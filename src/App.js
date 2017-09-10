@@ -9,7 +9,7 @@ const App = () => (
     <Router>
         <div>
             <Route path="/login/" component={Login} />
-        	<PrivateRoute authed={false} path ="/createprofile" component={CreateProfile}/>
+        	<PrivateRoute authed={true} path ="/createprofile" component={CreateProfile}/>
             <PrivateRoute exact authed={false} path="/" component={Home} />
         </div>
     </Router>
