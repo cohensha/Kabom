@@ -33,7 +33,9 @@
 
 			input[type="type"],
 			input[type="password"],
-			input[type="email"] {
+			input[type="email"]
+			input[type="firstName"],
+			input[type="lastName"], {
 				width: 100%;
 			}
 

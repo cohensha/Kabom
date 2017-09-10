@@ -746,6 +746,8 @@
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
+	input[type="firstName"],
+	input[type="lastName"],
 	select,
 	textarea {
 		-moz-appearance: none;
@@ -775,6 +777,8 @@
 		input[type="text"]:invalid,
 		input[type="password"]:invalid,
 		input[type="email"]:invalid,
+		input[type="firstName"]:invalid,
+		input[type="lastName"]:invalid,
 		select:invalid,
 		textarea:invalid {
 			box-shadow: none;
@@ -783,6 +787,8 @@
 		input[type="text"]:focus,
 		input[type="password"]:focus,
 		input[type="email"]:focus,
+		input[type="firstName"]:focus,
+		input[type="lastName"]:focus,
 		select:focus,
 		textarea:focus {
 			-moz-animation: focus 0.1s;
@@ -829,6 +835,8 @@
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
+	input[type="firstName"],
+	input[type="lastName"],
 	select {
 		height: 2.75em;
 	}
@@ -1007,6 +1015,65 @@
 
 		}
 
+/* Signup Form */
+
+	#login-form {
+		display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: flex;
+		position: relative;
+	}
+
+		#login-form input[type="text"],
+		#login-form input[type="password"],
+		#login-form input[type="email"],
+		#login-form input[type="firstName"],
+		#login-form input[type="lastName"] {
+			width: 18em;
+		}
+
+		#login-form > * {
+			margin: 0 0 0 1em;
+		}
+
+		#login-form > :first-child {
+			margin: 0 0 0 0;
+		}
+
+		@media screen and (max-width: 480px) {
+
+			#login-form {
+				-moz-flex-direction: column;
+				-webkit-flex-direction: column;
+				-ms-flex-direction: column;
+				flex-direction: column;
+			}
+
+				#login-form input[type="type"],
+				#login-form input[type="password"],
+				#login-form input[type="email"],
+				#login-form input[type="firstName"],
+				#login-form input[type="lastName"] {
+					width: 100%;
+				}
+
+				#login-form > * {
+					margin: 1.25em 0 0 0;
+				}
+
+				#login-form .message {
+					bottom: -1.5em;
+					font-size: 0.9em;
+					height: 1em;
+					left: 0;
+					line-height: inherit;
+					margin-top: 0;
+					position: absolute;
+				}
+
+		}
+
 /* Header */
 
 	#header h1 {
@@ -1049,18 +1116,20 @@
 		display: -moz-flex;
 		display: -webkit-flex;
 		display: -ms-flex;
-		display: flex;
+		display: inline-block;
 		position: relative;
 	}
 
 		#signup-form input[type="text"],
 		#signup-form input[type="password"],
-		#signup-form input[type="email"] {
+		#signup-form input[type="email"],
+		#signup-form input[type="firstName"],
+		#signup-form input[type="lastName"] {
 			width: 18em;
 		}
 
 		#signup-form > * {
-			margin: 0 0 0 1em;
+			margin: 0 0 0 0em;
 		}
 
 		#signup-form > :first-child {
@@ -1078,7 +1147,9 @@
 
 				#signup-form input[type="type"],
 				#signup-form input[type="password"],
-				#signup-form input[type="email"] {
+				#signup-form input[type="email"],
+				#signup-form input[type="firstName"],
+				#signup-form input[type="lastName"] {
 					width: 100%;
 				}
 

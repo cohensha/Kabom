@@ -26,6 +26,8 @@
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
+	input[type="firstName"],
+	input[type="lastName"]
 	select,
 	textarea {
 		border: solid _size(border-width) _palette(fg-bold);
