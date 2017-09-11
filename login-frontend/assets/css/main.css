@@ -1015,21 +1015,20 @@
 
 		}
 
-/* Signup Form */
+/* Login Form */
 
 	#login-form {
 		display: -moz-flex;
 		display: -webkit-flex;
 		display: -ms-flex;
 		display: flex;
-		position: relative;
+		position: absolute;
+   		top:1em;
+   		right:3em;
 	}
 
-		#login-form input[type="text"],
 		#login-form input[type="password"],
-		#login-form input[type="email"],
-		#login-form input[type="firstName"],
-		#login-form input[type="lastName"] {
+		#login-form input[type="email"] {
 			width: 18em;
 		}
 
@@ -1050,11 +1049,8 @@
 				flex-direction: column;
 			}
 
-				#login-form input[type="type"],
 				#login-form input[type="password"],
-				#login-form input[type="email"],
-				#login-form input[type="firstName"],
-				#login-form input[type="lastName"] {
+				#login-form input[type="email"] {
 					width: 100%;
 				}
 
@@ -1076,9 +1072,21 @@
 
 /* Header */
 
+	#header {
+		position: fixed;
+		z-index: 10000;
+		left: 2em;
+		top: 1em;
+		width: 100%;
+		/*background: rgba(255, 255, 255, 0.95);*/
+		height: 3em;
+		line-height: 3em;
+		/*box-shadow: 0 0 0.15em 0 rgba(0, 0, 0, 0.1);*/
+	}
+
 	#header h1 {
 		font-size: 3.25em;
-		margin: 0 0 0.55em 0;
+		margin: 0 0 0 0;
 	}
 
 	#header p {
@@ -1116,7 +1124,7 @@
 		display: -moz-flex;
 		display: -webkit-flex;
 		display: -ms-flex;
-		display: inline-block;
+		display: block;
 		position: relative;
 	}
 
@@ -1154,7 +1162,7 @@
 				}
 
 				#signup-form > * {
-					margin: 1.25em 0 0 0;
+					margin: 2.25em 0 0 0;
 				}
 
 				#signup-form .message {
