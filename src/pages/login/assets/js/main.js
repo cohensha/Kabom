@@ -1,9 +1,3 @@
-/*
-	Eventually by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
 (function() {
 
 	"use strict";
@@ -170,3 +164,15 @@
 		})();
 
 })();
+
+import React, {Component} from 'react';
+
+class Login extends Component {
+    render() {
+        return (
+            <h1>this is a login page</h1>
+        );
+    }
+}
+
+export default Login;
