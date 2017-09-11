@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup, DropdownItem, DropdownToggle, ButtonDropdown, DopdownMenu} from 'reactstrap'; 
+<<<<<<< HEAD
+import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup} from 'reactstrap';
+=======
+import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup, DropdownItem, DropdownToggle, ButtonDropdown, DropdownMenu} from 'reactstrap'; 
 
 /**********************LINKING TO FIREBASE FOR TESTING***/
 
