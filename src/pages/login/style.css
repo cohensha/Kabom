@@ -1,0 +1,158 @@
+/* Login Form */
+
+	#login-form {
+		display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: flex;
+		position: absolute;
+   		top:1em;
+   		right:2em;
+	}
+
+		#login-form input[type="password"],
+		#login-form input[type="email"] {
+			width: 18em;
+		}
+
+		#login-form > * {
+			margin: 0 0 0 1em;
+		}
+
+		#login-form > :first-child {
+			margin: 0 0 0 0;
+		}
+
+		@media screen and (max-width: 480px) {
+
+			#login-form {
+				-moz-flex-direction: column;
+				-webkit-flex-direction: column;
+				-ms-flex-direction: column;
+				flex-direction: column;
+			}
+
+				#login-form input[type="password"],
+				#login-form input[type="email"] {
+					width: 100%;
+				}
+
+				#login-form > * {
+					margin: 1.25em 0 0 0;
+				}
+
+				#login-form .message {
+					bottom: -1.5em;
+					font-size: 0.9em;
+					height: 1em;
+					left: 0;
+					line-height: inherit;
+					margin-top: 0;
+					position: absolute;
+				}
+
+		}
+
+/* Header */
+
+	#header {
+		position: fixed;
+		left: 1em;
+		top: 1em;
+		width: 100%;
+	}
+
+	#header h1 {
+		font-size: 3.25em;
+		margin: 0 0 0 0;
+	}
+
+	#header p {
+		font-size: 1.35em;
+		line-height: 1.65em;
+	}
+
+	#header a {
+		color: inherit;
+	}
+
+	@media screen and (max-width: 736px) {
+
+		#header h1 {
+			font-size: 2em;
+		}
+
+		#header p {
+			font-size: 1em;
+		}
+
+	}
+
+	@media screen and (max-width: 480px) {
+
+		#header {
+			margin: 0 0 1em 0;
+		}
+
+	}
+
+/* Signup Form */
+
+	#signup-form {
+		display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: block;
+		position: fixed;
+		top: 50%;
+		width: 100%;
+	}
+
+		#signup-form input[type="text"],
+		#signup-form input[type="password"],
+		#signup-form input[type="email"],
+		#signup-form input[type="firstName"],
+		#signup-form input[type="lastName"] {
+			width: 18em;
+		}
+
+		#signup-form > * {
+			margin: 0 0 0 0em;
+		}
+
+		#signup-form > :first-child {
+			margin: 0 0 0 0;
+		}
+
+		@media screen and (max-width: 480px) {
+
+			#signup-form {
+				-moz-flex-direction: column;
+				-webkit-flex-direction: column;
+				-ms-flex-direction: column;
+				flex-direction: column;
+			}
+
+				#signup-form input[type="type"],
+				#signup-form input[type="password"],
+				#signup-form input[type="email"],
+				#signup-form input[type="firstName"],
+				#signup-form input[type="lastName"] {
+					width: 100%;
+				}
+
+				#signup-form > * {
+					margin: 2.25em 0 0 0;
+				}
+
+				#signup-form .message {
+					bottom: -1.5em;
+					font-size: 0.9em;
+					height: 1em;
+					left: 0;
+					line-height: inherit;
+					margin-top: 0;
+					position: absolute;
+				}
+
+		}
