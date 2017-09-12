@@ -15,7 +15,7 @@ const App = () => (
         <div>
             <Route path="/login/" component={Login} />
         	<PrivateRoute authed={false} path ="/createprofile" component={CreateProfile}/>
-            <PrivateRoute exact authed={false} path="/home" component={Home} />
+            <PrivateRoute exact authed={false} path="/" component={Home} />
         </div>
     </Router>
 );
