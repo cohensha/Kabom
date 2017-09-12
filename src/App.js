@@ -1,18 +1,34 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import {Home, Login} from './pages';
 import {CreateProfile} from './pages';
 
+/*
+ * change authed={false} to authed={true} to view a privateroute page
+ * <PrivateRoute authed={false} path ="/createprofile" component={CreateProfile}/>
 
+ * @constructor
+ */
 const App = () => (
     <Router>
         <div>
-            <Route exact path="/" component={Home} />
             <Route path="/login/" component={Login} />
-        	<Route path ="/createprofile" component={CreateProfile}/>
+        	<PrivateRoute authed={false} path ="/createprofile" component={CreateProfile}/>
+            <PrivateRoute exact authed={false} path="/" component={Home} />
         </div>
     </Router>
 );
+
+function PrivateRoute ({component: Component, authed, ...rest}) {
+    return (
+        <Route
+            {...rest}
+            render={(props) => authed === true
+                ? <Component {...props} />
+                : <Redirect to={{pathname: '/login', state: {from: props.location}}} />}
+        />
+    )
+}
 
 export default App;
