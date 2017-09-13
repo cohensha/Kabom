@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Button, UncontrolledAlert } from 'reactstrap';
 import './style.css';
 import { auth, database } from '../../config/constants';
-
+import { Redirect } from 'react-router-dom';
 class Login extends Component {
 
 	constructor(props) {
@@ -13,7 +13,8 @@ class Login extends Component {
     		createAccountErrorMessage : "",
     		sentVerificationEmail : false,
     		verificationEmailError : false,
-    		emailNotVerified : false
+    		emailNotVerified : false,
+			logInSuccess : false,
     	};
     	this.logIn = this.logIn.bind(this);
     	this.createAccount = this.createAccount.bind(this);
@@ -26,7 +27,8 @@ class Login extends Component {
 			// Check if
 			var user = auth().currentUser;
 			if (user.emailVerified) {
-				// TODO: Move to another page
+				//ADDED
+                this.setState({ logInSuccess : true });
 			} else {
 				this.setState({ emailNotVerified : true });
 			}
@@ -72,11 +74,19 @@ class Login extends Component {
 		}.bind(this));
 	}
 
+
     render() {
+
+        const { from } = this.props.location.state || { from: { pathname: '/' } }
+        if (this.state.logInSuccess) {
+			return ( <Redirect to={from}/> );
+		}
+
         return (
             <header id="header">
 				<h1>Kabom</h1>
 				<p>Find people to help you launch your next big thing.</p>
+				<h1> {this.state.logInSuccess && '1'} </h1>
 
 				<form id="login-form" method="post" action="">
 					<input type="email" name="email" id="loginEmail" placeholder="Email" />

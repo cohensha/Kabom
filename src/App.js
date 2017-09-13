@@ -1,25 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { auth } from './config/constants';
 
 import {Home, Login} from './pages';
 import {CreateProfile} from './pages';
 
 
-/*
- * change authed={false} to authed={true} to view a privateroute page
- * <PrivateRoute authed={false} path ="/createprofile" component={CreateProfile}/>
 
- * @constructor
- */
-const App = () => (
-    <Router>
-        <div>
-            <Route path="/login/" component={Login} />
-        	<PrivateRoute authed={false} path ="/createprofile" component={CreateProfile}/>
-            <PrivateRoute exact authed={false} path="/" component={Home} />
-        </div>
-    </Router>
-);
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            authed: false,
+        };
+    }
+
+    componentDidMount() {
+        this.fireBaseListener = auth().onAuthStateChanged((user) => {
+            if (user) {
+                console.log('user changed..', user);
+                this.setState({ authed : true });
+            } else {
+                // No user is signed in.
+            }
+        });
+    }
+
+    componentWillUnmount () {
+            this.fireBaseListener && this.fireBaseListener();
+            this.setState({ authed: false });
+    }
+
+    render() {
+        return (
+            <Router>
+            <div>
+                <Route path="/login/" component={Login} />
+                <PrivateRoute authed={this.state.authed} path ="/createprofile" component={CreateProfile}/>
+                <PrivateRoute exact authed={this.state.authed} path="/" component={Home} />
+            </div>
+            </Router>
+        );
+    }
+}
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
     return (
@@ -31,5 +54,6 @@ function PrivateRoute ({component: Component, authed, ...rest}) {
         />
     )
 }
+
 
 export default App;
