@@ -1,27 +1,5 @@
 import React, {Component} from 'react';
-import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup} from 'reactstrap'; 
-
-/**********************LINKING TO FIREBASE FOR TESTING***/
-
-var firebase = require("firebase");
-
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDGctU-d7Kbp10qjICbVsuNMQaZ82q3Nh0",
-    authDomain: "kabom-3627c.firebaseapp.com",
-    databaseURL: "https://kabom-3627c.firebaseio.com",
-    projectId: "kabom-3627c",
-    storageBucket: "kabom-3627c.appspot.com",
-    messagingSenderId: "744303065823"
-  };
-  firebase.initializeApp(config);
-
-
-  // Get a reference to the database service
-  var database = firebase.database();
-
-
-  //*****************************************************
+import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup} from 'reactstrap';
 
 class FormContainer extends Component {
 
@@ -39,8 +17,8 @@ class FormContainer extends Component {
 			.then(data => {
 
 				this.setState({
-					
-					
+
+
 				});
 
 			});
@@ -61,7 +39,7 @@ class FormContainer extends Component {
 				<ButtonGroup>
 			        <Button>Left</Button>{' '}
 			        <Button>Middle</Button>{' '}
-			        <Button>Right</Button>	
+			        <Button>Right</Button>
 		    	</ButtonGroup>
 
 
