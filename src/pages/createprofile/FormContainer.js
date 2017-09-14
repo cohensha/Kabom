@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup, DropdownItem, DropdownToggle, ButtonDropdown, DopdownMenu} from 'reactstrap'; 
+import { Button, form, FormGroup, Label, Input, FormText, ButtonGroup, DropdownItem, DropdownToggle, ButtonDropdown, DropdownMenu} from 'reactstrap'; 
 
 /**********************LINKING TO FIREBASE FOR TESTING***/
 
@@ -57,6 +57,7 @@ class FormContainer extends Component {
 
 				this.setState({
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 =======
@@ -64,6 +65,11 @@ class FormContainer extends Component {
 					universities: data.universities
 					
 >>>>>>> starting to add to profile creation form
+=======
+					roles: data.roles,
+					universities: data.universities
+					
+>>>>>>> c5a5460644cf2bfed30a8d9d1a96d708a4d380ae
 				});
 
 			});
@@ -92,12 +98,15 @@ class FormContainer extends Component {
 
 		return (
 <<<<<<< HEAD
+<<<<<<< HEAD
 				<ButtonGroup>
 			        <Button>Left</Button>{' '}
 			        <Button>Middle</Button>{' '}
 			        <Button>Right</Button>
 		    	</ButtonGroup>
 =======
+=======
+>>>>>>> c5a5460644cf2bfed30a8d9d1a96d708a4d380ae
 				// <ButtonGroup>
 			 //        <Button>Left</Button>{' '}
 			 //        <Button>Middle</Button>{' '}
@@ -151,7 +160,10 @@ class FormContainer extends Component {
      		// }
 
 
+<<<<<<< HEAD
 >>>>>>> starting to add to profile creation form
+=======
+>>>>>>> c5a5460644cf2bfed30a8d9d1a96d708a4d380ae
 
 
 		 );
