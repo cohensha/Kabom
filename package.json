@@ -8,6 +8,7 @@
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",
     "react-addons-transition-group": "^15.6.0",
+    "react-background-image-loader": "0.0.5",
     "react-dom": "^15.6.1",
     "react-layout": "^1.1.0",
     "react-router-dom": "^4.2.2",
