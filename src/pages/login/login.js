@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, UncontrolledAlert } from 'reactstrap';
+import { Button, UncontrolledAlert, Alert } from 'reactstrap';
 import './style.css';
 import { auth, database } from '../../config/constants';
 import { Redirect } from 'react-router-dom';
@@ -74,55 +74,60 @@ class Login extends Component {
 		}.bind(this));
 	}
 
-
     render() {
-
         const { from } = this.props.location.state || { from: { pathname: '/' } }
         if (this.state.logInSuccess) {
 			return ( <Redirect to={from}/> );
 		}
 
         return (
-            <header id="header">
-				<h1>Kabom</h1>
-				<p>Find people to help you launch your next big thing.</p>
-				<h1> {this.state.logInSuccess && '1'} </h1>
+        	<div id="div">
+        	
+	            <header id="header">
+					<h1>Kabom</h1>
 
-				<form id="login-form" method="post" action="">
-					<input type="email" name="email" id="loginEmail" placeholder="Email" />
-					<input type="password" name="password" id="loginPassword" placeholder="Password" />
-					<Button color="primary" onClick={this.logIn}>Log In</Button>{' '}
-				</form>
+					<h3> <Alert color="danger" isOpen={this.state.logInFailed}>
+						<strong>Login Failed: </strong> Username or Password is incorrect.
+					</Alert> 
 
-				<form id="signup-form" method="post" action="">
-					<input type="firstName" name="firstName" id="firstName" placeholder="First name" />
-					<input type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
-					<input type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
-					<input type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
-					<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
-				</form>
+					<UncontrolledAlert color="danger" isOpen={this.state.createAccountFailed}>
+				 		<strong>Create Account Failed: </strong> {this.state.createAccountErrorMessage}
+				 	</UncontrolledAlert>
 
-				<UncontrolledAlert color="danger" isOpen={this.state.logInFailed}>
-					<strong>Login Failed: </strong> Username or Password is incorrect.
-				</UncontrolledAlert>
+				 	<UncontrolledAlert color="success" isOpen={this.state.sentVerificationEmail}>
+				 		<strong>Account Created: </strong> Please verify your email before logging in.
+				 	</UncontrolledAlert>
 
-				<UncontrolledAlert color="danger" isOpen={this.state.createAccountFailed}>
-			 		<strong>Create Account Failed: </strong> {this.state.createAccountErrorMessage}
-			 	</UncontrolledAlert>
+				 	<UncontrolledAlert color="warning" isOpen={this.state.emailNotVerified}>
+				 		<strong>Login Failed: </strong> Please verify your email before logging in.
+				 	</UncontrolledAlert>
 
-			 	<UncontrolledAlert color="success" isOpen={this.state.sentVerificationEmail}>
-			 		<strong>Account Created: </strong> Please verify your email before logging in.
-			 	</UncontrolledAlert>
+				 	<UncontrolledAlert color="warning" isOpen={this.state.verificationEmailError}>
+				 		<strong>Error Sending Email: </strong> Something went wrong with sending the verification email. Please try creating an account again.
+				 	</UncontrolledAlert>
+					</h3>
+					
+					<h1> {this.state.logInSuccess && '1'} </h1>
 
-			 	<UncontrolledAlert color="warning" isOpen={this.state.emailNotVerified}>
-			 		<strong>Login Failed: </strong> Please verify your email before logging in.
-			 	</UncontrolledAlert>
+					<form id="login-form" method="post" action="">
+						<input type="email" name="email" id="loginEmail" placeholder="Email" />
+						<input type="password" name="password" id="loginPassword" placeholder="Password" />
+						<Button color="primary" onClick={this.logIn}>Log In</Button>{' '}
+					</form>
 
-			 	<UncontrolledAlert color="warning" isOpen={this.state.verificationEmailError}>
-			 		<strong>Error Sending Email: </strong> Something went wrong with sending the verification email. Please try creating an account again.
-			 	</UncontrolledAlert>
+					<p>Find people to help you launch your <br/>
+					next big thing.</p>
+					</header>
 
-			</header>
+					<form id="signup-form" method="post" action="">
+						<h1> Sign up </h1> <br/>
+						<input type="firstName" name="firstName" id="firstName" placeholder="First name" /> <br/>
+						<input type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
+						<input type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
+						<input type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
+						<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
+					</form>
+			</div>
         );
     }
 }
