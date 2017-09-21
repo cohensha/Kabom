@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Button, UncontrolledAlert, Alert } from 'reactstrap';
+import { Button, UncontrolledAlert, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './style.css';
 import { auth, database } from '../../config/constants';
 import { Redirect } from 'react-router-dom';
@@ -15,9 +15,24 @@ class Login extends Component {
     		verificationEmailError : false,
     		emailNotVerified : false,
 			logInSuccess : false,
+			nestedModal: false,
     	};
     	this.logIn = this.logIn.bind(this);
     	this.createAccount = this.createAccount.bind(this);
+    	this.toggle = this.toggle.bind(this);
+    	this.toggleNested = this.toggleNested.bind(this);
+	}
+
+	toggle() {
+	    this.setState({
+	      modal: !this.state.modal
+	    });
+	 }
+
+	toggleNested() {
+		this.setState({
+		  nestedModal: !this.state.nestedModal
+		});
 	}
 
 	logIn() {
@@ -82,13 +97,12 @@ class Login extends Component {
 
         return (
         	<div id="div">
-        	
 	            <header id="header">
-					<h1>Kabom</h1>
+					<h1>kabom</h1>
 
-					<h3> <Alert color="danger" isOpen={this.state.logInFailed}>
+					<h3> <UncontrolledAlert color="danger" isOpen={this.state.logInFailed}>
 						<strong>Login Failed: </strong> Username or Password is incorrect.
-					</Alert> 
+					</UncontrolledAlert> 
 
 					<UncontrolledAlert color="danger" isOpen={this.state.createAccountFailed}>
 				 		<strong>Create Account Failed: </strong> {this.state.createAccountErrorMessage}
@@ -112,12 +126,35 @@ class Login extends Component {
 					<form id="login-form" method="post" action="">
 						<input type="email" name="email" id="loginEmail" placeholder="Email" />
 						<input type="password" name="password" id="loginPassword" placeholder="Password" />
-						<Button color="primary" onClick={this.logIn}>Log In</Button>{' '}
+						
+						<div>
+					<Button color="primary" onClick={this.logIn}>Log In</Button>{' '} 
+					</div>
+
+
+					<div id="forgotPassword" onClick={this.toggle}>Forgot Password?
+						<Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+						<ModalHeader toggle={this.toggle}>Find Your Account</ModalHeader>
+						<ModalBody>
+							Please enter your email to search for your account.<br />
+							<input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
+							<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
+							</Modal>
+						</ModalBody>
+						
+						<ModalFooter>
+							<Button color="primary" onClick={this.toggle}>Search</Button>{' '}
+							<Button color="secondary" onClick={this.toggle}>Cancel</Button>
+						</ModalFooter>
+						</Modal>
+					</div>
+
+
 					</form>
 
 					<p>Find people to help you launch your <br/>
 					next big thing.</p>
-					</header>
+				</header>
 
 					<form id="signup-form" method="post" action="">
 						<h1> Sign up </h1> <br/>
