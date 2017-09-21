@@ -1,11 +1,11 @@
 import React from 'react';
-
+import './style.css';
 import {Navbar, NavItem, NavLink, Nav} from 'reactstrap';
 
 
 const Header = () => (
     <div>
-        <Navbar>
+        <Navbar className="topBar">
             <Nav>
             <h1 href="/" className="d-inline-block">Kabom</h1>
                 <NavItem className="ml-auto">
