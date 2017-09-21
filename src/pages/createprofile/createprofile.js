@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import FormContainer from './FormContainer.js';
+import Header from '../home/header.js';
+import SideBar from '../home/sidebar/sidebar.js';
 
 class CreateProfile extends Component {
     render() {
@@ -9,8 +11,8 @@ class CreateProfile extends Component {
             	<div className="columns">
             		<div className="col-md-9" centered>
 
-            			<h3> Create a New Profile </h3>
 
+        <Header/>
 
  	     <FormContainer/>
 
