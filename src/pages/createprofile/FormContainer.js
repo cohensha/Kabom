@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { auth, database } from '../../config/constants';
-
+import { Redirect } from 'react-router-dom';
 import { Button, Form, FormGroup, Label,InputGroup, InputGroupAddon, Input, FormText, ButtonGroup} from 'reactstrap';
 
 
@@ -137,9 +137,18 @@ class FormContainer extends Component {
 					            </Label>
 					          </FormGroup>
 					    </FormGroup>
+					    
+
 
 
 				 </FormGroup>
+
+				  <FormGroup row >
+
+					          <Button sm={3}>
+					          	Go to Homepage
+					          </Button>
+					    </FormGroup>
 
 
 		    </Form>
