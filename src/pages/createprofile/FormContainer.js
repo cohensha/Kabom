@@ -57,6 +57,8 @@ class FormContainer extends Component {
 	}
 
 
+
+
 	render() {
 		
 
@@ -145,7 +147,7 @@ class FormContainer extends Component {
 
 				  <FormGroup row >
 
-					          <Button sm={3}>
+					          <Button sm={3} onClick={this.handleFormSubmit}>
 					          	Go to Homepage
 					          </Button>
 					    </FormGroup>

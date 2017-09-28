@@ -21,6 +21,7 @@ class CreateProfile extends Component {
             //         </Col>
 
 
+        //route to create profile after first login
 
             // 	</div>
             // </div>

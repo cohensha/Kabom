@@ -43,6 +43,7 @@ class Login extends Component {
 		var password = document.getElementById('createPassword').value;
 		var firstName = document.getElementById('firstName').value;
 		var lastName = document.getElementById('lastName').value;
+		var hasLoggedIn = false;
 
 		auth().createUserWithEmailAndPassword(email, password).then(function() {
 			var user = auth().currentUser;
@@ -62,7 +63,8 @@ class Login extends Component {
 				database.child('users/' + user.uid).set({
 					'first name': firstName,
 					'last name': lastName,
-					'email' : email
+					'email' : email,
+					'hasLoggedIn': hasLoggedIn
 				});
 			}
 		}.bind(this)).catch(function(error) {
