@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { Button, UncontrolledAlert, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './style.css';
-import { auth, database } from '../../config/constants';
+import { auth, database} from '../../firebase/constants';
+import { writeNewUser, getValue, getArray, writeValue } from '../../firebase/db';
 import { Redirect } from 'react-router-dom';
 class Login extends Component {
 
@@ -17,7 +18,7 @@ class Login extends Component {
 			logInSuccess : false,
 			nestedModal: false,
     	};
-    	this.logIn = this.logIn.bind(this);
+    	this.signIn = this.signIn.bind(this);
     	this.createAccount = this.createAccount.bind(this);
     	this.toggle = this.toggle.bind(this);
     	this.toggleNested = this.toggleNested.bind(this);
@@ -35,22 +36,26 @@ class Login extends Component {
 		});
 	}
 
-	logIn() {
+	onDismiss() {
+		this.setState({ visible: false });
+	}
+
+	signIn() {
 		var email = document.getElementById('loginEmail').value
 		var password = document.getElementById('loginPassword').value
+
+		// Firebase Auth Sign In
 		auth().signInWithEmailAndPassword(email, password).then(function() {
-			// Check if
 			var user = auth().currentUser;
 			if (user.emailVerified) {
-				//ADDED
-                this.setState({ logInSuccess : true });
+				this.setState({ logInSuccess : true });
 			} else {
 				this.setState({ emailNotVerified : true });
 			}
 		}.bind(this)).catch(function(error) {
-			// Handle Errors here.
+			// TODO: Format
 			this.setState({logInFailed : true });
-		}.bind(this));
+		}.bind(this));	
 	}
 
 	createAccount() {
@@ -58,34 +63,39 @@ class Login extends Component {
 		var password = document.getElementById('createPassword').value;
 		var firstName = document.getElementById('firstName').value;
 		var lastName = document.getElementById('lastName').value;
-
+		
+		// Firebase Auth Create User
 		auth().createUserWithEmailAndPassword(email, password).then(function() {
 			var user = auth().currentUser;
-			var emailSent = true;
 			user.sendEmailVerification().then(function() {
-				// Email sent.
-			}).catch(function(error) {
-				// An error happened. Should never occur.
-				emailSent = false;
-			});
-			if (!emailSent) {
-				this.setState({ verificationEmailError : true });
-			} else {
+				// Write new user to the users database
+				database.child("users/" + user.uid + "/email").set(email);
+				database.child("users/" + user.uid + "/firstName").set(firstName);
+				database.child("users/" + user.uid + "/lastName").set(lastName);
+				// Alert user a verification email has been sent
 				this.setState({ sentVerificationEmail : true });
-
-				// Add user to database
-				database.child('users/' + user.uid).set({
-					'first name': firstName,
-					'last name': lastName,
-					'email' : email
-				});
-			}
-		}.bind(this)).catch(function(error) {
+			}.bind(this)).catch(function(error) {
+				// An error happened. Should never occur.
+				this.setState({ verificationEmailError : true });
+			}.bind(this));
+		}).catch(function(error) {
 			// Handle Errors here.
 			this.setState({
 				createAccountFailed : true,
 				createAccountErrorMessage : error.message
 			});
+		}.bind(this));
+	}
+
+	forgotPassword() {
+		var email = document.getElementById('forgotPassEmail').value;
+		auth().sendPasswordResetEmail(email).then(function() {
+			// Show Success Alert
+
+
+		}.bind(this)).catch(function(error) {
+			// TODO: Format
+			// Show invalid email alert
 		}.bind(this));
 	}
 
@@ -100,23 +110,23 @@ class Login extends Component {
 	            <header id="header">
 					<h1>kabom</h1>
 
-					<h3> <UncontrolledAlert color="danger" isOpen={this.state.logInFailed}>
+					<h3> <UncontrolledAlert color="danger" isOpen={this.state.logInFailed} toggle={this.onDismiss}>
 						<strong>Login Failed: </strong> Username or Password is incorrect.
 					</UncontrolledAlert> 
 
-					<UncontrolledAlert color="danger" isOpen={this.state.createAccountFailed}>
+					<UncontrolledAlert color="danger" isOpen={this.state.createAccountFailed} toggle={this.onDismiss}>
 				 		<strong>Create Account Failed: </strong> {this.state.createAccountErrorMessage}
 				 	</UncontrolledAlert>
 
-				 	<UncontrolledAlert color="success" isOpen={this.state.sentVerificationEmail}>
+				 	<UncontrolledAlert color="success" isOpen={this.state.sentVerificationEmail} toggle={this.onDismiss}>
 				 		<strong>Account Created: </strong> Please verify your email before logging in.
 				 	</UncontrolledAlert>
 
-				 	<UncontrolledAlert color="warning" isOpen={this.state.emailNotVerified}>
+				 	<UncontrolledAlert color="warning" isOpen={this.state.emailNotVerified} toggle={this.onDismiss}>
 				 		<strong>Login Failed: </strong> Please verify your email before logging in.
 				 	</UncontrolledAlert>
 
-				 	<UncontrolledAlert color="warning" isOpen={this.state.verificationEmailError}>
+				 	<UncontrolledAlert color="warning" isOpen={this.state.verificationEmailError} toggle={this.onDismiss}>
 				 		<strong>Error Sending Email: </strong> Something went wrong with sending the verification email. Please try creating an account again.
 				 	</UncontrolledAlert>
 					</h3>
@@ -128,7 +138,7 @@ class Login extends Component {
 						<input type="password" name="password" id="loginPassword" placeholder="Password" />
 						
 						<div>
-					<Button color="primary" onClick={this.logIn}>Log In</Button>{' '} 
+					<Button color="primary" onClick={this.signIn}>Log In</Button>{' '} 
 					</div>
 
 
