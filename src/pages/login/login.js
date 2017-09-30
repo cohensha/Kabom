@@ -7,6 +7,7 @@ class Login extends Component {
 
 	constructor(props) {
     	super(props);
+
     	this.state = {
     		logInFailed : false,
     		createAccountFailed : false,
@@ -29,6 +30,9 @@ class Login extends Component {
 			if (user.emailVerified) {
 				//ADDED
                 this.setState({ logInSuccess : true });
+                
+
+
 			} else {
 				this.setState({ emailNotVerified : true });
 			}
@@ -64,7 +68,7 @@ class Login extends Component {
 					'first name': firstName,
 					'last name': lastName,
 					'email' : email,
-					'hasLoggedIn': hasLoggedIn
+					'completedProfile': false
 				});
 			}
 		}.bind(this)).catch(function(error) {
@@ -79,9 +83,39 @@ class Login extends Component {
 
     render() {
 
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
+    	
+        const { from } = this.props.location.state ||  { from: { pathname: '/' } }
+        // const { createProf } = { from: {pathname: '/createprofile'} }
         if (this.state.logInSuccess) {
-			return ( <Redirect to={from}/> );
+
+			var user = auth().currentUser;
+        	var ref = database.child('users/' + user.uid + '/completedProfile');
+        	var completedProf;
+        	ref.once("value").then(function(snapshot) {
+        		completedProf = snapshot.val();
+        		alert("completedProf: ", completedProf);
+        		// this.setState({completedProfile: completedProf});
+        		// if(snapshot.exists()) {
+        		// 	completedProf = snapshot.val();
+        		// 	alert("completed prof value is: ", completedProf);
+  				    // this.setState({ completedProfile: completedProf});
+        		// }
+        		// else {
+        		// 	completedProf = null;
+        		// }
+        	});
+
+                if(completedProf == true)  {
+			        		// alert("has logged in before, redirecting to homepage");
+			        		return ( <Redirect to={from}/> );
+			        	}
+			        	else {
+			        		// alert("has not logged in before, redirecting to create profile");
+
+			        		return (<Redirect to={{
+							  pathname: '/createprofile' }}/> );
+    					}
+			
 		}
 
         return (

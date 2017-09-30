@@ -13,7 +13,8 @@ class FormContainer extends Component {
 		this.state = {
 			rolesSelected: [0,0,0],
 			data: "haven't clicked a button",
-			skills: ['iOS', 'Java', 'JavaScript', 'C/C++', 'Node', 'Wireframing', 'Photoshop']
+			skills: ['iOS', 'Java', 'JavaScript', 'C/C++', 'Node', 'Wireframing', 'Photoshop'],
+			submitted: false
 			
 		};
 		this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -39,6 +40,7 @@ class FormContainer extends Component {
 
 	handleFormSubmit() {
 
+		this.setState({submitted: true});
 	}
 
 	handleClearForm() {
@@ -60,6 +62,10 @@ class FormContainer extends Component {
 
 
 	render() {
+
+		if(this.state.submitted == true) {
+			return ( <Redirect to={'/'}/> );
+		}
 		
 
 
@@ -148,7 +154,7 @@ class FormContainer extends Component {
 				  <FormGroup row >
 
 					          <Button sm={3} onClick={this.handleFormSubmit}>
-					          	Go to Homepage
+					          	Go to Homepage!
 					          </Button>
 					    </FormGroup>
 
