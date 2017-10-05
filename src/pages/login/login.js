@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
+
 import { Button, Alert, Modal, ModalHeader, ModalBody, ModalFooter, Container, Row, Col,
     InputGroup, InputGroupAddon, Input, Jumbotron} from 'reactstrap';
+
 import './style.css';
+
 import { auth, database} from '../../firebase/constants';
 import { Redirect } from 'react-router-dom';
 class Login extends Component {
@@ -20,6 +23,7 @@ class Login extends Component {
     		greenAlertMessage : "",
 			logInSuccess : false,
 			nestedModal: false,
+			createdProfile: false
     	};
 		this.signIn = this.signIn.bind(this);
 		this.createAccount = this.createAccount.bind(this);
@@ -157,11 +161,20 @@ class Login extends Component {
 
     render() {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
+        
         if (this.state.logInSuccess) {
-			return ( <Redirect to={from}/> );
+			
+			if(this.state.completedProf == true) {
+				return ( <Redirect to={from}/> );
+			}
+			else {
+				return (<Redirect to={{
+							  pathname: '/createprofile' }}/> );
+			}
 		}
 
         return (
+
 
 			<Container id="container">
 				<Row id="header" >
