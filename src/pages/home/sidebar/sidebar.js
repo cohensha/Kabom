@@ -18,7 +18,7 @@ class Sidebar extends Component {
             myProjects: [],
             isMounted: false,
         };
-        //const user = auth.currentUser;
+        const user = auth.currentUser;
         this.teamReqRef = database.child("requests/users/mOnTIAFBT8g1ijeglL2KWS3ASHp1");
         this.projReqRef = database.child("requests/teams/TeamUID0");
         this.myTeamsRef = database.child("users/mOnTIAFBT8g1ijeglL2KWS3ASHp1/teams");
@@ -29,6 +29,10 @@ class Sidebar extends Component {
 
 
     componentDidMount() {
+        const user = auth.currentUser;
+        console.log(user);
+        if (user) console.log(user.uid);
+        else console.log("no user");
         this.teamReqRef.once("value").then( (snapshot) => {
             // You are now in the Promise land (haha get it).
             // Every line the the then() will be executed after the snapshot has been retrieved.
@@ -44,7 +48,6 @@ class Sidebar extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({teamRequests: array});
             }
         });
@@ -63,7 +66,6 @@ class Sidebar extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({projRequests: array});
             }
         });
@@ -82,7 +84,6 @@ class Sidebar extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({myTeams: array});
             }
         });
@@ -101,7 +102,6 @@ class Sidebar extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({myProjects: array});
             }
         });

@@ -41,7 +41,6 @@ class Home extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({projects: array});
             }
         });
@@ -53,7 +52,6 @@ class Home extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({teams: array});
             }
         });
@@ -65,7 +63,6 @@ class Home extends Component {
                     const item = childSnapshot.val();
                     array.push(item);
                 });
-                array.map((p) => console.log(p));
                 this.setState({people: array});
             }
         });
@@ -97,6 +94,7 @@ class Home extends Component {
             showCreateProjectModal: !this.state.showCreateProjectModal
         });
     }
+
 
     render() {
         return (

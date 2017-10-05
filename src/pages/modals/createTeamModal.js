@@ -11,6 +11,8 @@ class CreateTeamModal extends Component {
         this.state = {
             teamNameInput: '',
             teamDescriptionInput: '',
+            seekingNumPeopleInput: 0,
+            numOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         };
 
         this.toggle = this.props.onclick;
@@ -28,6 +30,8 @@ class CreateTeamModal extends Component {
             description: this.state.teamDescriptionInput,
             created: new Date(),
             interests: 0,
+            numPeople: 0,
+            seekingNumPeople: this.state.seekingNumPeopleInput,
             projects: [],
             teamOwner: "mOnTIAFBT8g1ijeglL2KWS3ASHp1",
         });
@@ -54,6 +58,10 @@ class CreateTeamModal extends Component {
         this.setState({teamDescriptionInput: event.target.value});
     }
 
+    handleChangeNumPeople(event) {
+        this.setState({seekingNumPeopleInput: event.target.value});
+    }
+
     render() {
         return (
             <Modal isOpen={this.props.show} className={this.props.className}>
@@ -78,6 +86,22 @@ class CreateTeamModal extends Component {
                                id="teamNameExample"
                                placeholder="Tell us what you expect in a team... "
                         />
+                    </FormGroup>
+                    <FormGroup>
+                        <Label className="text-gray-dark" for="selectGroupSize">Select Group Size</Label>
+                        <Input type="select" name="select"
+                            id="selectGroupSize"
+                            onChange={(e) => this.handleChangeNumPeople(e)}
+                        >
+                            {this.state.numOptions.map( (num) => <option>{num}</option> )}
+                        </Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label className="text-gray-dark" for="skillSelect">Select Skills Needed:</Label>
+                        <Input type="select" name="selectMulti" id="skillSelect" multiple>
+                            <option>iOS</option>
+                            <option>Android</option>
+                        </Input>
                     </FormGroup>
                 </ModalBody>
                 <ModalFooter>
