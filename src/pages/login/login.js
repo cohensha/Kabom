@@ -127,15 +127,16 @@ class Login extends Component {
 				<form id="login-form" method="post" action="">
 					<input type="email" name="email" id="loginEmail" placeholder="Email" />
 					<input type="password" name="password" id="loginPassword" placeholder="Password" />
-					<Button color="primary" onClick={this.logIn}>Log In</Button>{' '}
+					<Button className="input" onClick={this.logIn}>Log In</Button>{' '}
 				</form>
 
 				<form id="signup-form" method="post" action="">
-					<input type="firstName" name="firstName" id="firstName" placeholder="First name" />
-					<input type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
-					<input type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
-					<input type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
-					<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
+					<input className="input" type="firstName" name="firstName" id="firstName" placeholder="First name" />
+					<input className="input" type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
+					<input className="input" type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
+					<input className="input" type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
+					<Button className="input" color="white" onClick={this.createAccount}>Create Account</Button>{' '}
+
 				</form>
 
 				<UncontrolledAlert color="danger" isOpen={this.state.logInFailed}>

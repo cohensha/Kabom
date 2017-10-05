@@ -4,7 +4,7 @@ import { auth } from './config/constants';
 
 import {Home, Login} from './pages';
 import {CreateProfile} from './pages';
-
+import {ViewProfile} from './pages';
 
 
 class App extends Component {
@@ -37,6 +37,7 @@ class App extends Component {
             <div>
                 <Route path="/login/" component={Login} />
                 <PrivateRoute authed={this.state.authed} path ="/createprofile" component={CreateProfile}/>
+                <Route path="/viewprofile/" component={ViewProfile} />
 
                 <PrivateRoute exact authed={this.state.authed} path="/" component={Home} />
             </div>
@@ -44,7 +45,8 @@ class App extends Component {
         );
     }
 }
-                 <Route path="/createprofile/" component={CreateProfile} />
+                 // <Route path="/createprofile/" component={CreateProfile} />
+                                 // <PrivateRoute authed={this.state.authed} path ="/viewprofile" component={viewprofile}/>
 
 
 

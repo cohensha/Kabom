@@ -76,10 +76,10 @@ class FormContainer extends Component {
 				<h3> Create your new profile</h3>
 
 				<FormGroup row>
-					<Label sm={4} for="username">Choose Profile picture</Label>
-					 <InputGroup sm={6} id="username">
+					<Label sm={4} for="username">Choose a username</Label>
+					 <InputGroup sm={4} id="username">
 				        <InputGroupAddon sm={2} >@</InputGroupAddon>
-				        <Input sm={4} placeholder="username" />
+				        <Input sm={2} placeholder="username" />
 	     			 </InputGroup>
 	     		</FormGroup>
 
