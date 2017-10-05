@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
 
-import Header from './header';
+import Header from '../header/header';
 import ProjectTab from './tabs/projectTab';
 import PeopleTab from "./tabs/peopleTab";
 import TeamTab from "./tabs/teamTab";
-import Sidebar from './sidebar/sidebar';
+import Sidebar from '../sidebar/sidebar';
 
 
 class Home extends Component {

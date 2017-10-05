@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Col, Row} from 'reactstrap';
 import FormContainer from './FormContainer.js';
-import Header from '../home/header.js';
-import SideBar from '../home/sidebar/sidebar.js';
+import Header from '../header/header.js';
+import SideBar from '../sidebar/sidebar.js';
 
 class CreateProfile extends Component {
     render() {

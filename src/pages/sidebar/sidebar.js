@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Card, CardBlock, Collapse, ListGroup, ListGroupItem, Badge} from 'reactstrap';
+import './style.css';
 
 
 class Sidebar extends Component {
@@ -11,6 +12,7 @@ class Sidebar extends Component {
             projectRequestCollapse: false,
             myTeamsCollapse: false,
             myProjectsCollapse: false,
+            colorTeam: "#ffffff"
         };
     }
 
@@ -25,11 +27,19 @@ class Sidebar extends Component {
             this.setState({ myProjectsCollapse: !this.state.myProjectsCollapse });
     }
 
+    backgroundOrange() {
+            this.setState({colorTeam: "#FF512F"});
+    }
+
+    backgroundWhite() {
+        this.setState({colorTeam: "#ffffff"});
+    }
+
     render() {
         return (
-            <div className="ml-auto ml-5 pl-2">
+            <div  id="sidebar-div" className="ml-auto ml-5 pl-2">
                 <p />
-                <p onClick={() => this.toggle('teamreq')}> Team Requests </p>
+                <p style={{backgroundColor: this.state.colorTeam}} onClick={() => this.toggle('teamreq')}   onMouseLeave={ this.backgroundWhite.bind(this)}onMouseEnter={ this.backgroundOrange.bind(this)}> Team Requests </p>
                 <Collapse isOpen={this.state.teamRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         <ListGroupItem>Team 1</ListGroupItem>
