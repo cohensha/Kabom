@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { Button, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Alert, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './style.css';
+
 import { auth, database} from '../../firebase/constants';
 import { Redirect } from 'react-router-dom';
 class Login extends Component {
@@ -19,6 +20,7 @@ class Login extends Component {
     		greenAlertMessage : "",
 			logInSuccess : false,
 			nestedModal: false,
+			createdProfile: false
     	};
 		this.signIn = this.signIn.bind(this);
 		this.createAccount = this.createAccount.bind(this);
@@ -138,12 +140,21 @@ class Login extends Component {
 
     render() {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
+        
         if (this.state.logInSuccess) {
-			return ( <Redirect to={from}/> );
+			
+			if(this.state.completedProf == true) {
+				return ( <Redirect to={from}/> );
+			}
+			else {
+				return (<Redirect to={{
+							  pathname: '/createprofile' }}/> );
+			}
 		}
 
         return (
         	<div id="div">
+        	<Row>
 	            <header id="header">
 					<h1>kabom</h1>
 					<h3> 
@@ -189,17 +200,28 @@ class Login extends Component {
 					</div>
 					</form>
 
-					<p>Find people to help you launch your <br/>
-					next big thing.</p>
+					
 				</header>
-					<form id="signup-form" method="post" action="">
-						<h1> Sign up </h1> <br/>
-						<input type="firstName" name="firstName" id="firstName" placeholder="First name" /> <br/>
-						<input type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
-						<input type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
-						<input type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
-						<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
-					</form>
+				</Row>
+					<Row>
+						<Col>
+							Find your team
+						</Col>
+
+						<Col>
+							<form id="signup-form" method="post" action="">
+								<h1> Sign up </h1> <br/>
+								<input type="firstName" name="firstName" id="firstName" placeholder="First name" /> <br/>
+								<input type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
+								<input type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
+								<input type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
+								<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
+							</form>
+						</Col>
+
+					</Row>
+
+					
 			</div>
         );
     }
