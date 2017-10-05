@@ -22,6 +22,7 @@ class App extends Component {
                 this.setState({ authed : true });
             } else {
                 // No user is signed in.
+                console.log("user signed out");
             }
         });
     }

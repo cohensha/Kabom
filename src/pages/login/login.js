@@ -159,6 +159,14 @@ class Login extends Component {
 		}.bind(this));
 	}
 
+	componentWillUnmount() {
+        var user = auth().currentUser;
+
+        database.child("users/" + user.uid + "/email").off();
+        database.child("users/" + user.uid + "/firstName").off();
+        database.child("users/" + user.uid + "/lastName").off();
+	}
+
     render() {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
         
