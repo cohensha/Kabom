@@ -39,7 +39,7 @@ class Sidebar extends Component {
         return (
             <div  id="sidebar-div" className="ml-auto ml-5 pl-2">
                 <p />
-                <p style={{backgroundColor: this.state.colorTeam}} onClick={() => this.toggle('teamreq')}   onMouseLeave={ this.backgroundWhite.bind(this)}onMouseEnter={ this.backgroundOrange.bind(this)}> Team Requests </p>
+                <p style={{backgroundColor: this.state.colorTeam}} onClick={() => this.toggle('teamreq')}> Team Requests </p>
                 <Collapse isOpen={this.state.teamRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         <ListGroupItem>Team 1</ListGroupItem>

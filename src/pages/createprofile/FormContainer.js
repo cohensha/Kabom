@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router-dom';
+import { auth, database} from '../../firebase/constants';
 import { Button, Form, FormGroup, Row, Col, Label, InputGroup, InputGroupAddon, Input, FormText, ButtonGroup} from 'reactstrap';
 
 class FormContainer extends Component {
@@ -21,18 +22,6 @@ class FormContainer extends Component {
 		// var user = auth().currentUser;
 		var name, email, photoUrl, uid, emailVerified;
 
-		// if (user != null) {
-		//   email = user.email;
-
-		//   uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
-		//                    // this value to authenticate with your backend server, if
-		//                    // you have one. Use User.getToken() instead.
-
-		//  this.setState({userData: {
-		//  	userUID: user,
-		//  	userEmail: email
-		//  }})
-		// }
 	}
 
 
@@ -57,6 +46,21 @@ class FormContainer extends Component {
 	}
 
 
+	getUsername() {
+        var uid = auth().currentUser.uid;
+        // var name = database.ref('/users/' + uid).once('value').then(function(snapshot) {
+        //     var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+        //     return username;
+        // });
+        // return name;
+
+		// var  users = database.ref('/users');
+		// 	console.log(users);
+			// .once('value')
+		return uid;
+	}
+
+
 
 
 	render() {
@@ -68,7 +72,7 @@ class FormContainer extends Component {
 		return (
 
 			<Form id="form">
-				<h3> Create your new profile</h3>
+				<h3> Create your new profile, {this.getUsername()} </h3>
 
 				<FormGroup>
 						<Label for="username">Choose a username</Label>
