@@ -1,26 +1,41 @@
 import React, {Component} from 'react';
-import { Button, UncontrolledAlert, Alert, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
+import { Button, Alert, Modal, ModalHeader, ModalBody, ModalFooter, Container, Row, Col,
+    InputGroup, InputGroupAddon, Input, Jumbotron} from 'reactstrap';
+
 import './style.css';
-import { auth, database } from '../../config/constants';
+
+import { auth, database} from '../../firebase/constants';
 import { Redirect } from 'react-router-dom';
 class Login extends Component {
 
 	constructor(props) {
     	super(props);
     	this.state = {
-    		logInFailed : false,
-    		createAccountFailed : false,
-    		createAccountErrorMessage : "",
-    		sentVerificationEmail : false,
-    		verificationEmailError : false,
-    		emailNotVerified : false,
+    		showRedAlert : false,
+    		showYellowAlert : false,
+    		showGreenAlert : false,
+    		redAlertHeader : "",
+    		redAlertMessage : "",
+    		yellowAlertHeader : "",
+    		yellowAlertMessage : "",
+    		greenAlertHeader : "",
+    		greenAlertMessage : "",
 			logInSuccess : false,
 			nestedModal: false,
+			createdProfile: false
     	};
-    	this.logIn = this.logIn.bind(this);
-    	this.createAccount = this.createAccount.bind(this);
-    	this.toggle = this.toggle.bind(this);
-    	this.toggleNested = this.toggleNested.bind(this);
+		this.signIn = this.signIn.bind(this);
+		this.createAccount = this.createAccount.bind(this);
+		this.toggle = this.toggle.bind(this);
+		this.toggleNested = this.toggleNested.bind(this);
+		this.dismissRed = this.dismissRed.bind(this);
+		this.dismissGreen = this.dismissGreen.bind(this);
+		this.dismissYellow = this.dismissYellow.bind(this);
+		this.showRedAlert = this.showRedAlert.bind(this);
+		this.showYellowAlert = this.showYellowAlert.bind(this);
+		this.showGreenAlert = this.showGreenAlert.bind(this);
+		this.forgotPassword = this.forgotPassword.bind(this);
 	}
 
 	toggle() {
@@ -35,136 +50,238 @@ class Login extends Component {
 		});
 	}
 
-	logIn() {
+	dismissRed() {
+		this.setState({ showRedAlert: false });
+	}
+
+	dismissYellow() {
+		this.setState({ showYellowAlert: false });
+	}
+
+	dismissGreen() {
+		this.setState({ showGreenAlert: false });
+	}
+
+	showRedAlert(header, message) {
+		this.setState({ 
+			showRedAlert : true,
+			redAlertHeader : header,
+			redAlertMessage : message
+		});
+	}
+
+	showYellowAlert(header, message) {
+		this.setState({ 
+			showYellowAlert : true,
+			yellowAlertHeader : header,
+			yellowAlertMessage : message
+		});
+	}
+
+	showGreenAlert (header, message) {
+		this.setState({ 
+			showGreenAlert : true,
+			greenAlertHeader : header,
+			greenAlertMessage : message
+		});
+	}
+
+	signIn() {
 		var email = document.getElementById('loginEmail').value
+		if (!email.endsWith("@usc.edu")) {
+			email+="@usc.edu"
+		}
+		console.log(email);
 		var password = document.getElementById('loginPassword').value
+		// Firebase Auth Sign In
 		auth().signInWithEmailAndPassword(email, password).then(function() {
-			// Check if
 			var user = auth().currentUser;
 			if (user.emailVerified) {
-				//ADDED
-                this.setState({ logInSuccess : true });
+				this.setState({ logInSuccess : true });
 			} else {
-				this.setState({ emailNotVerified : true });
+				this.showYellowAlert ("Sign In Failed: ", "Please verify your email before signing in.");
 			}
 		}.bind(this)).catch(function(error) {
-			// Handle Errors here.
-			this.setState({logInFailed : true });
-		}.bind(this));
+			this.showRedAlert("Sign In Failed: ", error.message);
+		}.bind(this));	
 	}
 
 	createAccount() {
 		var email = document.getElementById('createEmail').value;
 		var password = document.getElementById('createPassword').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
 		var firstName = document.getElementById('firstName').value;
 		var lastName = document.getElementById('lastName').value;
 
-		auth().createUserWithEmailAndPassword(email, password).then(function() {
-			var user = auth().currentUser;
-			var emailSent = true;
-			user.sendEmailVerification().then(function() {
-				// Email sent.
-			}).catch(function(error) {
-				// An error happened. Should never occur.
-				emailSent = false;
-			});
-			if (!emailSent) {
-				this.setState({ verificationEmailError : true });
-			} else {
-				this.setState({ sentVerificationEmail : true });
+		if(firstName == "" || lastName == ""){
+            this.showRedAlert("Please enter your first and last name.", "");
+		} else if (email=="") {
+            this.showRedAlert("Please enter your USC email.", "");
+        } else if(password == "") {
+            this.showRedAlert("Please enter a password", "");
+        } else if(password != confirmPassword) {
+            this.showRedAlert("Passwords do not match.", "");
+		} else {
+            if (!email.endsWith("@usc.edu")) {
+                email+="@usc.edu"
+            }
+            // Firebase Auth Create User
+            auth().createUserWithEmailAndPassword(email, password).then(function() {
+                var user = auth().currentUser;
+                //var _this = this;
+                user.sendEmailVerification().then(function() {
+                    // Write new user to the users database
+                    database.child("users/" + user.uid + "/email").set(email);
+                    database.child("users/" + user.uid + "/firstName").set(firstName);
+                    database.child("users/" + user.uid + "/lastName").set(lastName);
 
-				// Add user to database
-				database.child('users/' + user.uid).set({
-					'first name': firstName,
-					'last name': lastName,
-					'email' : email
-				});
-			}
+                    // Green alert: user a verification email has been sent
+                    this.showGreenAlert ("Your account has been created!",
+                        "An verification email has been sent. Please verify before logging in.");
+                }.bind(this)).catch(function(error) {
+                    // An error happened. Should never occur.
+                    this.showRedAlert("Email Verification Failed: ", error.message);
+                }.bind(this));
+            }.bind(this)).catch(function(error) {
+                this.showRedAlert("Create Account Failed: ", error.message);
+            }.bind(this));
+        }
+	}
+
+	forgotPassword() {
+		var email = document.getElementById('forgotPassEmail').value;
+		this.toggle();
+		auth().sendPasswordResetEmail(email).then(function() {
+			this.showGreenAlert ("Reset Password Email Sent: ", 
+				"Please check your email to reset your password.");
 		}.bind(this)).catch(function(error) {
-			// Handle Errors here.
-			this.setState({
-				createAccountFailed : true,
-				createAccountErrorMessage : error.message
-			});
+			this.showRedAlert("Reset Password Failed: ", error.message);
 		}.bind(this));
 	}
 
     render() {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
+        
         if (this.state.logInSuccess) {
-			return ( <Redirect to={from}/> );
+			
+			if(this.state.completedProf == true) {
+				return ( <Redirect to={from}/> );
+			}
+			else {
+				return (<Redirect to={{
+							  pathname: '/createprofile' }}/> );
+			}
 		}
 
         return (
-        	<div id="div">
-	            <header id="header">
-					<h1>kabom</h1>
 
-					<h3> <UncontrolledAlert color="danger" isOpen={this.state.logInFailed}>
-						<strong>Login Failed: </strong> Username or Password is incorrect.
-					</UncontrolledAlert> 
 
-					<UncontrolledAlert color="danger" isOpen={this.state.createAccountFailed}>
-				 		<strong>Create Account Failed: </strong> {this.state.createAccountErrorMessage}
-				 	</UncontrolledAlert>
+			<Container id="container">
+				<Row id="header" >
+					<Col xs="5">
+						<h1>kabom <small><sub>Unify to solve</sub></small></h1>
+					</Col>
+					<Col xs="auto">
+						<Row id="login">
+							<Col xs="auto">
+								<InputGroup>
+									<Input placeholder="username" type="email" name="email" id="loginEmail" />
+									<InputGroupAddon>@usc.edu</InputGroupAddon>
+								</InputGroup>
+							</Col>
+							<Col xs="auto">
+								<InputGroup>
+									<Input placeholder="password" type="password" name="password" id="loginPassword"/>
+								</InputGroup>
+							</Col>
+							<Col xs="auto">
+								<Button outline color="warning" onClick={this.signIn}>Sign In</Button>{' '}
+							</Col>
+							<Col xs="auto">
+								<Button color="link" id="forgotPassword" onClick={this.toggle}> Forgot Password?
+									<Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+										<ModalHeader toggle={this.toggle}>Find Your Account</ModalHeader>
+										<ModalBody>
+											Enter your email to reset your password.<br />
+											<input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
+											<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
+											</Modal>
+										</ModalBody>
 
-				 	<UncontrolledAlert color="success" isOpen={this.state.sentVerificationEmail}>
-				 		<strong>Account Created: </strong> Please verify your email before logging in.
-				 	</UncontrolledAlert>
+										<ModalFooter>
+											<Button color="primary" onClick={this.forgotPassword}>Reset Password</Button>{' '}
+											<Button color="secondary" onClick={this.toggle}>Cancel</Button>
+										</ModalFooter>
+									</Modal>
+								</Button>
+							</Col>
+						</Row>
 
-				 	<UncontrolledAlert color="warning" isOpen={this.state.emailNotVerified}>
-				 		<strong>Login Failed: </strong> Please verify your email before logging in.
-				 	</UncontrolledAlert>
+					</Col>
+				</Row>
 
-				 	<UncontrolledAlert color="warning" isOpen={this.state.verificationEmailError}>
-				 		<strong>Error Sending Email: </strong> Something went wrong with sending the verification email. Please try creating an account again.
-				 	</UncontrolledAlert>
-					</h3>
-					
-					<h1> {this.state.logInSuccess && '1'} </h1>
+				<Alert color="danger" isOpen={this.state.showRedAlert} toggle={this.dismissRed}>
+					<strong>{this.state.redAlertHeader} </strong> {this.state.redAlertMessage}
+				</Alert>
 
-					<form id="login-form" method="post" action="">
-						<input type="email" name="email" id="loginEmail" placeholder="Email" />
-						<input type="password" name="password" id="loginPassword" placeholder="Password" />
-						
+				<Alert color="warning" isOpen={this.state.showYellowAlert} toggle={this.dismissYellow}>
+					<strong>{this.state.yellowAlertHeader} </strong> {this.state.yellowAlertMessage}
+				</Alert>
+
+				<Alert color="success" isOpen={this.state.showGreenAlert} toggle={this.dismissGreen}>
+					<strong>{this.state.greenAlertHeader} </strong> {this.state.greenAlertMessage}
+				</Alert>
+
+				<Row id="body">
+					<Col xs="8">
 						<div>
-					<Button color="primary" onClick={this.logIn}>Log In</Button>{' '} 
-					</div>
+							<Jumbotron>
+								<h1 className="display-4">Project collaboration made easier.</h1>
+								<p className="lead">
+									Kabom connects USC students of all backgrounds to collaborate on student projects.
+									Whether you have a project in mind or you just want to join in on a side project,
+									find the team of developers, designers, project managers, and whoever else you need
+									to make an amazing project.
+								</p>
+								<p className="lead">
+									<Button color="primary">Learn More</Button>
+								</p>
+								<hr className="my-2" />
+								<p><strong>Fun fact:</strong> kabom /kəˈbo͞om/ means <i>unity</i> in Twi, one of the many languages spoken in Ghana.</p>
+							</Jumbotron>
+						</div>
+					</Col>
 
+					<Col id="signUpCol" xs="4">
+						<h1 className="display-5" >Sign Up</h1>
 
-					<div id="forgotPassword" onClick={this.toggle}>Forgot Password?
-						<Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-						<ModalHeader toggle={this.toggle}>Find Your Account</ModalHeader>
-						<ModalBody>
-							Please enter your email to search for your account.<br />
-							<input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
-							<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
-							</Modal>
-						</ModalBody>
-						
-						<ModalFooter>
-							<Button color="primary" onClick={this.toggle}>Search</Button>{' '}
-							<Button color="secondary" onClick={this.toggle}>Cancel</Button>
-						</ModalFooter>
-						</Modal>
-					</div>
+						<div id="signUp">
+							<Input type="firstName" name="firstName" id="firstName" placeholder="First Name" />
+							<Input type="lastName" name="lastName" id="lastName" placeholder="Last Name" />
+							<InputGroup>
+								<Input type="email" name="email" id="createEmail" placeholder="Username" />
+								<InputGroupAddon>@usc.edu</InputGroupAddon>
+							</InputGroup>
+							<Input type="password" name="password" id="createPassword" placeholder="Password" />
+							<Input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" />
+							<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
+						</div>
+					</Col>
 
+				</Row>
 
-					</form>
+				<Row id="bottom">
+					<Col align="center">
+						<p> Made at the University of Southern California
+							<br>
+							</br>
+							Professor Miller is the best!
+						</p>
 
-					<p>Find people to help you launch your <br/>
-					next big thing.</p>
-				</header>
+					</Col>
+				</Row>
 
-					<form id="signup-form" method="post" action="">
-						<h1> Sign up </h1> <br/>
-						<input type="firstName" name="firstName" id="firstName" placeholder="First name" /> <br/>
-						<input type="lastName" name="lastName" id="lastName" placeholder="Last name" /> <br/>
-						<input type="email" name="email" id="createEmail" placeholder="Email" /> <br/>
-						<input type="password" name="password" id="createPassword" placeholder="New password" /> <br/>
-						<Button color="success" onClick={this.createAccount}>Create Account</Button>{' '}
-					</form>
-			</div>
+			</Container>
         );
     }
 }
