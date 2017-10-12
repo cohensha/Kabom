@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Modal, ModalBody, ModalHeader, ModalFooter, Button, Row, Col, Label, FormGroup,Input} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 
+import '../home/style.css';
+
 
 class CardModal extends Component {
     constructor(props) {
@@ -18,6 +20,7 @@ class CardModal extends Component {
                     <p>{this.props.obj.description}</p>
                     <p>{'Seeking ' + this.props.obj.seekingNumPeople + ' developers'} </p>
                     <p>{'Interests: ' + this.props.obj.interests}</p>
+                    <p>{'Skills Needed: ' + this.props.obj.skillsNeeded} </p>
                     <Button>I'm interested!</Button>
                 </ModalBody>
                 <ModalFooter>

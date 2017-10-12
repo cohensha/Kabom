@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { auth } from './firebase/constants';
 
-import {Home, Login} from './pages';
-import {CreateProfile} from './pages';
-
+import {Home, Login, CreateProfile, Header} from './pages';
 
 
 class App extends Component {
@@ -38,7 +36,7 @@ class App extends Component {
             <div>
                 <Route path="/login/" component={Login} />
                 <PrivateRoute authed={this.state.authed} path ="/createprofile" component={CreateProfile}/>
-                <PrivateRoute exact authed={true} path="/" component={Home} />
+                <PrivateRoute exact authed={this.state.authed} path="/" component={Home} />
             </div>
             </Router>
         );

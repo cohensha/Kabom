@@ -17,33 +17,49 @@ class Sidebar extends Component {
             myTeams: [],
             myProjects: [],
             isMounted: false,
+            myTeam: null,
+            myTeamProject: null,
+            myTeamId: '',
         };
-        const user = auth.currentUser;
-        this.teamReqRef = database.child("requests/users/mOnTIAFBT8g1ijeglL2KWS3ASHp1");
-        this.projReqRef = database.child("requests/teams/TeamUID0");
-        this.myTeamsRef = database.child("users/mOnTIAFBT8g1ijeglL2KWS3ASHp1/teams");
-        this.myProjectsRef = database.child("users/mOnTIAFBT8g1ijeglL2KWS3ASHp1/projects");
+        this.teamReqRef = database.child("requests/users/" + this.props.uid);
+        this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
+        this.myProjectsRef = database.child("users/"+ this.props.uid + "/projects");
+        this.teamIdRef = database.child("users/" + this.props.uid + "/team");
 
 
     }
 
 
     componentDidMount() {
-        const user = auth.currentUser;
-        console.log(user);
-        if (user) console.log(user.uid);
-        else console.log("no user");
+        this.teamIdRef.once("value").then((teamIdSnapshot) => {
+            if (teamIdSnapshot.exists()) {
+                this.setState({myTeamId: teamIdSnapshot.val()});
+                console.log(teamIdSnapshot.val());
+                //get the team name from team id
+                database.child("teams/" + teamIdSnapshot.val() + "/name").once("value").then((sp) => {
+                    if (sp.exists()) {
+                        this.setState({myTeam: sp.val()});
+                    }
+                });
+
+                //get the team requests from team id
+                database.child("requests/teams/" + teamIdSnapshot.val()).once("value").then((teamsSnapshot) => {
+                    if (teamsSnapshot.exists()) {
+                        let array = [];
+                        teamsSnapshot.forEach(function(childSnapshot) {
+                            const item = childSnapshot.val();
+                            array.push(item);
+                            console.log("item: " + item);
+                        });
+                        this.setState({projRequests: array});
+                    }
+                 });
+            }
+        });
+
         this.teamReqRef.once("value").then( (snapshot) => {
-            // You are now in the Promise land (haha get it).
-            // Every line the the then() will be executed after the snapshot has been retrieved.
-
             if (snapshot.exists()) {
-                // Create a data structure to store your data
                 let array = [];
-
-                // Use the forEach function to get each childSnapshot
-                // Operate on the child snapshot as you would a regular snapshot
-
                 snapshot.forEach(function(childSnapshot) {
                     const item = childSnapshot.val();
                     array.push(item);
@@ -51,35 +67,11 @@ class Sidebar extends Component {
                 this.setState({teamRequests: array});
             }
         });
-        this.projReqRef.once("value").then( (snapshot) => {
-            // You are now in the Promise land (haha get it).
-            // Every line the the then() will be executed after the snapshot has been retrieved.
 
-            if (snapshot.exists()) {
-                // Create a data structure to store your data
-                let array = [];
 
-                // Use the forEach function to get each childSnapshot
-                // Operate on the child snapshot as you would a regular snapshot
-
-                snapshot.forEach(function(childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
-                });
-                this.setState({projRequests: array});
-            }
-        });
         this.myTeamsRef.once("value").then( (snapshot) => {
-            // You are now in the Promise land (haha get it).
-            // Every line the the then() will be executed after the snapshot has been retrieved.
-
             if (snapshot.exists()) {
-                // Create a data structure to store your data
                 let array = [];
-
-                // Use the forEach function to get each childSnapshot
-                // Operate on the child snapshot as you would a regular snapshot
-
                 snapshot.forEach(function(childSnapshot) {
                     const item = childSnapshot.val();
                     array.push(item);
@@ -87,17 +79,10 @@ class Sidebar extends Component {
                 this.setState({myTeams: array});
             }
         });
+
         this.myProjectsRef.once("value").then( (snapshot) => {
-            // You are now in the Promise land (haha get it).
-            // Every line the the then() will be executed after the snapshot has been retrieved.
-
             if (snapshot.exists()) {
-                // Create a data structure to store your data
                 let array = [];
-
-                // Use the forEach function to get each childSnapshot
-                // Operate on the child snapshot as you would a regular snapshot
-
                 snapshot.forEach(function(childSnapshot) {
                     const item = childSnapshot.val();
                     array.push(item);
@@ -110,7 +95,6 @@ class Sidebar extends Component {
 
     componentWillUnmount() {
         this.teamReqRef.off();
-        this.projReqRef.off();
     }
 
     toggle(collapse) {
@@ -128,34 +112,36 @@ class Sidebar extends Component {
         return (
             <div className="ml-auto ml-5 pl-2">
                 <p />
+                <p>Team Lead For</p>
+                <ListGroup className="mr-3 mb-3">
+                    <ListGroupItem> {this.state.myTeam || 'None. Create One Below!'} </ListGroupItem>
+                </ListGroup>
+                <p>Your Team's Current Project</p>
+                <ListGroup className="mr-3 mb-3">
+                    <ListGroupItem> {this.state.myTeamProject || 'None. Find one to the left!'} </ListGroupItem>
+                </ListGroup>
                 <p onClick={() => this.toggle('teamreq')}> Team Requests </p>
                 <Collapse isOpen={this.state.teamRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.teamRequests.map( (req, id) =>
                             <ListGroupItem key={id}> {req} </ListGroupItem>
                         )}
-                        <ListGroupItem>Team 1</ListGroupItem>
-                        <ListGroupItem>cool Teamsz</ListGroupItem>
                     </ListGroup>
                 </Collapse>
-                <p onClick={() => this.toggle('projectreq')}> Project Requests </p>
+                <p onClick={() => this.toggle('projectreq')}> Project Requests for {this.state.myTeam} </p>
                 <Collapse isOpen={this.state.projectRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.projRequests.map( (req, id) =>
                             <ListGroupItem key={id}> {req} </ListGroupItem>
                         )}
-                        <ListGroupItem>Awesome project</ListGroupItem>
-                        <ListGroupItem>super galactic cool projectakjfkljal</ListGroupItem>
                     </ListGroup>
                 </Collapse>
-                <p onClick={() => this.toggle('team')}> My teams </p>
+                <p onClick={() => this.toggle('team')}> My Teams </p>
                 <Collapse isOpen={this.state.myTeamsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeams.map( (req, id) =>
                             <ListGroupItem key={id}> {req} </ListGroupItem>
                         )}
-                        <ListGroupItem>Look at my teams</ListGroupItem>
-                        <ListGroupItem>we are cool teams</ListGroupItem>
                     </ListGroup>
                 </Collapse>
                 <p onClick={() => this.toggle('project')}> My Projects </p>
@@ -164,9 +150,16 @@ class Sidebar extends Component {
                         {this.state.myProjects.map( (req, id) =>
                             <ListGroupItem key={id}> {req.name} </ListGroupItem>
                         )}
-                        <ListGroupItem>kabom project</ListGroupItem>
                     </ListGroup>
                 </Collapse>
+                <Button className="mb-2" color="secondary" size="lg"
+                        onClick={this.props.teamclick}
+                        block
+                >Create Team</Button>
+                <Button className="mb-2" color="secondary" size="lg"
+                        onClick={this.props.projectclick}
+                        block
+                >Create Project</Button>
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Button} from 'reactstrap';
 
+
 import Header from './header';
 import PeopleTab from "./tabs/peopleTab";
 import TeamTab from "./tabs/teamTab";
@@ -25,54 +26,8 @@ class Home extends Component {
             people: [],
             showCreateTeamModal: false,
             showCreateProjectModal: false,
+            currUid: auth().currentUser.uid,
         };
-        //const user = auth.currentUser;
-       this.projectRef = database.child("projects");
-       this.teamsRef = database.child("teams");
-       this.peopleRef = database.child("users");
-    }
-
-    componentDidMount() {
-        this.projectRef.once("value").then((snapshot) => {
-            if (snapshot.exists()) {
-                // Create a data structure to store your data
-                let array = [];
-                snapshot.forEach(function (childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
-                });
-                this.setState({projects: array});
-            }
-        });
-        this.teamsRef.once("value").then((snapshot) => {
-            if (snapshot.exists()) {
-                // Create a data structure to store your data
-                let array = [];
-                snapshot.forEach(function (childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
-                });
-                this.setState({teams: array});
-            }
-        });
-        this.peopleRef.limitToFirst(10).once("value").then((snapshot) => {
-            if (snapshot.exists()) {
-                // Create a data structure to store your data
-                let array = [];
-                snapshot.forEach(function (childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
-                });
-                this.setState({people: array});
-            }
-        });
-    }
-
-
-    componentWillUnmount() {
-        this.peopleRef.off();
-        this.projectRef.off();
-        this.peopleRef.off();
     }
 
     toggle(tab) {
@@ -130,26 +85,23 @@ class Home extends Component {
                                 </NavItem>
                             </Nav>
                             <TabContent activeTab={this.state.activeTab}>
-                                <DisplayTab id="1" data={this.state.projects}/>
-                                <DisplayTab id="2" data={this.state.teams}/>
-                                <DisplayTab id="3" data={this.state.people} />
+                                <DisplayTab id="1" type="projects"/>
+                                <DisplayTab id="2" type="teams"/>
+                                <DisplayTab id="3" type="users"/>
                             </TabContent>
                         </div>
                         </Col>
                         <Col sm={{ size: '3', offset: 1 }}>
-                        <Sidebar />
-                            <Button className="mb-2" color="secondary" size="lg"
-                                    onClick={() => this.toggleCreateTeam()}
-                                    block
-                            >Create Team</Button>
-                            <Button className="mb-2" color="secondary" size="lg"
-                                    onClick={() => this.toggleCreateProject()}
-                                    block
-                            >Create Project</Button>
+                        <Sidebar uid={this.state.currUid || 'null rn'} teamclick={() => this.toggleCreateTeam()}
+                            projectclick={() => this.toggleCreateProject()}/>
                         </Col>
                     </Row>
-                <CreateTeamModal show={this.state.showCreateTeamModal} onclick={() => this.toggleCreateTeam()} />
-                <CreateProjectModal show={this.state.showCreateProjectModal} onclick={() => this.toggleCreateProject()} />
+                <CreateTeamModal show={this.state.showCreateTeamModal}
+                                 onclick={() => this.toggleCreateTeam()}
+                                 uid={this.state.currUid} />
+                <CreateProjectModal show={this.state.showCreateProjectModal}
+                                    onclick={() => this.toggleCreateProject()}
+                                    uid={this.state.currUid} />
             </div>
         );
     }

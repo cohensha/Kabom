@@ -14,7 +14,7 @@ class CreateProjectModal extends Component {
 
         this.toggle = this.props.onclick;
         this.postProjectRef = database.child("projects");
-        this.postUserProjectsRef = database.child("users/mOnTIAFBT8g1ijeglL2KWS3ASHp1/projects");
+        this.postUserProjectsRef = database.child("users/" + this.props.uid + "/projects");
 
 
     }
@@ -27,7 +27,7 @@ class CreateProjectModal extends Component {
             description: this.state.projectDescriptionInput,
             created: new Date(),
             interests: 0,
-            projectOwner: "mOnTIAFBT8g1ijeglL2KWS3ASHp1",
+            projectOwner: this.props.uid,
         });
 
         this.postUserProjectsRef.push({

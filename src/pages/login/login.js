@@ -23,7 +23,8 @@ class Login extends Component {
     		greenAlertMessage : "",
 			logInSuccess : false,
 			nestedModal: false,
-			createdProfile: false
+			createdProfile: false,
+			completedProf: true,
     	};
 		this.signIn = this.signIn.bind(this);
 		this.createAccount = this.createAccount.bind(this);
@@ -172,7 +173,7 @@ class Login extends Component {
         
         if (this.state.logInSuccess) {
 			
-			if(this.state.completedProf == true) {
+			if(this.state.completedProf) {
 				return ( <Redirect to={from}/> );
 			}
 			else {

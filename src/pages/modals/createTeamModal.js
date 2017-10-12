@@ -13,18 +13,21 @@ class CreateTeamModal extends Component {
             teamDescriptionInput: '',
             seekingNumPeopleInput: 0,
             numOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            skillOptions: ["C++", "Android", "iOS", "Java", "React"],
+            skillsNeededInput: [],
+            currUid: this.props.uid,
         };
 
         this.toggle = this.props.onclick;
-        this.postTeamRef = database.child("teams");
-        this.postUserTeamRef = database.child("users/mOnTIAFBT8g1ijeglL2KWS3ASHp1/team");
-        this.postUserTeamsRef = database.child("users/mOnTIAFBT8g1ijeglL2KWS3ASHp1/teams/0");
+        this.postTeamRef = database.child("teams"); //this posts to general teams tree
+        this.postUserTeamRef = database.child("users/" + this.props.uid + "/team"); //this posts to users team owner
+        this.postUserTeamsRef = database.child("users/" + this.props.uid + "/teams/"); //this posts to users list of teams
 
     }
 
 
     writeTeamToDb() {
-        console.log(this.state.teamNameInput);
+        //console.log(this.state.teamNameInput);
         const teamId = this.postTeamRef.push({
             name: this.state.teamNameInput,
             description: this.state.teamDescriptionInput,
@@ -33,13 +36,15 @@ class CreateTeamModal extends Component {
             numPeople: 0,
             seekingNumPeople: this.state.seekingNumPeopleInput,
             projects: [],
-            teamOwner: "mOnTIAFBT8g1ijeglL2KWS3ASHp1",
+            teamOwner: this.state.currUid,
+            skillsNeeded: this.state.skillsNeededInput,
         });
-        this.postUserTeamRef.set(teamId.key)
-        this.postUserTeamsRef.set(this.state.teamNameInput);
+        this.postUserTeamRef.set(teamId.key);
+        this.postUserTeamsRef.push(this.state.teamNameInput);
 
         this.setState({teamNameInput: ''});
         this.setState({teamDescriptionInput: ''});
+        this.setState({skillsNeededInput: []});
         this.toggle();
 
     }
@@ -60,6 +65,13 @@ class CreateTeamModal extends Component {
 
     handleChangeNumPeople(event) {
         this.setState({seekingNumPeopleInput: event.target.value});
+    }
+
+    handleSelectSkills(event) {
+        let array = this.state.skillsNeededInput;
+        array.push(event.target.value);
+        this.setState({skillsNeededInput: array});
+        //this.state.skillsNeededInput.map( (skill) => console.log(skill) );
     }
 
     render() {
@@ -93,14 +105,16 @@ class CreateTeamModal extends Component {
                             id="selectGroupSize"
                             onChange={(e) => this.handleChangeNumPeople(e)}
                         >
-                            {this.state.numOptions.map( (num) => <option>{num}</option> )}
+                            {this.state.numOptions.map( (num, id) => <option key={id}>{num}</option> )}
                         </Input>
                     </FormGroup>
                     <FormGroup>
                         <Label className="text-gray-dark" for="skillSelect">Select Skills Needed:</Label>
-                        <Input type="select" name="selectMulti" id="skillSelect" multiple>
-                            <option>iOS</option>
-                            <option>Android</option>
+                        <Input type="select" name="selectMulti" id="skillSelect"
+                               onChange={(e) => this.handleSelectSkills(e)}
+                               multiple
+                        >
+                            {this.state.skillOptions.map( (skill, id) => <option key={id}>{skill}</option> )}
                         </Input>
                     </FormGroup>
                 </ModalBody>
