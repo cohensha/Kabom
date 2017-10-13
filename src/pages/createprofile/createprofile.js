@@ -5,24 +5,24 @@ import Header from '../header/header.js';
 import SideBar from '../sidebar/sidebar.js';
 
 class CreateProfile extends Component {
+
     render() {
         return (
-            
-             <div>
-            <br />
+            <div>
+                <br />
                 <Header />
                     <br />
                     <Row>
-                        <Col sm="16" md={{size: 8}}>
+                        <Col xs="16" md={{size: 8}}>
                         <div className="ml-3 d-inline-block">
                             <FormContainer/>
                         </div>
                         </Col>
-                        <Col sm={{ size: '2', offset: 2 }}>
+                        <Col xs={{ size: '2', offset: 2 }}>
                         <SideBar />
                         </Col>
                     </Row>
-        </div>
+            </div>
         );
     }
 }
