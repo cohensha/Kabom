@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { auth } from './firebase/constants';
 
-import {Home, Login} from './pages';
-import {CreateProfile} from './pages';
-
+import {Home, Login, CreateProfile, Header} from './pages';
 
 
 class App extends Component {
@@ -22,6 +20,7 @@ class App extends Component {
                 this.setState({ authed : true });
             } else {
                 // No user is signed in.
+                console.log("user signed out");
             }
         });
     }

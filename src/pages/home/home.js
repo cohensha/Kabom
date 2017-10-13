@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
-import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
+import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Button} from 'reactstrap';
+
 
 import Header from '../header/header';
 import ProjectTab from './tabs/projectTab';
 import PeopleTab from "./tabs/peopleTab";
 import TeamTab from "./tabs/teamTab";
+import { database, auth } from '../../firebase/constants';
+import DisplayTab from "./tabs/displayTab";
+import CreateTeamModal from '../modals/createTeamModal';
+import CreateProjectModal from '../modals/createProjectModal';
+
 import Sidebar from '../sidebar/sidebar';
 
 
@@ -13,8 +19,15 @@ class Home extends Component {
         super(props);
 
         this.toggle = this.toggle.bind(this);
+        this.toggleCreateTeam = this.toggleCreateTeam.bind(this);
         this.state = {
-            activeTab: '1'
+            activeTab: '1',
+            projects: [],
+            teams: [],
+            people: [],
+            showCreateTeamModal: false,
+            showCreateProjectModal: false,
+            currUid: auth().currentUser.uid,
         };
     }
 
@@ -25,6 +38,19 @@ class Home extends Component {
             });
         }
     }
+
+    toggleCreateTeam() {
+        this.setState({
+            showCreateTeamModal: !this.state.showCreateTeamModal
+        });
+    }
+
+    toggleCreateProject() {
+        this.setState({
+            showCreateProjectModal: !this.state.showCreateProjectModal
+        });
+    }
+
 
     render() {
         return (
@@ -60,16 +86,23 @@ class Home extends Component {
                                 </NavItem>
                             </Nav>
                             <TabContent activeTab={this.state.activeTab}>
-                                <ProjectTab id="1" />
-                                <TeamTab id="2" />
-                                <PeopleTab id="3" />
+                                <DisplayTab id="1" type="projects"/>
+                                <DisplayTab id="2" type="teams"/>
+                                <DisplayTab id="3" type="users"/>
                             </TabContent>
                         </div>
                         </Col>
                         <Col sm={{ size: '3', offset: 1 }}>
-                        <Sidebar />
+                        <Sidebar uid={this.state.currUid || 'null rn'} teamclick={() => this.toggleCreateTeam()}
+                            projectclick={() => this.toggleCreateProject()}/>
                         </Col>
                     </Row>
+                <CreateTeamModal show={this.state.showCreateTeamModal}
+                                 onclick={() => this.toggleCreateTeam()}
+                                 uid={this.state.currUid} />
+                <CreateProjectModal show={this.state.showCreateProjectModal}
+                                    onclick={() => this.toggleCreateProject()}
+                                    uid={this.state.currUid} />
             </div>
         );
     }

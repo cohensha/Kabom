@@ -23,7 +23,8 @@ class Login extends Component {
     		greenAlertMessage : "",
 			logInSuccess : false,
 			nestedModal: false,
-			createdProfile: false
+			createdProfile: false,
+			completedProf: true,
     	};
 		this.signIn = this.signIn.bind(this);
 		this.createAccount = this.createAccount.bind(this);
@@ -159,12 +160,20 @@ class Login extends Component {
 		}.bind(this));
 	}
 
+	componentWillUnmount() {
+        var user = auth().currentUser;
+
+        database.child("users/" + user.uid + "/email").off();
+        database.child("users/" + user.uid + "/firstName").off();
+        database.child("users/" + user.uid + "/lastName").off();
+	}
+
     render() {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
         
         if (this.state.logInSuccess) {
 			
-			if(this.state.completedProf == true) {
+			if(this.state.completedProf) {
 				return ( <Redirect to={from}/> );
 			}
 			else {
