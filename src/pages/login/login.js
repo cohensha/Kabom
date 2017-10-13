@@ -91,13 +91,14 @@ class Login extends Component {
 		if (!email.endsWith("@usc.edu")) {
 			email+="@usc.edu"
 		}
-		console.log(email);
 		var password = document.getElementById('loginPassword').value
 		// Firebase Auth Sign In
 		auth().signInWithEmailAndPassword(email, password).then(function() {
 			var user = auth().currentUser;
 			if (user.emailVerified) {
-				this.setState({ logInSuccess : true });
+
+
+                this.setState({ logInSuccess : true });
 			} else {
 				this.showYellowAlert ("Sign In Failed: ", "Please verify your email before signing in.");
 			}
@@ -134,6 +135,7 @@ class Login extends Component {
                     database.child("users/" + user.uid + "/email").set(email);
                     database.child("users/" + user.uid + "/firstName").set(firstName);
                     database.child("users/" + user.uid + "/lastName").set(lastName);
+                    database.child("users/" + user.uid + "/createdProfile").set(false);
 
                     // Green alert: user a verification email has been sent
                     this.showGreenAlert ("Your account has been created!",
@@ -163,19 +165,11 @@ class Login extends Component {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
         
         if (this.state.logInSuccess) {
-			
-			if(this.state.completedProf == true) {
-				return ( <Redirect to={from}/> );
-			}
-			else {
-				return (<Redirect to={{
-							  pathname: '/createprofile' }}/> );
-			}
+        	console.log("success going to" + {from});
+            return ( <Redirect to={from}/> );
 		}
 
         return (
-
-
 			<Container id="container">
 				<Row id="header" >
 					<Col xs="5">
@@ -216,7 +210,6 @@ class Login extends Component {
 								</Button>
 							</Col>
 						</Row>
-
 					</Col>
 				</Row>
 
@@ -271,7 +264,7 @@ class Login extends Component {
 				</Row>
 
 				<Row id="bottom">
-					<Col align="center">
+					<Col>
 						<p> Made at the University of Southern California
 							<br>
 							</br>
