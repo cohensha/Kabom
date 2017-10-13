@@ -13,45 +13,18 @@ class SearchBar extends Component {
     }
 
     searchByName() {
-        if (this.state.searchInput === "") return;
-        let array = [];
-        this.props.data.map( (obj) => {
-           if (obj.name && obj.name.toLowerCase().includes(this.state.searchInput.toLowerCase())) {
-               array.push(obj);
-           }
-        });
-        this.props.setresults(array);
+        this.props.searchByName(this.state.searchInput);
         this.setState({searchInput: ""});
-
-
     }
 
     searchByDesc() {
-        if (this.state.searchInput === "") return;
-        let array = [];
-        this.props.data.map( (obj) => {
-            if (obj.description && obj.description.toLowerCase().includes(this.state.searchInput.toLowerCase())) {
-                array.push(obj);
-            }
-        });
-        this.props.setresults(array);
+        this.props.searchByDesc(this.state.searchInput);
         this.setState({searchInput: ""});
-
-
     }
 
     searchBySkills() {
-        if (this.state.searchInput === "") return;
-        let array = [];
-        this.props.data.map( (obj) => {
-            if (obj.skillsNeeded && obj.skillsNeeded.includes(this.state.searchInput)) {
-                array.push(obj);
-                console.log(obj.name);
-            }
-        });
-        this.props.setresults(array);
+        this.props.searchBySkills(this.state.searchInput);
         this.setState({searchInput: ""});
-
 
     }
 

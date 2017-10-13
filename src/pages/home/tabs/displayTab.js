@@ -52,10 +52,37 @@ class DisplayTab extends Component {
         });
     }
 
-    setSearchResults(results) {
-        //console.log("set");
-        //console.log(results);
-        this.setState({searchResults: results});
+    searchByName(input) {
+        if (input === "") return;
+        let array = [];
+        this.state.originalData.map( (obj) => {
+            if (obj.name && obj.name.toLowerCase().includes(input.toLowerCase())) {
+                array.push(obj);
+            }
+        });
+        this.setState({searchResults: array});
+    }
+
+    searchByDesc(input) {
+        if (input === "") return;
+        let array = [];
+        this.state.originalData.map( (obj) => {
+            if (obj.description && obj.description.toLowerCase().includes(input.toLowerCase())) {
+                array.push(obj);
+            }
+        });
+        this.setState({searchResults: array});
+    }
+
+    searchBySkills(input) {
+        if (input === "") return;
+        let array = [];
+        this.state.originalData.map( (obj) => {
+            if (obj.skillsNeeded && obj.skillsNeeded.includes(input)) {
+                array.push(obj);
+            }
+        });
+        this.setState({searchResults: array});
     }
 
     setSeeAll() {
@@ -66,8 +93,9 @@ class DisplayTab extends Component {
         return(
             <TabPane tabId={this.props.id} className="mt-3">
                 <SearchBar
-                    setresults={(results) => this.setSearchResults(results)}
-                    data={this.state.originalData}
+                    searchByName={(input) => this.searchByName(input)}
+                    searchByDesc={(input) => this.searchByDesc(input)}
+                    searchBySkills={(input) => this.searchBySkills(input)}
                     setSeeAll={() => this.setSeeAll()}
                 />
                 <Row>
