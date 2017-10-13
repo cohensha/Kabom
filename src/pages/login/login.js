@@ -113,13 +113,13 @@ class Login extends Component {
 		var firstName = document.getElementById('firstName').value;
 		var lastName = document.getElementById('lastName').value;
 
-		if(firstName == "" || lastName == ""){
+		if(firstName === "" || lastName === ""){
             this.showRedAlert("Please enter your first and last name.", "");
-		} else if (email=="") {
+		} else if (email==="") {
             this.showRedAlert("Please enter your USC email.", "");
-        } else if(password == "") {
+        } else if(password === "") {
             this.showRedAlert("Please enter a password", "");
-        } else if(password != confirmPassword) {
+        } else if(password !== confirmPassword) {
             this.showRedAlert("Passwords do not match.", "");
 		} else {
             if (!email.endsWith("@usc.edu")) {
@@ -160,11 +160,6 @@ class Login extends Component {
 	}
 
 	componentWillUnmount() {
-        var user = auth().currentUser;
-
-        database.child("users/" + user.uid + "/email").off();
-        database.child("users/" + user.uid + "/firstName").off();
-        database.child("users/" + user.uid + "/lastName").off();
 	}
 
     render() {

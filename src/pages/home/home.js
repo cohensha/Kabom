@@ -12,7 +12,7 @@ import CreateTeamModal from '../modals/createTeamModal';
 import CreateProjectModal from '../modals/createProjectModal';
 
 import Sidebar from '../sidebar/sidebar';
-import FormContainer from './FormContainer';
+import FormContainer from '../createprofile/FormContainer';
 
 import { Redirect } from 'react-router-dom';
 
@@ -76,12 +76,11 @@ class Home extends Component {
     }
 
     render() {
-        const {from} = this.props.location.state || {from: {pathname: '/createprofile'}}
+        const {from} = this.props.location.state || {from: {pathname: '/createprofile'}};
 
         if (!this.state.completedProfile) {
             return ( <Redirect to={from}/> );
         } else {
-            // Create Profile if the completedProfile variable is not found or is false
             return (
                 <div>
                     <Header/>
