@@ -2,16 +2,13 @@ import React, {Component} from 'react';
 import { Container, Row, Col, CardImg } from 'reactstrap';
 import './style.css';
 import { Redirect } from 'react-router-dom';
-import { ProfileImage } from './profile.jpg';
+import Header from '../header/header';
 
 class ViewProfile extends Component {
     render() {
         return (
         	<div class="col-container">
-        		<div id="header">
-					<h1>kabom</h1>
-				</div>
-
+        		<Header/>
 				<div className="courses">
 					<h4>Currently taking</h4><br />
 					
@@ -56,7 +53,7 @@ class ViewProfile extends Component {
 				</div>
 
 				<div className="skillsCard">
-					<h1>Experience</h1> <br/>
+					<h1>Experience</h1> 
 					
 					<h5>user.company</h5>
 					<div className="container">

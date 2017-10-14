@@ -17,7 +17,7 @@
 .card {
     box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
     max-width: 20%;
-    margin: 10% auto auto auto;
+    margin: 5% auto auto auto;
     text-align: center;
     border-radius: 20px;
     /*display: table-cell;  Make elements inside the container behave like table cells */
@@ -27,8 +27,8 @@
 
 .skillsCard {
     box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
-    max-width: 40%;
-    margin: 10% auto 10% auto;
+    max-width: 20%;
+    margin: 5% auto 10% auto;
     text-align: center;
     border-radius: 20px;
     padding: 15px;
@@ -52,7 +52,7 @@
 .courses {
 	box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
     max-width: 20%;
-    margin: auto auto auto 72%;
+    margin: 5% auto auto 72%;
     position: fixed;
     text-align: left;
     border-radius: 15px;
@@ -65,7 +65,7 @@
 .bio {
     box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
     max-width: 20%;
-    margin: auto auto auto 10%;
+    margin: 5% auto auto 10%;
     position: fixed;
     text-align: left;
     border-radius: 15px;
