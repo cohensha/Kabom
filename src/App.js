@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { auth } from './firebase/constants';
-
-import {Home, Login, CreateProfile, ViewProfile} from './pages';
-
-
+import {Home, Login, CreateProfile, ViewProfile, Header} from './pages';
 
 class App extends Component {
     constructor(props) {
@@ -21,6 +18,7 @@ class App extends Component {
                 this.setState({ authed : true });
             } else {
                 // No user is signed in.
+                console.log("user signed out");
             }
         });
     }
