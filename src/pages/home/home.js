@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Button} from 'reactstrap';
+import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
 
 
 import Header from '../header/header';
@@ -12,7 +12,6 @@ import CreateTeamModal from '../modals/createTeamModal';
 import CreateProjectModal from '../modals/createProjectModal';
 
 import Sidebar from '../sidebar/sidebar';
-import FormContainer from '../createprofile/FormContainer';
 
 import { Redirect } from 'react-router-dom';
 
@@ -22,9 +21,9 @@ class Home extends Component {
         super(props);
         this.toggle = this.toggle.bind(this);
         this.toggleCreateTeam = this.toggleCreateTeam.bind(this);
-        this.checkIfUserCompletedProfile = this.checkIfUserCompletedProfile.bind(this);
+        this.checkIfUserCreatedProfile = this.checkIfUserCreatedProfile.bind(this);
         this.state = {
-            completedProfile: true,
+            createdProfile: false,
             activeTab: '1',
             projects: [],
             teams: [],
@@ -33,6 +32,11 @@ class Home extends Component {
             showCreateProjectModal: false,
             currUid: auth().currentUser.uid,
         };
+    }
+
+    // TODO: Issue with data persistence. See GitHub
+    getInitialState () {
+
     }
 
     toggle(tab) {
@@ -55,30 +59,32 @@ class Home extends Component {
         });
     }
 
-    componentWillMount() {
-        console.log("poo ");
-        this.checkIfUserCompletedProfile();
+    componentDidMount() {
+        console.log("In didMount.");
+        this.checkIfUserCreatedProfile();
+        console.log("End didMount.");
+
     }
 
-    checkIfUserCompletedProfile() {
+    checkIfUserCreatedProfile() {
 
         var uid = auth().currentUser.uid;
         var reference = database.child("users/" + uid + "/createdProfile");
 
-
-        reference.once("value").then(function (snapshot) {
-            console.log("completed profile: " + snapshot.val());
-            if (!snapshot.exists() || !snapshot.val()) {
-
-                this.setState({completedProfile: false});
+        reference.once("value").then( (snapshot) => {
+            if (!snapshot.exists()) {
+                this.setState({createdProfile: snapshot.val()});
             }
-        }.bind(this));
+        });
+        console.log("Value of createdProfile after check: " + this.state.createdProfile);
     }
 
     render() {
         const {from} = this.props.location.state || {from: {pathname: '/createprofile'}};
 
-        if (!this.state.completedProfile) {
+        // TODO: This is not being printed...
+        console.log("createdProfile Profile: " + this.state.createdProfile);
+        if (!this.state.createdProfile) {
             return ( <Redirect to={from}/> );
         } else {
             return (
