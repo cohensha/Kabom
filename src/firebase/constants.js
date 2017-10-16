@@ -13,3 +13,4 @@ if (!firebase.length) {
 
 export const database = firebase.database().ref()
 export const auth = firebase.auth
+export const storage = firebase.storage().ref()

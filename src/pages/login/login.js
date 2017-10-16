@@ -268,7 +268,6 @@ class Login extends Component {
 						<p> Made at the University of Southern California
 							<br>
 							</br>
-							Professor Miller is the best!
 						</p>
 
 					</Col>
