@@ -19,6 +19,7 @@ class DisplayTab extends Component {
             radioButtonNames: ["Name", "Description", "Number of Members Needed", "Skills"],
             searchResults: [],
             originalData: [],
+            seeAll: false,
         };
         this.ref = database.child(this.props.type);
     }
@@ -53,7 +54,34 @@ class DisplayTab extends Component {
     }
 
     searchByName(input) {
-        if (input === "") return;
+        // if (input === "") return;
+        // console.log("here");
+        // this.ref.orderByChild("skillsNeeded").equalTo(input).on("value", (snapshot) => {
+        //     console.log("in callback");
+        //     let array = [];
+        //     snapshot.forEach(function (childSnapshot) {
+        //         const item = childSnapshot.val();
+        //         array.push(item);
+        //         console.log(item);
+        //     });
+        // });
+        // console.log("here");
+
+        //
+        this.ref.once("value").then((snapshot) => {
+            if (snapshot.exists()) {
+                // Create a data structure to store your data
+                let array = [];
+                snapshot.forEach(function (childSnapshot) {
+                    const item = childSnapshot.val();
+                    array.push(item);
+                });
+                this.setState({originalData: array});
+                this.setState({searchResults: array});
+
+            }
+        });
+
         let array = [];
         this.state.originalData.map( (obj) => {
             if (obj.name && obj.name.toLowerCase().includes(input.toLowerCase())) {
@@ -61,6 +89,7 @@ class DisplayTab extends Component {
             }
         });
         this.setState({searchResults: array});
+
     }
 
     searchByDesc(input) {
@@ -85,8 +114,37 @@ class DisplayTab extends Component {
         this.setState({searchResults: array});
     }
 
-    setSeeAll() {
+    reset() {
         this.setState({searchResults: this.state.originalData});
+    }
+
+    setSeeAll() {
+        if (this.state.seeAll) {
+            this.ref.once("value").then((snapshot) => {
+                if (snapshot.exists()) {
+                    // Create a data structure to store your data
+                    let array = [];
+                    snapshot.forEach(function (childSnapshot) {
+                        const item = childSnapshot.val();
+                        array.push(item);
+                    });
+                    this.setState({searchResults: array});
+                }
+            });
+        }
+
+        else this.setState({searchResults: this.state.originalData});
+
+    }
+
+    toggleSeeAll() {
+        this.setState({seeAll: !this.state.seeAll});
+
+        this.setSeeAll();
+    }
+
+    componentWillUnmount() {
+        this.ref.off();
     }
 
     render() {
@@ -96,7 +154,7 @@ class DisplayTab extends Component {
                     searchByName={(input) => this.searchByName(input)}
                     searchByDesc={(input) => this.searchByDesc(input)}
                     searchBySkills={(input) => this.searchBySkills(input)}
-                    setSeeAll={() => this.setSeeAll()}
+                    reset={() => this.reset()}
                 />
                 <Row>
                     {this.state.searchResults.map((d, id) =>
@@ -111,6 +169,10 @@ class DisplayTab extends Component {
                         </Col>
                     )}
                 </Row>
+                <Button className="mt-4" onClick={() => this.toggleSeeAll()} block>
+                    {!this.state.seeAll && 'Hide'}
+                    {this.state.seeAll && 'See All'}
+                </Button>
                 <CardModal
                     show={this.state.showCardModal}
                     obj={this.state.selectedObj}
@@ -118,7 +180,7 @@ class DisplayTab extends Component {
                 />
             </TabPane>
         );
-        }
-    };
+    }
+}
 
 export default DisplayTab;

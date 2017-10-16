@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
+//import {RejectIcon, AcceptIcon} from '../../icons/icon'
+import RequestListGroupItem from './requestListGroupItem';
 import './style.css';
 
 
@@ -118,6 +120,10 @@ class Sidebar extends Component {
         this.setState({colorTeam: "#ffffff"});
     }
 
+    accept() {
+        console.log("clicked");
+    }
+
     render() {
         return (
             <div  id="sidebar-div" className="ml-auto ml-5 pl-2">
@@ -141,8 +147,11 @@ class Sidebar extends Component {
                 <p onClick={() => this.toggle('projectreq')}> Project Requests for {this.state.myTeam} </p>
                 <Collapse isOpen={this.state.projectRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
-                        {this.state.projRequests.map( (req, id) =>
-                            <ListGroupItem key={id}> {req} </ListGroupItem>
+                        {this.state.projRequests.map((req, id) =>
+                            <RequestListGroupItem key={id}
+                                accept={() => this.accept()}
+                            >{req}
+                            </RequestListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
