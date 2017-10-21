@@ -51,13 +51,9 @@ class FormContainer extends Component {
         this.addNewInterest = this.addNewInterest.bind(this);
 	}
 
-    handleSelectedSchoolChange (e) {
-        console.log(e.target.value);
-        this.setState({school : e.target.value});}
+    handleSelectedSchoolChange (e) {this.setState({school : e.target.value});}
 
-    handleSelectedYearChange (e) {
-        console.log(e.target.value);
-        this.setState({year : e.target.value});}
+    handleSelectedYearChange (e) {this.setState({year : e.target.value});}
 
     handleDescriptionChange (e) { this.setState({description : e.target.value});}
 
@@ -218,7 +214,6 @@ class FormContainer extends Component {
 
         } else {
             this.setState({skillsInvalid : true});
-
         }
 
 		if (this.state.projectInterests.length === 0) {
