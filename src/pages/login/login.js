@@ -24,7 +24,6 @@ class Login extends Component {
 			logInSuccess : false,
 			nestedModal: false,
 			createdProfile: false,
-			completedProf: true,
     	};
 		this.signIn = this.signIn.bind(this);
 		this.createAccount = this.createAccount.bind(this);
@@ -37,6 +36,7 @@ class Login extends Component {
 		this.showYellowAlert = this.showYellowAlert.bind(this);
 		this.showGreenAlert = this.showGreenAlert.bind(this);
 		this.forgotPassword = this.forgotPassword.bind(this);
+		this.checkIfUserCreatedProfile = this.checkIfUserCreatedProfile.bind(this);
 	}
 
 	toggle() {
@@ -94,16 +94,16 @@ class Login extends Component {
 		}
 		var password = document.getElementById('loginPassword').value
 		// Firebase Auth Sign In
-		auth().signInWithEmailAndPassword(email, password).then(function() {
+		auth().signInWithEmailAndPassword(email, password).then(() =>  {
 			var user = auth().currentUser;
 			if (user.emailVerified) {
-                this.setState({ logInSuccess : true });
+				this.checkIfUserCreatedProfile();
 			} else {
 				this.showYellowAlert ("Sign In Failed: ", "Please verify your email before signing in.");
 			}
-		}.bind(this)).catch(function(error) {
+		}).catch((error) => {
 			this.showRedAlert("Sign In Failed: ", error.message);
-		}.bind(this));	
+		});
 	}
 
 	createAccount() {
@@ -126,47 +126,68 @@ class Login extends Component {
                 email+="@usc.edu"
             }
             // Firebase Auth Create User
-            auth().createUserWithEmailAndPassword(email, password).then(function() {
+            auth().createUserWithEmailAndPassword(email, password).then(() => {
                 var user = auth().currentUser;
-                user.sendEmailVerification().then(function() {
+                user.sendEmailVerification().then(() => {
                     // Write new user to the users database
                     database.child("users/" + user.uid + "/email").set(email);
                     database.child("users/" + user.uid + "/firstName").set(firstName);
                     database.child("users/" + user.uid + "/lastName").set(lastName);
                     database.child("users/" + user.uid + "/createdProfile").set(false);
+                    database.child("users/" + user.uid + "/name").set(firstName + " " + lastName);
+
+
 
                     // Green alert: user a verification email has been sent
                     this.showGreenAlert ("Your account has been created!",
                         "An verification email has been sent. Please verify before logging in.");
-                }.bind(this)).catch(function(error) {
+                }).catch((error) => {
                     // An error happened. Should never occur.
                     this.showRedAlert("Email Verification Failed: ", error.message);
-                }.bind(this));
-            }.bind(this)).catch(function(error) {
+                });
+            }).catch((error) => {
                 this.showRedAlert("Create Account Failed: ", error.message);
-            }.bind(this));
+            });
         }
 	}
 
 	forgotPassword() {
 		var email = document.getElementById('forgotPassEmail').value;
 		this.toggle();
-		auth().sendPasswordResetEmail(email).then(function() {
+		auth().sendPasswordResetEmail(email).then(() => {
 			this.showGreenAlert ("Reset Password Email Sent: ", 
 				"Please check your email to reset your password.");
-		}.bind(this)).catch(function(error) {
+		}).catch((error) => {
 			this.showRedAlert("Reset Password Failed: ", error.message);
-		}.bind(this));
+		});
 	}
 
 	componentWillUnmount() {
+
 	}
 
+    checkIfUserCreatedProfile() {
+        var uid = auth().currentUser.uid;
+        var reference = database.child("users/" + uid + "/createdProfile");
+
+        reference.once("value").then( (snapshot) => {
+        	// Snapshot must exist if user created an account.
+            if (snapshot.exists()) {
+                this.setState({
+					createdProfile: snapshot.val(),
+					logInSuccess : true
+                });
+            }
+        });
+    }
+
     render() {
-        const { from } = this.props.location.state || { from: { pathname: '/' } };
-        
         if (this.state.logInSuccess) {
-            return ( <Redirect to={from}/> );
+        	if (this.state.createdProfile) {
+                return ( <Redirect to={'/'}/> );
+			} else {
+                return ( <Redirect to={'/createprofile'}/> );
+			}
 		}
 
         return (
@@ -197,7 +218,7 @@ class Login extends Component {
 										<ModalHeader toggle={this.toggle}>Find Your Account</ModalHeader>
 										<ModalBody>
 											Enter your email to reset your password.<br />
-											<input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
+											<Input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
 											<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
 											</Modal>
 										</ModalBody>
