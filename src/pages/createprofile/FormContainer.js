@@ -4,7 +4,8 @@ import { Button, Form, FormGroup, Label, InputGroup, InputGroupButton, Input,
 	FormText, Badge} from 'reactstrap';
 import { database, auth, storage} from '../../firebase/constants';
 import './style.css';
-import {defaultProfilePictureUrl} from "../../media/urls";
+import {defaultProfilePictureUrl} from "../../constants/urls";
+import {uscSchools, schoolYears} from "../../constants/lists";
 
 class FormContainer extends Component {
 
@@ -12,6 +13,7 @@ class FormContainer extends Component {
 		super(props);
 
 		this.state = {
+			firstName : "",
             allSkills :[], // Drop down of skills pulled from the database
             skills: [], // My selected skills
             newSkills : [], // New skills to be added to the database
@@ -19,6 +21,8 @@ class FormContainer extends Component {
             projectInterests : [], // My project interests
             newProjectTypes : [], // New project interest to be added to db
 			// Inputs
+			school : "",
+			year : "",
 			description : "",
 			profilePictureUrl : defaultProfilePictureUrl,
 			profilePictureFile : "",
@@ -31,9 +35,12 @@ class FormContainer extends Component {
             github: "",
             website : "",
 			// Validation for required fields
+			schoolInvalid : true,
+			yearInvalid : true,
 			descriptionInvalid : true,
 			skillsInvalid : true,
 			interestInvalid : true,
+
             submitted: false,
 		};
 
@@ -43,6 +50,14 @@ class FormContainer extends Component {
         this.addInterest = this.addInterest.bind(this);
         this.addNewInterest = this.addNewInterest.bind(this);
 	}
+
+    handleSelectedSchoolChange (e) {
+        console.log(e.target.value);
+        this.setState({school : e.target.value});}
+
+    handleSelectedYearChange (e) {
+        console.log(e.target.value);
+        this.setState({year : e.target.value});}
 
     handleDescriptionChange (e) { this.setState({description : e.target.value});}
 
@@ -74,6 +89,12 @@ class FormContainer extends Component {
 	handleWebsiteChange(e) {this.setState({website : e.target.value});}
 
     componentDidMount() {
+		// Get First Name
+		var uid = auth().currentUser.uid;
+        database.child("users/"+uid+"/firstName").once("value").then((snapshot) => {
+        	this.setState({ firstName : snapshot.val()});
+        });
+
         // Get Skills
         database.child("skills").once("value").then((snapshot) => {
             if (snapshot.exists()) {
@@ -83,10 +104,9 @@ class FormContainer extends Component {
                         allSkills: this.state.allSkills.concat([item])
                     });
                 });
-
             }
-
         });
+
 
         // Get Project Types
         database.child("projectTypes").once("value").then((snapshot) => {
@@ -99,6 +119,12 @@ class FormContainer extends Component {
                 });
             }
         });
+
+        // Set default input select values
+		this.setState({
+			year : schoolYears[0],
+			school : uscSchools[0]
+		});
 	}
 
 	addSkill () {
@@ -160,17 +186,50 @@ class FormContainer extends Component {
 	}
 
     completeProfile() {
+		var isComplete = true;
 
         // Validate form data
+        if (this.state.year.length === 0) {
+            this.setState({yearInvalid : false});
+            isComplete = false;
+            console.log(this.state.year);
+        } else {
+            this.setState({yearInvalid : true});
+        }
+
+        if (this.state.school.length === 0) {
+            this.setState({schoolInvalid : false});
+            isComplete = false;
+        } else {
+            this.setState({schoolInvalid : true});
+        }
+
 		if (this.state.description.length === 0) {
 			this.setState({descriptionInvalid : false});
-		}
+            isComplete = false;
+
+        } else {
+            this.setState({descriptionInvalid : true});
+        }
+
 		if (this.state.skills.length === 0) {
 			this.setState({skillsInvalid: false});
-		}
+            isComplete = false;
+
+        } else {
+            this.setState({skillsInvalid : true});
+
+        }
+
 		if (this.state.projectInterests.length === 0) {
         	this.setState({interestInvalid: false});
+            isComplete = false;
+
         } else {
+            this.setState({interestInvalid : true});
+        }
+
+        if (isComplete) {
             let uid = auth().currentUser.uid;
 
             if (this.state.profilePictureFile) {
@@ -184,7 +243,9 @@ class FormContainer extends Component {
             }
 
             database.child("users/"+uid).update({
-                "description" : this.state.description,
+				"year" : this.state.year,
+				"school" : this.state.school,
+				"description" : this.state.description,
                 "linkedIn" : this.state.linkedIn,
                 "facebook" : this.state.facebook,
                 "website" : this.state.website,
@@ -194,11 +255,12 @@ class FormContainer extends Component {
 				"createdProfile" : true
             });
 
+            // TODO: delete this once a comprehensive list of skills have been generated
 			this.state.newSkills.map((x, index) => {
                 database.child("skills/" + x).push().set(uid);
 			});
 
-
+			// TODO: same
             this.state.newProjectTypes.map((x, index) => {
                 database.child("projectTypes").push().set(x);
             });
@@ -207,19 +269,52 @@ class FormContainer extends Component {
 		}
 	}
 
-    getUsername() {
-        var uid = auth().currentUser.uid;
-        return uid;
-    }
-
 	render() {
 		if(this.state.submitted) {
 			return ( <Redirect to={'/'}/> );
 		}
-		
 		return (
 			<Form id="form">
-				<h3> Welcome to Kabom! Let's get started with your creating profile.</h3>
+				<h3> Welcome to Kabom, {this.state.firstName}! Let's get started with your creating profile.</h3>
+
+				<FormGroup>
+					<Label>School</Label>
+					<InputGroup>
+						<Input type="select"
+							   value={this.state.school}
+							   onChange={(e) => this.handleSelectedSchoolChange(e)}>
+                            {uscSchools.map( (skill, idx) =>
+								<option key={idx}
+										value={skill}>
+                                    {skill}
+								</option>
+                            )}
+						</Input>
+					</InputGroup>
+					<FormText>Which school are you in at USC?</FormText>
+					<Label hidden={this.state.schoolInvalid} id={"schoolError"}>
+						Please enter your school.
+					</Label>
+				</FormGroup>
+
+				<FormGroup>
+					<Label>Year</Label>
+					<InputGroup>
+						<Input type="select"
+							   value={this.state.year}
+							   onChange={(e) => this.handleSelectedYearChange(e)}>
+                            {schoolYears.map( (skill, idx) =>
+								<option key={idx}
+										value={skill}>
+                                    {skill}
+								</option>
+                            )}
+						</Input>
+					</InputGroup>
+					<Label hidden={this.state.yearInvalid} id={"yearError"}>
+						Please enter your year.
+					</Label>
+				</FormGroup>
 
 				<FormGroup>
 					<Label>Describe yourself *</Label>
