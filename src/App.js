@@ -34,8 +34,6 @@ class App extends Component {
             <div>
                 <Route path="/login/" component={Login} />
                 <PrivateRoute authed={this.state.authed} path ="/createprofile" component={CreateProfile}/>
-                <PrivateRoute authed={true} path ="/viewprofile" component={ViewProfile}/>
-                <PrivateRoute authed={true} path ="/projectprofile" component={ProjectProfile}/>
                 <PrivateRoute exact authed={this.state.authed} path="/" component={Home} />
             </div>
             </Router>

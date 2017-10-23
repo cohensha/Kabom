@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
 
-
 import Header from '../header/header';
 import ProjectTab from './tabs/projectTab';
 import PeopleTab from "./tabs/peopleTab";
