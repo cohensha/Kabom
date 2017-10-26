@@ -1,8 +1,30 @@
-.card {
+.introCard {
     box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
-    margin: auto auto auto auto;
+    margin: auto;
     text-align: center;
     border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+.mission {
+    font-size: 16px;
+    color: grey;
+}
+
+.name {
+    padding-top: 10px;
+}
+
+/* Each project, group or people card */
+.card {
+    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+    text-align: center;
+    border-radius: 5px;
+    width: 300px;
+    max-height: 200px;
+    padding: 15px;
+
 }
 
 .description {
@@ -13,19 +35,14 @@
     padding: 15px;
 }
 
-.skills {
+/*.skills {
   text-align: right;
   padding-right: 5%;
   line-height: 40px;
   color: white;
-}
+}*/
 
-.slogan {
-    font-size: 16px;
-    color: grey;
-}
-
-.about {
+.information {
     box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
     margin: auto;
     display: block;
@@ -74,4 +91,6 @@ a {
     white-space: nowrap;
     font-size: 14px;
     border-radius: 20px;
+    width: 50%;
+    align-self: center;
 }

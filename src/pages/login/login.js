@@ -210,7 +210,7 @@ class Login extends Component {
 								</InputGroup>
 							</Col>
 							<Col xs="auto">
-								<Button outline color="warning" onClick={this.signIn}>Sign In</Button>{' '}
+								<Button outline color="info" onClick={this.signIn}>Sign In</Button>{' '}
 							</Col>
 							<Col xs="auto">
 								<Button color="link" id="forgotPassword" onClick={this.toggle}> Forgot Password?

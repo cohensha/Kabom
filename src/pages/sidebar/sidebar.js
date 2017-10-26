@@ -122,15 +122,21 @@ class Sidebar extends Component {
         return (
             <div  id="sidebar-div" className="ml-auto ml-5 pl-2">
                 <p />
+                
                 <p>Team Lead For</p>
+                
                 <ListGroup className="mr-3 mb-3">
                     <ListGroupItem> {this.state.myTeam || 'None. Create One Below!'} </ListGroupItem>
                 </ListGroup>
+                
                 <p>Your Team's Current Project</p>
+                
                 <ListGroup className="mr-3 mb-3">
                     <ListGroupItem> {this.state.myTeamProject || 'None. Find one to the left!'} </ListGroupItem>
                 </ListGroup>
+                
                 <p onClick={() => this.toggle('teamreq')}> Team Requests </p>
+                
                 <Collapse isOpen={this.state.teamRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.teamRequests.map( (req, id) =>
@@ -138,7 +144,9 @@ class Sidebar extends Component {
                         )}
                     </ListGroup>
                 </Collapse>
+                
                 <p onClick={() => this.toggle('projectreq')}> Project Requests for {this.state.myTeam} </p>
+                
                 <Collapse isOpen={this.state.projectRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.projRequests.map( (req, id) =>
@@ -146,7 +154,9 @@ class Sidebar extends Component {
                         )}
                     </ListGroup>
                 </Collapse>
+                
                 <p onClick={() => this.toggle('team')}> My Teams </p>
+                
                 <Collapse isOpen={this.state.myTeamsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeams.map( (req, id) =>
@@ -154,7 +164,9 @@ class Sidebar extends Component {
                         )}
                     </ListGroup>
                 </Collapse>
+                
                 <p onClick={() => this.toggle('project')}> My Projects </p>
+                
                 <Collapse isOpen={this.state.myProjectsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myProjects.map( (req, id) =>
@@ -162,10 +174,13 @@ class Sidebar extends Component {
                         )}
                     </ListGroup>
                 </Collapse>
+                
                 <Button className="mb-2" color="secondary" size="lg"
                         onClick={this.props.teamclick}
                         block
-                >Create Team</Button>
+                >Create Group
+                </Button>
+                
                 <Button className="mb-2" color="secondary" size="lg"
                         onClick={this.props.projectclick}
                         block

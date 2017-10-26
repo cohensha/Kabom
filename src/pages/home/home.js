@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
-
 import Header from '../header/header';
 import ProjectTab from './tabs/projectTab';
 import PeopleTab from "./tabs/peopleTab";
@@ -19,7 +18,7 @@ class Home extends Component {
         this.state = {
             activeTab: '1',
             projects: [],
-            teams: [],
+            groups: [],
             people: [],
             showCreateTeamModal: false,
             showCreateProjectModal: false,
@@ -76,7 +75,7 @@ class Home extends Component {
                                             this.toggle('2');
                                         }}
                                     >
-                                        Teams
+                                        Groups
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
@@ -92,7 +91,7 @@ class Home extends Component {
                             </Nav>
                             <TabContent activeTab={this.state.activeTab}>
                                 <DisplayTab id="1" type="projects"/>
-                                <DisplayTab id="2" type="teams"/>
+                                <DisplayTab id="2" type="groups"/>
                                 <DisplayTab id="3" type="users"/>
                             </TabContent>
                         </div>
