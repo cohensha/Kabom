@@ -1,0 +1,15 @@
+#header {
+    background: #fe8c00;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #f83600, #fe8c00);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #f83600, #fe8c00); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    height: 130%;
+    color: rgb(255, 255, 255);
+    font-family: sans-serif;
+}
+
+.txt {
+    font-size: 20px;
+    color: white;
+}
+
+#content { margin-left: 50px; }

@@ -5,6 +5,7 @@ import ViewProfile from './viewprofile/viewprofile';
 import Header from './header/header';
 import Sidebar from './sidebar/sidebar';
 import ProjectProfile from './projectprofile/projectprofile';
+import NotFound from './notfound/notFound';
 
 export {
     Home,
@@ -13,5 +14,6 @@ export {
     ViewProfile,
     Header,
     Sidebar,
-    ProjectProfile
+    ProjectProfile,
+    NotFound
 }
