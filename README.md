@@ -1,5 +1,4 @@
 # Urgent
-1. Create separate UI for project/team/people. Right now they all share the same one in cardModal.js but used for project
 2. Functionality to store project/team cover photos
 3. Ability to add more members in each input box and show as tree in database
 4. Increment numOfInterests after a user clicks on "I'm interested!" button

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
-import { database, auth } from '../../firebase/constants';
+import { database } from '../../firebase/constants';
 import './style.css';
 
 

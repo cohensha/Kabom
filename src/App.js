@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { auth } from './firebase/constants';
-import {Home, Login, CreateProfile, ViewProfile, Header, ProjectProfile} from './pages';
+import {Home, Login, CreateProfile} from './pages';
 
 class App extends Component {
     constructor(props) {

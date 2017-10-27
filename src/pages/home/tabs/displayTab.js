@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-
 import {TabPane, Row, Col, Input, Button, FormGroup, Label, InputGroup, InputGroupButton} from 'reactstrap';
-
 import DisplayCard from '../cards/displayCard';
-import CardModal from '../../modals/cardModal';
+import ProjectCardModal from '../../modals/projectCardModal';
+import TeamCardModal from '../../modals/teamCardModal';
+import PeopleCardModal from '../../modals/peopleCardModal';
 import SearchBar from './searchBar';
-
 import { database, auth } from '../../../firebase/constants';
-
 
 class DisplayTab extends Component {
     constructor(props) {
@@ -15,10 +13,12 @@ class DisplayTab extends Component {
 
         this.state = {
             selectedObj: {name: ''},
-            showCardModal: false,
             radioButtonNames: ["Name", "Description", "Number of Members Needed", "Skills"],
             searchResults: [],
             originalData: [],
+            showProjectModal: false,
+            showTeamModal: false,
+            showPeopleModal: false
         };
         this.ref = database.child(this.props.type);
     }
@@ -47,9 +47,19 @@ class DisplayTab extends Component {
     }
 
     toggleCardModal() {
-        this.setState({
-            showCardModal: !this.state.showCardModal
-        });
+        if (this.props.type == "projects") {
+            this.setState({
+                showProjectModal: !this.state.showProjectModal
+            });
+        } else if (this.props.type == "teams") {
+            this.setState({
+                showTeamModal: !this.state.showTeamModal
+            });
+        } else {
+            this.setState({
+                showPeopleModal: !this.state.showPeopleModal
+            });
+        }
     }
 
     searchByName(input) {
@@ -111,10 +121,23 @@ class DisplayTab extends Component {
                         </Col>
                     )}
                 </Row>
-                <CardModal
-                    show={this.state.showCardModal}
+                
+                <ProjectCardModal
+                    show={this.state.showProjectModal}
                     obj={this.state.selectedObj}
-                    onclick={ () => this.toggleCardModal() }
+                    onclick={ () => this.toggleCardModal()}
+                />
+
+                <TeamCardModal
+                    show={this.state.showTeamModal}
+                    obj={this.state.selectedObj}
+                    onclick={ () => this.toggleCardModal()}
+                />
+
+                <PeopleCardModal
+                    show={this.state.showPeopleModal}
+                    obj={this.state.selectedObj}
+                    onclick={ () => this.toggleCardModal()}
                 />
             </TabPane>
         );
