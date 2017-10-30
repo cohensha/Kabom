@@ -23,7 +23,7 @@ class Login extends Component {
     		greenAlertMessage : "",
 			logInSuccess : false,
 			nestedModal: false,
-			createdProfile: false
+			createdProfile: false,
     	};
 		this.signIn = this.signIn.bind(this);
 		this.createAccount = this.createAccount.bind(this);
@@ -36,6 +36,7 @@ class Login extends Component {
 		this.showYellowAlert = this.showYellowAlert.bind(this);
 		this.showGreenAlert = this.showGreenAlert.bind(this);
 		this.forgotPassword = this.forgotPassword.bind(this);
+		this.checkIfUserCreatedProfile = this.checkIfUserCreatedProfile.bind(this);
 	}
 
 	toggle() {
@@ -91,19 +92,18 @@ class Login extends Component {
 		if (!email.endsWith("@usc.edu")) {
 			email+="@usc.edu"
 		}
-		console.log(email);
 		var password = document.getElementById('loginPassword').value
 		// Firebase Auth Sign In
-		auth().signInWithEmailAndPassword(email, password).then(function() {
+		auth().signInWithEmailAndPassword(email, password).then(() =>  {
 			var user = auth().currentUser;
 			if (user.emailVerified) {
-				this.setState({ logInSuccess : true });
+				this.checkIfUserCreatedProfile();
 			} else {
 				this.showYellowAlert ("Sign In Failed: ", "Please verify your email before signing in.");
 			}
-		}.bind(this)).catch(function(error) {
+		}).catch((error) => {
 			this.showRedAlert("Sign In Failed: ", error.message);
-		}.bind(this));	
+		});
 	}
 
 	createAccount() {
@@ -113,69 +113,84 @@ class Login extends Component {
 		var firstName = document.getElementById('firstName').value;
 		var lastName = document.getElementById('lastName').value;
 
-		if(firstName == "" || lastName == ""){
+		if(firstName === "" || lastName === ""){
             this.showRedAlert("Please enter your first and last name.", "");
-		} else if (email=="") {
+		} else if (email==="") {
             this.showRedAlert("Please enter your USC email.", "");
-        } else if(password == "") {
+        } else if(password === "") {
             this.showRedAlert("Please enter a password", "");
-        } else if(password != confirmPassword) {
+        } else if(password !== confirmPassword) {
             this.showRedAlert("Passwords do not match.", "");
 		} else {
             if (!email.endsWith("@usc.edu")) {
                 email+="@usc.edu"
             }
             // Firebase Auth Create User
-            auth().createUserWithEmailAndPassword(email, password).then(function() {
+            auth().createUserWithEmailAndPassword(email, password).then(() => {
                 var user = auth().currentUser;
-                //var _this = this;
-                user.sendEmailVerification().then(function() {
+                user.sendEmailVerification().then(() => {
                     // Write new user to the users database
                     database.child("users/" + user.uid + "/email").set(email);
                     database.child("users/" + user.uid + "/firstName").set(firstName);
                     database.child("users/" + user.uid + "/lastName").set(lastName);
+                    database.child("users/" + user.uid + "/createdProfile").set(false);
+                    database.child("users/" + user.uid + "/name").set(firstName + " " + lastName);
+
+
 
                     // Green alert: user a verification email has been sent
                     this.showGreenAlert ("Your account has been created!",
                         "An verification email has been sent. Please verify before logging in.");
-                }.bind(this)).catch(function(error) {
+                }).catch((error) => {
                     // An error happened. Should never occur.
                     this.showRedAlert("Email Verification Failed: ", error.message);
-                }.bind(this));
-            }.bind(this)).catch(function(error) {
+                });
+            }).catch((error) => {
                 this.showRedAlert("Create Account Failed: ", error.message);
-            }.bind(this));
+            });
         }
 	}
 
 	forgotPassword() {
 		var email = document.getElementById('forgotPassEmail').value;
 		this.toggle();
-		auth().sendPasswordResetEmail(email).then(function() {
+		auth().sendPasswordResetEmail(email).then(() => {
 			this.showGreenAlert ("Reset Password Email Sent: ", 
 				"Please check your email to reset your password.");
-		}.bind(this)).catch(function(error) {
+		}).catch((error) => {
 			this.showRedAlert("Reset Password Failed: ", error.message);
-		}.bind(this));
+		});
 	}
 
+	componentWillUnmount() {
+
+	}
+
+    checkIfUserCreatedProfile() {
+        var uid = auth().currentUser.uid;
+        var reference = database.child("users/" + uid + "/createdProfile");
+
+        reference.once("value").then( (snapshot) => {
+        	// Snapshot must exist if user created an account.
+            if (snapshot.exists()) {
+                this.setState({
+					createdProfile: snapshot.val(),
+					logInSuccess : true
+                });
+            }
+        });
+    }
+
     render() {
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
-        
         if (this.state.logInSuccess) {
-			
-			if(this.state.completedProf == true) {
-				return ( <Redirect to={from}/> );
-			}
-			else {
-				return (<Redirect to={{
-							  pathname: '/createprofile' }}/> );
+        	if (this.state.createdProfile) {
+                return ( <Redirect to={'/'}/> );
+			} else {
+                return ( <Redirect to={'/createprofile'}/> );
 			}
 		}
 
         return (
-
-
 			<Container id="container">
 				<Row id="header" >
 					<Col xs="5">
@@ -195,7 +210,7 @@ class Login extends Component {
 								</InputGroup>
 							</Col>
 							<Col xs="auto">
-								<Button outline color="warning" onClick={this.signIn}>Sign In</Button>{' '}
+								<Button outline color="info" onClick={this.signIn}>Sign In</Button>{' '}
 							</Col>
 							<Col xs="auto">
 								<Button color="link" id="forgotPassword" onClick={this.toggle}> Forgot Password?
@@ -203,7 +218,7 @@ class Login extends Component {
 										<ModalHeader toggle={this.toggle}>Find Your Account</ModalHeader>
 										<ModalBody>
 											Enter your email to reset your password.<br />
-											<input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
+											<Input id = "forgotPassEmail" type="email" name="email" placeholder="Email" />
 											<Modal isOpen={this.state.nestedModal} toggle={this.toggleNested}>
 											</Modal>
 										</ModalBody>
@@ -216,7 +231,6 @@ class Login extends Component {
 								</Button>
 							</Col>
 						</Row>
-
 					</Col>
 				</Row>
 
@@ -271,11 +285,10 @@ class Login extends Component {
 				</Row>
 
 				<Row id="bottom">
-					<Col align="center">
+					<Col>
 						<p> Made at the University of Southern California
 							<br>
 							</br>
-							Professor Miller is the best!
 						</p>
 
 					</Col>

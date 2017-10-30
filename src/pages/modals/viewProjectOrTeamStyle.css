@@ -1,0 +1,87 @@
+.introCard {
+    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    text-align: center;
+    border-radius: 5px;
+    padding-bottom: 10px;
+}
+
+.mission {
+    font-size: 16px;
+    color: grey;
+}
+
+.name {
+    padding-top: 10px;
+}
+
+/* Each project, group or people card */
+.card {
+    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    text-align: center;
+    border-radius: 5px;
+    width: 300px;
+    max-height: 200px;
+    padding: 15px;
+    word-wrap: break-word;
+}
+
+.description {
+    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    margin: 5% auto auto auto;
+    text-align: left;
+    border-radius: 5px;
+    padding: 15px;
+    word-wrap: break-word;
+}
+
+.information {
+    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    margin: auto;
+    display: block;
+    margin: 5% auto auto auto;
+    text-align: left;
+    border-radius: 5px;
+    padding: 15px;
+    word-wrap: break-word;
+}
+
+.button {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 40%;
+    font-size: 18px;
+    border-radius: 20px;
+}
+
+a {
+    text-decoration: none;
+    font-size: 22px;
+    color: black;
+}
+
+.button:hover, .cardImInterestButton:hover, a:hover {
+    /*opacity: 1;*/
+    background-color: #FB5012;
+}
+
+.cardImInterestButton {
+    border: none;
+    outline: 0;
+    margin: 5px;
+    padding: 10px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 20px;
+    width: 50%;
+    align-self: center;
+}

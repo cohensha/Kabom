@@ -1,0 +1,38 @@
+#skillBadge {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+#interestBadge {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+#profilePicture {
+    margin : 10px 10px 10px 10px;
+    height: 200px;
+    width: 200px;
+}
+
+#descriptionError {
+    color : red;
+}
+
+#skillError {
+    color : red;
+
+}
+
+#interestError {
+    color : red;
+
+}
+
+#yearError {
+    color : red;
+}
+
+#schoolError {
+    color : red;
+}
+
