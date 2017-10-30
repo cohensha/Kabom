@@ -183,7 +183,6 @@ class Sidebar extends Component {
                 <ListGroup className="mr-3 mb-3">
                     <ListGroupItem> {this.state.myTeam || 'None. Create One Below!'} </ListGroupItem>
                 </ListGroup>
-
                 
                 <p onClick={() => this.toggle('teamInterest')}> Users interested in {this.state.myTeam}: {this.state.myTeamInterestedUsers.length}</p>
                 <Collapse isOpen={this.state.myTeamInterestsCollapse}>
