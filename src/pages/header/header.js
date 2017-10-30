@@ -5,7 +5,7 @@ import {Navbar, NavItem, NavLink, Nav} from 'reactstrap';
 
 
 const Header = () => (
-    <div id="header-comp">
+    <div id="header">
         <Navbar>
             <Nav>
             <h1 href="/" className="d-inline-block">Kabom</h1>

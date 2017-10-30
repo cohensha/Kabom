@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalHeader, ModalFooter, Button, Row, Col, Label, FormGroup,Input} from 'reactstrap';
-import { database, auth } from '../../firebase/constants';
+import {Modal, ModalBody, ModalHeader, ModalFooter, Button, Label, FormGroup,Input} from 'reactstrap';
+import { database } from '../../firebase/constants';
 
 class CreateTeamModal extends Component {
     constructor(props) {

@@ -18,7 +18,7 @@ class Home extends Component {
         this.state = {
             activeTab: '1',
             projects: [],
-            groups: [],
+            teams: [],
             people: [],
             showCreateTeamModal: false,
             showCreateProjectModal: false,
@@ -52,7 +52,7 @@ class Home extends Component {
 
     render() {
         return (
-            <div>
+            <div className="home">
                 <Header/>
                 <Row>
                     <Col sm="12" md={{size: 8}}>
@@ -75,7 +75,7 @@ class Home extends Component {
                                             this.toggle('2');
                                         }}
                                     >
-                                        Groups
+                                        Teams
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
@@ -91,7 +91,7 @@ class Home extends Component {
                             </Nav>
                             <TabContent activeTab={this.state.activeTab}>
                                 <DisplayTab id="1" type="projects"/>
-                                <DisplayTab id="2" type="groups"/>
+                                <DisplayTab id="2" type="teams"/>
                                 <DisplayTab id="3" type="users"/>
                             </TabContent>
                         </div>

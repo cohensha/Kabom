@@ -1,10 +1,10 @@
 # Urgent
-1. Create separate UI for project/team/people. Right now they all share the same one in cardModal.js but used for project
 2. Functionality to store project/team cover photos
 3. Ability to add more members in each input box and show as tree in database
 4. Increment numOfInterests after a user clicks on "I'm interested!" button
 5. Fix seeking num users when creating a project/team. It shows numbers 2-10 in database right now. Database should only show number selected and reflect in project profile.
 6. Show a project/group after a project/group is created instead of refreshing
+7. Notify users when I'm interested" button is clicked
 
 ## Future
 * better/consistent UI colors and buttons
@@ -13,6 +13,7 @@
 * autosuggest a member when searching or adding members to a project/team
 * be able to convert a group to a project w/ certain members
 * ability to remove from a group/project
+* Ability to write posts on a group/project
 
 
 
