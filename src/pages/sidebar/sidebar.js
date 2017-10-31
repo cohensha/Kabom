@@ -13,6 +13,7 @@ class Sidebar extends Component {
             projectRequestCollapse: false,
             myTeamsCollapse: false,
             myProjectsCollapse: false,
+            myTeamInterestsCollapse: false,
             colorTeam: "#ffffff",
             teamRequests: [],
             projRequests: [],
@@ -22,12 +23,18 @@ class Sidebar extends Component {
             myTeam: null,
             myTeamProject: null,
             myTeamId: '',
+            myTeamInterestedUsers: [],
+            myTeamInterestedUsersNames: [],
         };
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
         this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
         this.myProjectsRef = database.child("users/"+ this.props.uid + "/projects");
         this.teamIdRef = database.child("users/" + this.props.uid + "/team");
 
+        var myTeamID = this.teamIdRef.key;
+        console.log("my team id: ", myTeamID);
+
+       // this.myTeamRequests = database.child()
 
     }
 
@@ -42,6 +49,39 @@ class Sidebar extends Component {
                     if (sp.exists()) {
                         this.setState({myTeam: sp.val()});
                     }
+                });
+
+                database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
+                   if(sp.exists()) {
+                       console.log("reading users interested");
+                       let arrayIds = [];
+                       let arrayNames = [];
+                      sp.forEach(function(childSnapshot) {
+                         const item = childSnapshot.val();
+                         arrayIds.push(item);
+                         console.log("user interested: " + item);
+
+                         //get user name
+                          database.child("/users/" + item + "/firstName").once("value").then((snapshot) => {
+                              if(snapshot.exists()) {
+                                  arrayNames.push(snapshot.val());
+                              }
+
+                          });
+
+
+                         //for each interested user -- I want to use the val (user id) to read from
+                          //db, get their name and push onto myTeamInterestedUsersNames to display in list
+
+                      });
+                      this.setState({myTeamInterestedUsers: arrayIds});
+                      this.setState({myTeamInterestedUsersNames: arrayNames});
+
+                   }
+                   else{
+                       console.log("can't see users interested");
+                   }
+
                 });
 
                 //get the team requests from team id
@@ -71,12 +111,14 @@ class Sidebar extends Component {
         });
 
 
+
         this.myTeamsRef.once("value").then( (snapshot) => {
             if (snapshot.exists()) {
                 let array = [];
                 snapshot.forEach(function(childSnapshot) {
                     const item = childSnapshot.val();
                     array.push(item);
+                    console.log("team", item);
                 });
                 this.setState({myTeams: array});
             }
@@ -108,6 +150,8 @@ class Sidebar extends Component {
             this.setState({ myTeamsCollapse: !this.state.myTeamsCollapse });
         else if (collapse === 'project')
             this.setState({ myProjectsCollapse: !this.state.myProjectsCollapse });
+        else if (collapse == 'teamInterest')
+            this.setState({myTeamInterestsCollapse: !this.state.myTeamInterestsCollapse});
     }
 
     backgroundOrange() {
@@ -116,6 +160,17 @@ class Sidebar extends Component {
 
     backgroundWhite() {
         this.setState({colorTeam: "#ffffff"});
+    }
+
+    getUserNameFromId(userid) {
+        var name = null;
+        database.child("users/" + userid + "/name").once("value").then((sp) => {
+            if (sp.exists()) {
+               name = sp.val();
+            }
+        });
+
+        return name;
     }
 
     render() {
@@ -128,6 +183,16 @@ class Sidebar extends Component {
                 <ListGroup className="mr-3 mb-3">
                     <ListGroupItem> {this.state.myTeam || 'None. Create One Below!'} </ListGroupItem>
                 </ListGroup>
+                
+                <p onClick={() => this.toggle('teamInterest')}> Users interested in {this.state.myTeam}: {this.state.myTeamInterestedUsers.length}</p>
+                <Collapse isOpen={this.state.myTeamInterestsCollapse}>
+                    <ListGroup className="mr-3 mb-3">
+                        {this.state.myTeamInterestedUsersNames.map( (req, id) =>
+
+                            <ListGroupItem key={id}> {req}</ListGroupItem>
+                        )}
+                    </ListGroup>
+                </Collapse>
                 
                 <p>Your Team's Current Project</p>
                 

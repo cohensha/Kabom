@@ -20,7 +20,6 @@ class CreateTeamModal extends Component {
         this.postTeamRef = database.child("teams"); //this posts to general teams tree
         this.postUserTeamRef = database.child("users/" + this.props.uid + "/team"); //this posts to users team owner
         this.postUserTeamsRef = database.child("users/" + this.props.uid + "/teams/"); //this posts to users list of teams
-
     }
 
     writeTeamToDb() {
@@ -38,6 +37,8 @@ class CreateTeamModal extends Component {
         });
         this.postUserTeamRef.set(teamId.key);
         this.postUserTeamsRef.push(this.state.teamNameInput);
+
+
 
         this.setState({teamNameInput: ''});
         this.setState({teamDescriptionInput: ''});
