@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
 import { database } from '../../firebase/constants';
+import PeopleCardModal from '../modals/peopleCardModal';
+
 import './style.css';
 
 
@@ -25,6 +27,9 @@ class Sidebar extends Component {
             myTeamId: '',
             myTeamInterestedUsersUID: [],
             myTeamInterestedUsersData: [],
+            showProfileModal: false,
+            selectedObj: {name: ''}
+
         };
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
         this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
@@ -151,6 +156,20 @@ class Sidebar extends Component {
             this.setState({myTeamInterestsCollapse: !this.state.myTeamInterestsCollapse});
     }
 
+    handleProfileClick(data) {
+        this.setState({
+           selectedObj: data
+        });
+        this.toggleProfileModal();
+        console.log("clicked an item to open a profile");
+    }
+
+    toggleProfileModal() {
+        this.setState({
+           showProfileModal: !this.state.showProfileModal
+        });
+    }
+
     backgroundOrange() {
             this.setState({colorTeam: "#FF512F"});
     }
@@ -186,7 +205,7 @@ class Sidebar extends Component {
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeamInterestedUsersData.map( (req, id) =>
 
-                            <ListGroupItem key={id}> {req.firstName}</ListGroupItem>
+                            <ListGroupItem key={id} onClick={ () => this.handleProfileClick(req) }> {req.firstName}</ListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
@@ -247,6 +266,12 @@ class Sidebar extends Component {
                         onClick={this.props.projectclick}
                         block
                 >Create Project</Button>
+
+                <PeopleCardModal
+                    show={this.state.showProfileModal}
+                    obj={this.state.selectedObj}
+                    onclick={ () => this.toggleProfileModal()}
+                />
             </div>
         );
     }
