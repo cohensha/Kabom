@@ -1,9 +1,10 @@
-# Urgent
-2. Functionality to store project/team cover photos
+# Functionality to be implemented
+## Urgent
+2. Functionality to store project/team cover photos (Jonathan)
 3. Ability to add more members in each input box and show as tree in database
-4. Increment numOfInterests after a user clicks on "I'm interested!" button
-5. Fix seeking num users when creating a project/team. It shows numbers 2-10 in database right now. Database should only show number selected and reflect in project profile.
-6. Show a project/group after a project/group is created instead of refreshing
+4. Increment numOfInterests after a user clicks on "I'm interested!" button 
+5. Fix seeking num users when creating a project/team. It shows numbers 2-10 in database right now. Database should only show number selected and reflect in project profile. (Jonathan)
+6. Show a project/group after a project/group is created instead of refreshing 
 7. Notify users when I'm interested" button is clicked
 
 ## Future
@@ -16,7 +17,7 @@
 * Ability to write posts on a group/project
 
 
-
+# Resources Used
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
