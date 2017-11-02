@@ -5,7 +5,7 @@ const DisplayCard = ({name, description, onclick}) => (
     <Card onClick={onclick} block>
         <CardTitle>{name}</CardTitle>
         <CardText>{description}</CardText>
-        <button className="cardImInterestButton">I'm interested!</button>
+        <button className="cardImInterestButton">Open full profile</button>
     </Card>
 );
 
