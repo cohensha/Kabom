@@ -23,8 +23,8 @@ class Sidebar extends Component {
             myTeam: null,
             myTeamProject: null,
             myTeamId: '',
-            myTeamInterestedUsers: [],
-            myTeamInterestedUsersNames: [],
+            myTeamInterestedUsersUID: [],
+            myTeamInterestedUsersData: [],
         };
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
         this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
@@ -51,31 +51,28 @@ class Sidebar extends Component {
                     }
                 });
 
+
                 database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
                    if(sp.exists()) {
                        console.log("reading users interested");
                        let arrayIds = [];
-                       let arrayNames = [];
+                       let array= [];
                       sp.forEach(function(childSnapshot) {
                          const item = childSnapshot.val();
                          arrayIds.push(item);
                          console.log("user interested: " + item);
 
-                         //get user name
-                          database.child("/users/" + item + "/firstName").once("value").then((snapshot) => {
+                         //for each interested user, pull their data using uid's and add to array
+                          database.child("/users/" + item).once("value").then((snapshot) => {
                               if(snapshot.exists()) {
-                                  arrayNames.push(snapshot.val());
+                                  array.push(snapshot.val());
                               }
 
                           });
 
-
-                         //for each interested user -- I want to use the val (user id) to read from
-                          //db, get their name and push onto myTeamInterestedUsersNames to display in list
-
                       });
-                      this.setState({myTeamInterestedUsers: arrayIds});
-                      this.setState({myTeamInterestedUsersNames: arrayNames});
+                      this.setState({myTeamInterestedUsersUID: arrayIds});
+                      this.setState({myTeamInterestedUsersData: array});
 
                    }
                    else{
@@ -184,12 +181,12 @@ class Sidebar extends Component {
                     <ListGroupItem> {this.state.myTeam || 'None. Create One Below!'} </ListGroupItem>
                 </ListGroup>
                 
-                <p onClick={() => this.toggle('teamInterest')}> Users interested in {this.state.myTeam}: {this.state.myTeamInterestedUsers.length}</p>
+                <p onClick={() => this.toggle('teamInterest')}> Users interested in {this.state.myTeam}: {this.state.myTeamInterestedUsersUID.length}</p>
                 <Collapse isOpen={this.state.myTeamInterestsCollapse}>
                     <ListGroup className="mr-3 mb-3">
-                        {this.state.myTeamInterestedUsersNames.map( (req, id) =>
+                        {this.state.myTeamInterestedUsersData.map( (req, id) =>
 
-                            <ListGroupItem key={id}> {req}</ListGroupItem>
+                            <ListGroupItem key={id}> {req.firstName}</ListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
