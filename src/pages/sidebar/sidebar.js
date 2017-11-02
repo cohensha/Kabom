@@ -243,7 +243,7 @@ class Sidebar extends Component {
                 <Button className="mb-2" color="secondary" size="lg"
                         onClick={this.props.teamclick}
                         block
-                >Create Group
+                >Create Team
                 </Button>
                 
                 <Button className="mb-2" color="secondary" size="lg"
