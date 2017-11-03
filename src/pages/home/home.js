@@ -11,26 +11,15 @@ import Sidebar from '../sidebar/sidebar';
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.toggle = this.toggle.bind(this);
         this.toggleCreateTeam = this.toggleCreateTeam.bind(this);
         this.state = {
-            activeTab: '1',
-            projects: [],
-            teams: [],
-            people: [],
             showCreateTeamModal: false,
             showCreateProjectModal: false,
-            currUid: auth().currentUser.uid,
+            currUid: auth().currentUser.uid
         };
     }
 
-    toggle(tab) {
-        if (this.state.activeTab !== tab) {
-            this.setState({
-                activeTab: tab
-            });
-        }
-    }
+
 
     toggleCreateTeam() {
         this.setState({

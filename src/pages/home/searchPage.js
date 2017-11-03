@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
+import { database, auth } from '../../firebase/constants';
+
 import ProjectTab from './tabs/projectTab';
 import PeopleTab from "./tabs/peopleTab";
 import TeamTab from "./tabs/teamTab";
@@ -10,6 +12,25 @@ import Header from "../header/header";
 
 class SearchPage extends Component {
 
+    constructor(props) {
+        super(props);
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            activeTab: '1',
+            projects: [],
+            teams: [],
+            people: [],
+            // currUid: auth().currentUser.uid,
+        };
+    }
+
+    toggle(tab) {
+        if (this.state.activeTab !== tab) {
+            this.setState({
+                activeTab: tab
+            });
+        }
+    }
 
 
     render () {
