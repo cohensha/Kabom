@@ -16,6 +16,9 @@ const Header = () => (
                     <NavLink className="txt" href="/">Home</NavLink>
                 </NavItem>
                 <NavItem>
+                    <NavLink className="txt" href="/searchpage">Search Page</NavLink>
+                </NavItem>
+                <NavItem>
                     <NavLink className="txt" href="/login">Sign Out</NavLink>
                 </NavItem>
             </Nav>
