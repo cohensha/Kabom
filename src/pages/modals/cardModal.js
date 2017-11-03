@@ -24,6 +24,7 @@ class CardModal extends Component {
                     <Button>I'm interested!</Button>
                 </ModalBody>
                 <ModalFooter>
+                    <Button color="secondary" onClick={this.props.request}>Request</Button>
                     <Button color="secondary" onClick={this.props.onclick}>Close</Button>
                 </ModalFooter>
             </Modal>

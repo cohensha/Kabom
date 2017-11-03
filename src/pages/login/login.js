@@ -172,14 +172,7 @@ class Login extends Component {
         const { from } = this.props.location.state || { from: { pathname: '/' } }
         
         if (this.state.logInSuccess) {
-			
-			if(this.state.completedProf) {
-				return ( <Redirect to={from}/> );
-			}
-			else {
-				return (<Redirect to={{
-							  pathname: '/createprofile' }}/> );
-			}
+        	return ( <Redirect to={from}/> )
 		}
 
         return (
