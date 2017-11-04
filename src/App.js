@@ -12,10 +12,13 @@ class App extends Component {
     }
 
     componentDidMount() {
+        console.log("1");
+        console.log(this.state.authed);
         this.fireBaseListener = auth().onAuthStateChanged((user) => {
             if (user) {
                 console.log('user changed..', user);
                 this.setState({ authed : true });
+                console.log("2");
             } else {
                 // No user is signed in.
                 console.log("user signed out");
@@ -24,7 +27,9 @@ class App extends Component {
     }
 
     componentWillUnmount () {
+        console.log("3");
             this.fireBaseListener && this.fireBaseListener();
+        console.log("4");
             this.setState({ authed: false });
     }
 
@@ -36,8 +41,8 @@ class App extends Component {
                     <Route path="/login/" component={Login} />
                     <PrivateRoute authed={this.state.authed} path ="/createprofile" component={CreateProfile}/>
                     <PrivateRoute exact authed={this.state.authed} path="/" component={Home} />
-                    {/*<PrivateRoute authed={this.state.authed} path ='/searchpage' component={SearchPage}/>*/}
-                    <Route component={SearchPage}/>
+                    <PrivateRoute authed={this.state.authed} path ='/searchpage' component={SearchPage}/>
+                    {/*<Route component={SearchPage}/>*/}
                     <Route component={NotFound} />
                 </Switch>
             </div>

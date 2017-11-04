@@ -94,16 +94,19 @@ class Login extends Component {
 		}
 		var password = document.getElementById('loginPassword').value
 		// Firebase Auth Sign In
-		auth().signInWithEmailAndPassword(email, password).then(() =>  {
-			var user = auth().currentUser;
-			if (user.emailVerified) {
-				this.checkIfUserCreatedProfile();
-			} else {
-				this.showYellowAlert ("Sign In Failed: ", "Please verify your email before signing in.");
-			}
-		}).catch((error) => {
-			this.showRedAlert("Sign In Failed: ", error.message);
-		});
+		// auth().setPersistence(auth.Auth.Persistence.SESSION).then(function() {
+            auth().signInWithEmailAndPassword(email, password).then(() => {
+                var user = auth().currentUser;
+                if (user.emailVerified) {
+                    this.checkIfUserCreatedProfile();
+                } else {
+                    this.showYellowAlert("Sign In Failed: ", "Please verify your email before signing in.");
+                }
+            }).catch((error) => {
+                this.showRedAlert("Sign In Failed: ", error.message);
+            });
+        // });
+
 	}
 
 	createAccount() {
@@ -173,6 +176,7 @@ class Login extends Component {
         reference.once("value").then( (snapshot) => {
         	// Snapshot must exist if user created an account.
             if (snapshot.exists()) {
+            	auth().setPersistence(auth.Auth.Persistence.SESSION);
                 this.setState({
 					createdProfile: snapshot.val(),
 					logInSuccess : true
