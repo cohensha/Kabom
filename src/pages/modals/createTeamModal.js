@@ -74,7 +74,7 @@ class CreateTeamModal extends Component {
 
     render() {
         return (
-            <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
+            <Modal isOpen={this.props.show} toggle={this.props.onclick} className={this.props.className}>
                 <ModalHeader >Create a Team!</ModalHeader>
                 <ModalBody>
                     <FormGroup>

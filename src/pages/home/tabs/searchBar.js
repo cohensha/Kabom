@@ -56,7 +56,7 @@ class SearchBar extends Component {
                             </DropdownMenu>
                         </ButtonDropdown>
                     </InputGroupButton> {' '}
-                    <Button className="mr-2" onClick={() => this.props.setSeeAll()}>See All</Button>
+                    <Button className="mr-2" onClick={() => this.props.reset()}>Reset</Button>
                 </InputGroup>
             </div>
         );
