@@ -1,5 +1,6 @@
 # Functionality to be implemented
 ## Urgent, Must-Have Functionality
+- [X] Create Project Improvements
 - [ ] Create Team Improvements: Team Pictures, Project links, Skills, Whether or not you are accepting members, Availability, Desired Team Size (soft requirement) **Jonathan**
 - [ ] Request Modal: Team/Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing **Jonathan**
 - [ ] Increment numOfInterests after a user clicks on "I'm interested!" button 
