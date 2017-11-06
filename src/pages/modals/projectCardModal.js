@@ -28,9 +28,6 @@ class ProjectCardModal extends Component {
                             <h5>Where</h5>
                             <p>{this.props.obj.locationDescription} </p>
 
-                            <h5>Looking for</h5>
-                            <p>{this.props.obj.seekingNumPeople + ' people'} </p>
-
                             <h5>Number of interests</h5>
                             <p className="info">{this.props.obj.noOfInterests}</p>
                         </div>

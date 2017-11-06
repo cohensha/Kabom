@@ -111,7 +111,7 @@ class DisplayTab extends Component {
                 <Row>
                     {this.state.searchResults.map((d, id) =>
                         <Col key={id} className="m-1 d-inline-block">
-                            <DisplayCard className="d-inline-block"
+                            <DisplayCard className="d-inline-block card"
                                          key={id}
                                          name={d.name}
                                          description={d.description}

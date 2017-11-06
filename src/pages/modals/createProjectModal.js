@@ -10,7 +10,6 @@ class CreateProjectModal extends Component {
             projectNameInput: '',
             projectDescriptionInput: '',
             locationDescriptionInput: '',
-            numOptions: [2, 3, 4, 5, 6, 7, 8, 9, 10],
             membersInput: '',
             missionNameInput: ''
         };
@@ -27,7 +26,6 @@ class CreateProjectModal extends Component {
             mission: this.state.missionNameInput,
             noOfInterests: 0,
             members: this.state.membersInput,
-            seekingNumPeople: this.state.numOptions,
             description: this.state.projectDescriptionInput,
             locationDescription: this.state.locationDescriptionInput,
             projectOwner: this.props.uid
@@ -77,6 +75,8 @@ class CreateProjectModal extends Component {
             <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
                 <ModalHeader >Create New Project</ModalHeader>
                 <ModalBody>
+                    
+
                     <FormGroup>
                         <Label className="text-gray-dark">Name your project</Label>
                         <Input type="text"
@@ -99,26 +99,18 @@ class CreateProjectModal extends Component {
                         />
                     </FormGroup>
 
-                    <FormGroup>
-                        <Label className="text-gray-dark" for="selectGroupSize">How many people are you looking for?</Label>
-                        <Input type="select" name="select"
-                            id="selectGroupSize"
-                            onChange={(e) => this.handleChangeNumPeople(e)}
-                        >
-                            {this.state.numOptions.map( (num, id) => <option key={id}>{num}</option> )}
-                        </Input>
-                    </FormGroup>
-
-                    <FormGroup>
+                    {/*<FormGroup>
                         <Label className="text-gray-dark">Members</Label>
-                        <Input type="textarea"
+                        <Input type="text"
                                name="memberNames"
                                onChange={(e) => this.handleChangeMemberName(e)}
                                value={this.state.membersInput}
                                id="memberName"
                                placeholder="Janson Lau"
                         />
+
                     </FormGroup>
+                    */}
 
                     <FormGroup>
                         <Label className="text-gray-dark">Where</Label>
