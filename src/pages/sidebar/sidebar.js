@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import PeopleCardModal from '../modals/peopleCardModal';
+import CreateProjectModal from '../modals/createProjectModal';
+import CreateTeamModal from '../modals/createTeamModal';
 
 import RequestListGroupItem from './requestListGroupItem';
 import './style.css';
@@ -35,6 +37,9 @@ class Sidebar extends Component {
             selectedObj: {name: ''},
             showCardModal: false,
             currUser: null,
+            uid: auth().currentUser.uid,
+            showCreateTeamModal: false,
+            showCreateProjectModal: false,
         };
         //console.log(auth().currentUser);
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
@@ -196,13 +201,11 @@ class Sidebar extends Component {
            selectedObj: data
         });
         this.toggleProfileModal(type);
-        console.log("clicked an item to open a profile");
+        //console.log("clicked an item to open a profile");
     }
 
     toggleProfileModal(type) {
-        console.log(type);
         if (type === "teams") {
-            console.log("here");
             this.setState({ showTeamProfileModal: !this.state.showTeamProfileModal });
         }
         if (type === "people") {
@@ -297,6 +300,20 @@ class Sidebar extends Component {
         return name;
     }
 
+    toggleCreateTeam() {
+        console.log("hey");
+        this.setState({
+            showCreateTeamModal: !this.state.showCreateTeamModal
+        });
+    }
+
+    toggleCreateProject() {
+        this.setState({
+            showCreateProjectModal: !this.state.showCreateProjectModal
+        });
+    }
+
+
     render() {
         return (
             <div  id="sidebar-div" className="ml-auto ml-5 pl-2">
@@ -362,7 +379,7 @@ class Sidebar extends Component {
                 <Collapse isOpen={this.state.myTeamsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeams.map( (req, id) =>
-                            <ListGroupItem key={id}> {req.name} </ListGroupItem>
+                            <ListGroupItem key={id}> {req} </ListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
@@ -378,13 +395,13 @@ class Sidebar extends Component {
                 </Collapse>
 
                 <Button className="mb-2" color="secondary" size="lg"
-                        onClick={this.props.teamclick}
+                        onClick={() => this.toggleCreateTeam()}
                         block
                 >Create Team
                 </Button>
 
                 <Button className="mb-2" color="secondary" size="lg"
-                        onClick={this.props.projectclick}
+                        onClick={() => this.toggleCreateProject()}
                         block
                 >Create Project</Button>
 
@@ -400,6 +417,12 @@ class Sidebar extends Component {
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleProfileModal("teams")}
                 />
+                <CreateTeamModal show={this.state.showCreateTeamModal}
+                                 onclick={() => this.toggleCreateTeam()}
+                                 uid={this.state.uid}/>
+                <CreateProjectModal show={this.state.showCreateProjectModal}
+                                    onclick={() => this.toggleCreateProject()}
+                                    uid={this.state.uid}/>
             </div>
         );
     }

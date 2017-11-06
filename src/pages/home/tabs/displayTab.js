@@ -18,9 +18,11 @@ class DisplayTab extends Component {
             originalData: [],
             showProjectModal: false,
             showTeamModal: false,
-            showPeopleModal: false
+            showPeopleModal: false,
+            currUser: null,
         };
         this.ref = database.child(this.props.type);
+        this.userRef = database.child("users/" + auth().currentUser.uid);
     }
 
     componentDidMount() {
@@ -29,7 +31,11 @@ class DisplayTab extends Component {
                 // Create a data structure to store your data
                 let array = [];
                 snapshot.forEach(function (childSnapshot) {
+                    //append uid to object stored client side
                     const item = childSnapshot.val();
+                    if (item) {
+                        item["id"] = childSnapshot.key;
+                    }
                     array.push(item);
                 });
                 this.setState({originalData: array});
@@ -37,6 +43,13 @@ class DisplayTab extends Component {
 
             }
         });
+        this.userRef.once("value").then((sp) => {
+            if (sp.exists()) {
+                this.setState({ currUser: sp.val() });
+            }
+
+        });
+
     }
 
     handleClick(data) {
@@ -153,18 +166,21 @@ class DisplayTab extends Component {
                     show={this.state.showProjectModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
+                    currUser={this.state.currUser}
                 />
 
                 <TeamCardModal
                     show={this.state.showTeamModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
+                    currUser={this.state.currUser}
                 />
 
                 <PeopleCardModal
                     show={this.state.showPeopleModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
+                    currUser={this.state.currUser}
                 />
             </TabPane>
         );
