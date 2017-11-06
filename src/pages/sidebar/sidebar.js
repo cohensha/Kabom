@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
-import { database } from '../../firebase/constants';
+import { database, auth } from '../../firebase/constants';
 import PeopleCardModal from '../modals/peopleCardModal';
+
 import RequestListGroupItem from './requestListGroupItem';
 import './style.css';
 
 import CardModal from '../modals/cardModal';
+import TeamCardModal from "../modals/teamCardModal";
 
 class Sidebar extends Component {
     constructor(props) {
@@ -29,19 +31,31 @@ class Sidebar extends Component {
             myTeamInterestedUsersUID: [],
             myTeamInterestedUsersData: [],
             showProfileModal: false,
+            showTeamProfileModal: false,
             selectedObj: {name: ''},
             showCardModal: false,
+            currUser: null,
         };
+        //console.log(auth().currentUser);
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
         this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
         this.myProjectsRef = database.child("users/"+ this.props.uid + "/projects");
         this.teamIdRef = database.child("users/" + this.props.uid + "/team");
         this.testRef = database.child("teams/members");
+        this.userRef = database.child("users/" + auth().currentUser.uid);
 
     }
 
 
     componentDidMount() {
+        //console.log(auth().currentUser);
+        this.userRef.once("value").then((sp) => {
+            if (sp.exists()) {
+                this.setState({ currUser: sp.val() });
+            }
+
+        });
+
         this.teamIdRef.once("value").then((teamIdSnapshot) => {
             if (teamIdSnapshot.exists()) {
                 this.setState({myTeamId: teamIdSnapshot.val()});
@@ -177,55 +191,56 @@ class Sidebar extends Component {
             this.setState({myTeamInterestsCollapse: !this.state.myTeamInterestsCollapse});
     }
 
-    handleProfileClick(data) {
+    handleProfileClick(data, type) {
         this.setState({
            selectedObj: data
         });
-        this.toggleProfileModal();
+        this.toggleProfileModal(type);
         console.log("clicked an item to open a profile");
     }
 
-    toggleProfileModal() {
-        this.setState({
-           showProfileModal: !this.state.showProfileModal
-        });
+    toggleProfileModal(type) {
+        console.log(type);
+        if (type === "teams") {
+            console.log("here");
+            this.setState({ showTeamProfileModal: !this.state.showTeamProfileModal });
+        }
+        if (type === "people") {
+            this.setState({
+                showProfileModal: !this.state.showProfileModal
+            });
+        }
     }
 
     accept(index) {
         //accept a team's request to you
         //to do
-        console.log("clicked " + index);
+        // console.log("clicked " + index);
+
+        //remove request from request table - DONE
+        let selectedTeam = this.state.teamRequests[index];
+        //console.log(selectedTeam.teamId);
+        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/" + selectedTeam.teamId);
+        deleteTeamReqRef.remove();
 
         //remove request from front end teamrequest array - DONE
-        let acceptedTeam = this.state.teamRequests[index];
-        console.log(acceptedTeam);
         let newArray = this.state.teamRequests.filter(function(e, i){
             return i!==index;
         });
         this.setState({ teamRequests: newArray });
 
-        //remove request from request table - DONE
-        let selectedTeam = this.state.teamRequests[index];
-        console.log(selectedTeam.teamId);
-        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/teams");
-        deleteTeamReqRef.remove();
+        //push team to your teams list in user table - DONE
+        let postUserTeamsRef = database.child("users/" + this.props.uid + "/teams/");
+        postUserTeamsRef.child(selectedTeam.teamId).set(selectedTeam.name);
 
-        //push team to your teams list in user table
-        let postUserTeamsRef = database.child("users/" + this.props.uid + "/teams/" + selectedTeam.teamId + "/");
-        let teamIdAndName = { "name": selectedTeam.name, "teamId": selectedTeam.teamId };
-        //console.log(teamIdAndName);
-        postUserTeamsRef.push(teamIdAndName);
-
-        //push to front end list of myteams
+        //push to front end list of myteams - DONE
         let newArr = this.state.myTeams;
         newArr.push(selectedTeam);
         this.setState({ myTeams: newArr });
 
-        //push your id to members list of a team
-        //TODO: figure out how to push name to this
+        //push your id to members list of a team - DONE
         let postTeamMemberRef = database.child("teams/" + selectedTeam.teamId + "/members");
-        //console.log(auth.currentUser.displayName);
-        postTeamMemberRef.push(this.props.uid);
+        postTeamMemberRef.child(this.props.uid).set(this.state.currUser.name);
         //this.ref.child("Victor").setValue("setting custom key when pushing new data to firebase database");
 
 
@@ -242,9 +257,27 @@ class Sidebar extends Component {
             // If node/clicks has never been set, currentRank will be `null`.
             return (num || 0) + 1;
         });
+        //
+        //add curr users skills to skills list of team - DONE
+        let skillsRef = database.child("teams/" + selectedTeam.teamId + "/skills/");
+        this.state.currUser.skills.map((skill) => skillsRef.push(skill));
+        //skillsRef.push()
 
-        //TODO: add curr users skills to skills list of team
+    }
 
+    reject(index) {
+        //remove request from request table - DONE
+        let selectedTeam = this.state.teamRequests[index];
+        //console.log(selectedTeam.teamId);
+        //console.log("requests/users/" + this.props.uid + "/" + selectedTeam.id + "/");
+        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/" + selectedTeam.teamId + "/");
+        deleteTeamReqRef.remove();
+
+        //remove request from front end teamrequest array - DONE
+        let newArray = this.state.teamRequests.filter(function(e, i){
+            return i!==index;
+        });
+        this.setState({ teamRequests: newArray });
     }
 
     toggleCardModal() {
@@ -298,7 +331,9 @@ class Sidebar extends Component {
                         {this.state.teamRequests.map( (req, id) =>
                               <RequestListGroupItem
                                     key={id}
+                                    onclick={() => this.handleProfileClick(req, "teams")}
                                     accept={this.accept.bind(this, id)}
+                                    reject={this.reject.bind(this, id)}
                                 >
                                     {req.name}
                                 </RequestListGroupItem>
@@ -313,7 +348,8 @@ class Sidebar extends Component {
                         {this.state.projRequests.map((req, id) =>
                             <RequestListGroupItem
                                 key={id}
-                                accept={() => this.accept()}
+                                accept={this.accept.bind(this, id)}
+                                reject={this.reject.bind(this,id)}
                             >
                                 {req}
                             </RequestListGroupItem>
@@ -356,7 +392,13 @@ class Sidebar extends Component {
                 <PeopleCardModal
                     show={this.state.showProfileModal}
                     obj={this.state.selectedObj}
-                    onclick={ () => this.toggleProfileModal()}
+                    onclick={ () => this.toggleProfileModal("people")}
+                />
+
+                <TeamCardModal
+                    show={this.state.showTeamProfileModal}
+                    obj={this.state.selectedObj}
+                    onclick={ () => this.toggleProfileModal("teams")}
                 />
             </div>
         );
