@@ -1,21 +1,21 @@
 # Functionality to be implemented
-## Urgent
-2. Functionality to store project/team cover photos - **Jonathan**
-3. Ability to add more members in each input box and show as tree in database
-4. Increment numOfInterests after a user clicks on "I'm interested!" button 
-5. Fix seeking num users when creating a project/team. It shows numbers 2-10 in database right now. Database should only show number selected and reflect in project profile. - **Jonathan**
-6. Show a project/group after a project/group is created instead of refreshing 
-7. Notify users when I'm interested" button is clicked
+## Urgent, Must-Have Functionality
+- [ ] Create Team Improvements: Team Pictures, Project links, Skills, Whether or not you are accepting members, Availability, Desired Team Size (soft requirement) **Jonathan**
+- [ ] Request Modal: Team/Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing **Jonathan**
+- [ ] Increment numOfInterests after a user clicks on "I'm interested!" button 
+- [ ] Notify users when I'm interested" button is clicked
+
+## Not Urgent, UX-Friendly Functionality
+- [ ] Show a project/group after a project/group is created instead of refreshing 
 
 ## Future
-* better/consistent UI colors and buttons
-* deadline on a project based on created date
-* have a member size displayed in members' box
-* autosuggest a member when searching or adding members to a project/team
-* be able to convert a group to a project w/ certain members
-* ability to remove from a group/project
-* Ability to write posts on a group/project
-
+- [ ] better/consistent UI colors and buttons
+- [ ] deadline on a project based on created date
+- [ ] have a member size displayed in members' box
+- [ ] autosuggest a member when searching or adding members to a project/team
+- [ ] be able to convert a group to a project w/ certain members
+- [ ] ability to remove from a group/project
+- [ ] Ability to write posts on a group/project
 
 # Resources Used
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
