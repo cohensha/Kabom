@@ -37,7 +37,7 @@ class Sidebar extends Component {
         this.teamIdRef = database.child("users/" + this.props.uid + "/team");
 
         var myTeamID = this.teamIdRef.key;
-        console.log("my team id: ", myTeamID);
+        // console.log("my team id: ", myTeamID);
 
        // this.myTeamRequests = database.child()
 
@@ -48,7 +48,7 @@ class Sidebar extends Component {
         this.teamIdRef.once("value").then((teamIdSnapshot) => {
             if (teamIdSnapshot.exists()) {
                 this.setState({myTeamId: teamIdSnapshot.val()});
-                console.log(teamIdSnapshot.val());
+                // console.log(teamIdSnapshot.val());
                 //get the team name from team id
                 database.child("teams/" + teamIdSnapshot.val() + "/name").once("value").then((sp) => {
                     if (sp.exists()) {
@@ -59,13 +59,13 @@ class Sidebar extends Component {
 
                 database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
                    if(sp.exists()) {
-                       console.log("reading users interested");
+                       // console.log("reading users interested");
                        let arrayIds = [];
                        let array= [];
                       sp.forEach(function(childSnapshot) {
                          const item = childSnapshot.val();
                          arrayIds.push(item);
-                         console.log("user interested: " + item);
+                         // console.log("user interested: " + item);
 
                          //for each interested user, pull their data using uid's and add to array
                           database.child("/users/" + item).once("value").then((snapshot) => {
@@ -93,7 +93,7 @@ class Sidebar extends Component {
                         teamsSnapshot.forEach(function(childSnapshot) {
                             const item = childSnapshot.val();
                             array.push(item);
-                            console.log("item: " + item);
+                            // console.log("item: " + item);
                         });
                         this.setState({projRequests: array});
                     }
@@ -120,7 +120,7 @@ class Sidebar extends Component {
                 snapshot.forEach(function(childSnapshot) {
                     const item = childSnapshot.val();
                     array.push(item);
-                    console.log("team", item);
+                    // console.log("team", item);
                 });
                 this.setState({myTeams: array});
             }
@@ -161,7 +161,7 @@ class Sidebar extends Component {
            selectedObj: data
         });
         this.toggleProfileModal();
-        console.log("clicked an item to open a profile");
+        // console.log("clicked an item to open a profile");
     }
 
     toggleProfileModal() {

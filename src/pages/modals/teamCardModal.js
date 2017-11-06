@@ -12,83 +12,112 @@ class TeamCardModal extends Component {
         this.state = {
             interestButtonText: "Express interest to team!",
             interestedUsersArray: [],
-            userInterest: false
+            userInterestOriginal: false,
+            userInterestUpdated: false
         };
 
+        //read if user is interested in team from db
         this.teamIdRef = database.child("users/" + this.props.uid + "/team");
+        this.handleCloseClick = this.handleCloseClick.bind(this);
 
+        this.interestedUsersRef = database.child("teams/" + this.props.teamId + "/interestedUsers")
+
+
+
+    }
+
+    getButtonText() {
+        if(this.state.userInterestUpdated) {
+            console.log("unexpressing interest");
+            this.setState({
+                interestButtonText: "Express interest to team!"
+            });
+        }
+        else {
+            console.log("expressing interest");
+            this.setState({
+                interestButtonText: "Interest sent to team!"
+            });
+        }
     }
 
 
     handleInterestClick() {
         //team object is this.props.obj
         this.setState({
-           userInterest: !this.state.userInterest
+           userInterestUpdated: !this.state.userInterestUpdated
         });
-        if(this.state.userInterest) {
-            console.log("expressing interest");
-            this.setState({
-                interestButtonText: "Interest sent to team!"
-            });
-        }
-        else {
-            console.log("unexpressing interest");
-            this.setState({
-               interestButtonText: "Express interest to team!"
-            });
-        }
 
-        //get array of team interested users
+        this.getButtonText();
 
-        //push value onto array
-
-        //update array
 
     }
 
     componentDidMount() {
-        // this.teamIdRef.once("value").then((teamIdSnapshot) => {
-        //     if (teamIdSnapshot.exists()) {
-        //         this.setState({myTeamId: teamIdSnapshot.val()});
-        //         console.log(teamIdSnapshot.val());
-        //
-        //         database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
-        //             if(sp.exists()) {
-        //                 console.log("reading users interested");
-        //                 let array= [];
-        //                 sp.forEach(function(childSnapshot) {
-        //                     const item = childSnapshot.val();
-        //                     arrayIds.push(item);
-        //                     // console.log("user interested: " + item);
-        //
-        //                     //for each interested user, pull their data using uid's and add to array
-        //                     database.child("/users/" + item).once("value").then((snapshot) => {
-        //                         if(snapshot.exists()) {
-        //                             array.push(snapshot.val());
-        //                         }
-        //
-        //                     });
-        //
-        //                 });
-        //                 this.setState({interestedUsersArray: array});
-        //                 //sets interested user array in state
-        //             }
-        //
-        //         });
-        //     }
-        // });
+
+        this.setState({
+            userInterestOriginal: false,
+            userInterestUpdated: false
+        });
+        //set userinterestedoriginal and updated
+
+        //look at team's list of users interested
+        this.interestedUsersRef.once("value").then((sp)=>
+
+        {
+            if(sp.exists()) {
+
+                console.log("reading team interested users to add to set original and buid array to publish to db");
+
+                //for each
+
+                //if value is current user id - then set interested values to true
+
+                //add item to state array
+            }
+            else {
+                console.log("not reading interested users");
+            }
+
+        });
+
+
+        //set text for button
+
+
+        this.getButtonText();
+
+        //loop through this.props.obj.interestedUsers
+
+
+
     }
 
     handleCloseClick() {
-        this.props.onclick;
-
         console.log("closing team card modal");
+       // this.props.onclick;
+
+     if(this.state.userInterestOriginal != this.state.userInterestUpdated) {
+         if(this.state.userInterestUpdated) {
+             console.log("writing user is interested to db");
+         }
+         else {
+
+             console.log("writing user is not interested to db");
+         }
+     }
+     else {
+        console.log("user interested unchanged");
+     }
+        this.toggle();
 
         //TODO FOR EXPRESSING INTEREST:
             // if user interest is true,
             // add team to user's set of team they're interested in
 
             //add user to team's array of interested users
+
+
 
         //when mounting - check db to see
 
@@ -142,7 +171,7 @@ class TeamCardModal extends Component {
                     </Row>
                 </ModalFooter>
             </Modal>
-        );
+        ); //this.handleCloseClick
     }
 }
 export default TeamCardModal;

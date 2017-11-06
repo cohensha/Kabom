@@ -13,6 +13,7 @@ class DisplayTab extends Component {
 
         this.state = {
             selectedObj: {name: ''},
+            selectedObjId: 0,
             radioButtonNames: ["Name", "Description", "Number of Members Needed", "Skills"],
             searchResults: [],
             originalData: [],
@@ -39,9 +40,10 @@ class DisplayTab extends Component {
         });
     }
 
-    handleClick(data) {
+    handleClick(data, id) {
         this.setState({
-             selectedObj: data
+             selectedObj: data,
+            selectedObjId: id
         });
         this.toggleCardModal();
     }
@@ -116,7 +118,7 @@ class DisplayTab extends Component {
                                          name={d.name}
                                          description={d.description}
                                          src={d}
-                                         onclick={ () => this.handleClick(d) }
+                                         onclick={ () => this.handleClick(d, id) }
                             />
                         </Col>
                     )}
@@ -129,6 +131,7 @@ class DisplayTab extends Component {
                 />
 
                 <TeamCardModal
+                    teamId={this.state.selectedObjId}
                     show={this.state.showTeamModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
