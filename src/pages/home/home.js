@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Button} from 'reactstrap';
-
-
+import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
 import Header from '../header/header';
 import ProjectTab from './tabs/projectTab';
 import PeopleTab from "./tabs/peopleTab";
@@ -10,14 +8,11 @@ import { database, auth } from '../../firebase/constants';
 import DisplayTab from "./tabs/displayTab";
 import CreateTeamModal from '../modals/createTeamModal';
 import CreateProjectModal from '../modals/createProjectModal';
-
 import Sidebar from '../sidebar/sidebar';
-
 
 class Home extends Component {
     constructor(props) {
         super(props);
-
         this.toggle = this.toggle.bind(this);
         this.toggleCreateTeam = this.toggleCreateTeam.bind(this);
         this.state = {
@@ -51,19 +46,24 @@ class Home extends Component {
         });
     }
 
+    componentDidMount() {
+
+    }
 
     render() {
         return (
-            <div>
-                <Header />
-                    <Row>
-                        <Col sm="12" md={{size: 8}}>
+            <div className="home">
+                <Header/>
+                <Row>
+                    <Col sm="12" md={{size: 8}}>
                         <div className="ml-3 d-inline-block">
                             <Nav tabs>
                                 <NavItem>
                                     <NavLink
                                         className="{ active: this.state.activeTab === '1' }"
-                                        onClick={() => { this.toggle('1'); }}
+                                        onClick={() => {
+                                            this.toggle('1');
+                                        }}
                                     >
                                         Projects
                                     </NavLink>
@@ -71,7 +71,9 @@ class Home extends Component {
                                 <NavItem>
                                     <NavLink
                                         className="{ active: this.state.activeTab === '2' }"
-                                        onClick={() => { this.toggle('2'); }}
+                                        onClick={() => {
+                                            this.toggle('2');
+                                        }}
                                     >
                                         Teams
                                     </NavLink>
@@ -79,7 +81,9 @@ class Home extends Component {
                                 <NavItem>
                                     <NavLink
                                         className="{ active: this.state.activeTab === '3' }"
-                                        onClick={() => { this.toggle('3'); }}
+                                        onClick={() => {
+                                            this.toggle('3');
+                                        }}
                                     >
                                         People
                                     </NavLink>
@@ -91,18 +95,18 @@ class Home extends Component {
                                 <DisplayTab id="3" type="users"/>
                             </TabContent>
                         </div>
-                        </Col>
-                        <Col sm={{ size: '3', offset: 1 }}>
+                    </Col>
+                    <Col sm={{size: '3', offset: 1}}>
                         <Sidebar uid={this.state.currUid || 'null rn'} teamclick={() => this.toggleCreateTeam()}
-                            projectclick={() => this.toggleCreateProject()}/>
-                        </Col>
-                    </Row>
+                                 projectclick={() => this.toggleCreateProject()}/>
+                    </Col>
+                </Row>
                 <CreateTeamModal show={this.state.showCreateTeamModal}
                                  onclick={() => this.toggleCreateTeam()}
-                                 uid={this.state.currUid} />
+                                 uid={this.state.currUid}/>
                 <CreateProjectModal show={this.state.showCreateProjectModal}
                                     onclick={() => this.toggleCreateProject()}
-                                    uid={this.state.currUid} />
+                                    uid={this.state.currUid}/>
             </div>
         );
     }

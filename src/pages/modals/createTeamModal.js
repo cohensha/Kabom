@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalHeader, ModalFooter, Button, Row, Col, Label, FormGroup,Input} from 'reactstrap';
-import { database, auth } from '../../firebase/constants';
-
+import {Modal, ModalBody, ModalHeader, ModalFooter, Button, Label, FormGroup,Input} from 'reactstrap';
+import { database } from '../../firebase/constants';
 
 class CreateTeamModal extends Component {
     constructor(props) {
@@ -12,8 +11,7 @@ class CreateTeamModal extends Component {
             teamNameInput: '',
             teamDescriptionInput: '',
             seekingNumPeopleInput: 0,
-            numOptions: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            skillOptions: ["C++", "Android", "iOS", "Java", "React"],
+            numOptions: [2, 3, 4, 5, 6, 7, 8, 9, 10],
             skillsNeededInput: [],
             currUid: this.props.uid,
         };
@@ -22,9 +20,7 @@ class CreateTeamModal extends Component {
         this.postTeamRef = database.child("teams"); //this posts to general teams tree
         this.postUserTeamRef = database.child("users/" + this.props.uid + "/team"); //this posts to users team owner
         this.postUserTeamsRef = database.child("users/" + this.props.uid + "/teams/"); //this posts to users list of teams
-
     }
-
 
     writeTeamToDb() {
         //console.log(this.state.teamNameInput);
@@ -41,6 +37,8 @@ class CreateTeamModal extends Component {
         });
         this.postUserTeamRef.set(teamId.key);
         this.postUserTeamsRef.push(this.state.teamNameInput);
+
+
 
         this.setState({teamNameInput: ''});
         this.setState({teamDescriptionInput: ''});
@@ -76,7 +74,7 @@ class CreateTeamModal extends Component {
 
     render() {
         return (
-            <Modal isOpen={this.props.show} className={this.props.className}>
+            <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
                 <ModalHeader >Create a Team!</ModalHeader>
                 <ModalBody>
                     <FormGroup>
@@ -89,6 +87,7 @@ class CreateTeamModal extends Component {
                                placeholder="Enter Your Team Name ... "
                         />
                     </FormGroup>
+                    
                     <FormGroup>
                         <Label className="text-gray-dark">Team Description</Label>
                         <Input type="textarea"
@@ -99,6 +98,7 @@ class CreateTeamModal extends Component {
                                placeholder="Tell us what you expect in a team... "
                         />
                     </FormGroup>
+                    
                     <FormGroup>
                         <Label className="text-gray-dark" for="selectGroupSize">Select Group Size</Label>
                         <Input type="select" name="select"
@@ -108,20 +108,13 @@ class CreateTeamModal extends Component {
                             {this.state.numOptions.map( (num, id) => <option key={id}>{num}</option> )}
                         </Input>
                     </FormGroup>
-                    <FormGroup>
-                        <Label className="text-gray-dark" for="skillSelect">Select Skills Needed:</Label>
-                        <Input type="select" name="selectMulti" id="skillSelect"
-                               onChange={(e) => this.handleSelectSkills(e)}
-                               multiple
-                        >
-                            {this.state.skillOptions.map( (skill, id) => <option key={id}>{skill}</option> )}
-                        </Input>
-                    </FormGroup>
+                    
                 </ModalBody>
+                
                 <ModalFooter>
                     <Button color="primary"
                             onClick={() => this.writeTeamToDb()}
-                            >Create Team</Button>{' '}
+                            >Create a Group</Button>{' '}
                     <Button color="secondary" onClick={this.props.onclick}>Cancel</Button>
                 </ModalFooter>
             </Modal>

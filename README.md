@@ -1,3 +1,24 @@
+# Functionality to be implemented
+## Urgent, Must-Have Functionality
+- [X] Create Project Improvements - **Jonathan**
+- [ ] Create Team Improvements: Team Pictures, Project links, Skills, Whether or not you are accepting members, Availability, Desired Team Size (soft requirement) - **Jonathan**
+- [ ] Request Modal: Team/Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing - **Jonathan**
+- [ ] Increment numOfInterests after a user clicks on "I'm interested!" button 
+- [ ] Notify users when I'm interested" button is clicked
+
+## Not Urgent, UX-Friendly Functionality
+- [ ] Show a project/group after a project/group is created instead of refreshing 
+
+## Future
+- [ ] better/consistent UI colors and buttons
+- [ ] deadline on a project based on created date
+- [ ] have a member size displayed in members' box
+- [ ] autosuggest a member when searching or adding members to a project/team
+- [ ] be able to convert a group to a project w/ certain members
+- [ ] ability to remove from a group/project
+- [ ] Ability to write posts on a group/project
+
+# Resources Used
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
