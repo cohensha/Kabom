@@ -32,6 +32,8 @@ class CreateProjectModal extends Component {
             timeDescription : '',
             myRoleDescription : '',
             compensationDescription : '',
+            lookingForMembers : false,
+            workingOnProject : false,
         };
 
         this.addSkill = this.addSkill.bind(this);
@@ -89,7 +91,9 @@ class CreateProjectModal extends Component {
                 "skillsNeeded" : this.state.skillsNeeded,
                 "projectTypes" : this.state.projectTypes,
                 "projectOwner" : this.props.uid,
-                "dateAdded" : new Date().toString()
+                "dateAdded" : new Date().toString(),
+                "lookingForMembers" : this.state.lookingForMembers,
+                "workingOnProject" : this.state.workingOnProject,
             });
 
             if (this.state.projectImageFile) {
@@ -157,6 +161,10 @@ class CreateProjectModal extends Component {
     handleSelectedProjectTypeChange (e) {this.setState({selectedProjectType : e.target.value});}
 
     handleNewProjectTypeChange(e) {this.setState({newProjectType : e.target.value});}
+
+    handleLookingForMembersChange(e) {this.setState({lookingForMembers : e.target.checked});}
+
+    handleWorkingOnProjectChange (e) {this.setState({workingOnProject : e.target.checked});}
 
     addSkill () {
         if (!this.state.selectedSkill) {
@@ -380,6 +388,22 @@ class CreateProjectModal extends Component {
                                value={this.state.compensationDescription}
                                placeholder="Ex. $1000 for completed website, 10% equity, etc."
                         />
+                    </FormGroup>
+
+                    <FormGroup check>
+                        <Label check>
+                            <Input type="checkbox"
+                                   onChange={(e) => this.handleLookingForMembersChange(e)}
+                                   value={this.state.lookingForMembers} />{' '}
+                            Currently looking for project members
+                        </Label>
+
+                        <Label check>
+                            <Input type="checkbox"
+                                   onChange={(e) => this.handleWorkingOnProjectChange(e)}
+                                   value={this.state.lookingForMembers} />{' '}
+                            Currently working on this project
+                        </Label>
                     </FormGroup>
 
                 </ModalBody>
