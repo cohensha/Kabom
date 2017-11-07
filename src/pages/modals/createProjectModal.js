@@ -123,13 +123,12 @@ class CreateProjectModal extends Component {
         return true;
     }
 
-
     componentWillUnmount() {
         this.postProjectRef.off();
         this.postUserProjectsRef.off();
     }
 
-    handleChangename(e) {this.setState({name: e.target.value});}
+    handleChangeName(e) {this.setState({name: e.target.value});}
 
     handleChangeElevatorPitch(e) {this.setState({elevatorPitch: e.target.value});}
 
@@ -144,7 +143,7 @@ class CreateProjectModal extends Component {
         }
     }
 
-    handleChangedescription(e) { this.setState({description: e.target.value});}
+    handleChangeDescription(e) { this.setState({description: e.target.value});}
 
     handleChangeProjectMembersDescription(e) { this.setState({projectMembersDescription: e.target.value});}
 
@@ -229,15 +228,12 @@ class CreateProjectModal extends Component {
             <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
                 <ModalHeader >Create Your New Project</ModalHeader>
                 <ModalBody>
-                    
-
                     <FormGroup>
                         <Label className="text-gray-dark">What's the name of your project?</Label>
                         <Input type="text"
                                value={this.state.name}
-                               onChange={(e) => this.handleChangename(e)}
-                               placeholder="Project Name"
-                        />
+                               onChange={(e) => this.handleChangeName(e)}
+                               placeholder="Project Name"/>
                     </FormGroup>
 
                     <FormGroup>
@@ -245,35 +241,30 @@ class CreateProjectModal extends Component {
                         <Input type="textarea"
                                onChange={(e) => this.handleChangeElevatorPitch(e)}
                                value={this.state.elevatorPitch}
-                               placeholder="Elevator Pitch"
-                        />
+                               placeholder="Elevator Pitch" />
                     </FormGroup>
 
                     <FormGroup>
                         <Label>Got a logo or an idea of what you want your project to look like? Upload it here!</Label>
                         <Input type="file" accept="image/*"
                                files={this.state.projectImageFile}
-                               onChange={(e) => this.handleChangeProjectImage(e)}/>
+                               onChange={(e) => this.handleChangeProjectImage(e)} />
                     </FormGroup>
 
                     <FormGroup>
                         <Label className="text-gray-dark">Tell us anything else about your project here. (Milestones you have, a software development methodology you want to follow, etc.) </Label>
                         <Input type="textarea"
-                               onChange={(e) => this.handleChangedescription(e)}
+                               onChange={(e) => this.handleChangeDescription(e)}
                                value={this.state.description}
-                               placeholder="Description"
-                        />
-
+                               placeholder="Description" />
                     </FormGroup>
-
 
                     <FormGroup>
                         <Label className="text-gray-dark"> What's your role in this project?</Label>
                         <Input type="textarea"
                                onChange={(e) => this.handleChangeRoleDescription(e)}
                                value={this.state.myRoleDescription}
-                               placeholder="Ex. Developer, Designer, Project Manager, General Stakeholder, etc."
-                        />
+                               placeholder="Ex. Developer, Designer, Project Manager, General Stakeholder, etc." />
                     </FormGroup>
 
                     <FormGroup>
@@ -281,8 +272,7 @@ class CreateProjectModal extends Component {
                         <Input type="textarea"
                                onChange={(e) => this.handleChangeProjectMembersDescription(e)}
                                value={this.state.projectMembersDescription}
-                               placeholder="Ex. 2-3 Developers, 1 Designer, 1 Project Manager"
-                        />
+                               placeholder="Ex. 2-3 Developers, 1 Designer, 1 Project Manager" />
                     </FormGroup>
 
                     <FormGroup>
@@ -369,7 +359,6 @@ class CreateProjectModal extends Component {
                                 {projectType}
                             </Badge>
                         )}
-
                     </FormGroup>
 
                     <FormGroup>
@@ -377,8 +366,7 @@ class CreateProjectModal extends Component {
                         <Input type="textarea"
                                onChange={(e) => this.handleChangeTimeDescription(e)}
                                value={this.state.timeDescription}
-                               placeholder="Ex. 2-3 hours per week, checking in once a week in person on campus. Aiming for completion before winter break."
-                        />
+                               placeholder="Ex. 2-3 hours per week, checking in once a week in person on campus. Aiming for completion before winter break."/>
                     </FormGroup>
 
                     <FormGroup>
@@ -386,8 +374,7 @@ class CreateProjectModal extends Component {
                         <Input type="textarea"
                                onChange={(e) => this.handleChangeCompensationDescription(e)}
                                value={this.state.compensationDescription}
-                               placeholder="Ex. $1000 for completed website, 10% equity, etc."
-                        />
+                               placeholder="Ex. $1000 for completed website, 10% equity, etc."/>
                     </FormGroup>
 
                     <FormGroup check>
@@ -416,7 +403,6 @@ class CreateProjectModal extends Component {
                     <Button color="secondary" onClick={this.props.onclick}>
                         Cancel
                     </Button>
-
                 </ModalFooter>
             </Modal>
         );
