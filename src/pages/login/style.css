@@ -56,6 +56,24 @@
 
 #forgotPassword {
 	color: white;
+	margin-left: 8%;
+}
+
+.signInButton {
+    border: none;
+    outline: 0;
+    padding: 10px;
+    color: white;
+    background-color: #000;
+    font-size: 14px;
+    border-radius: 20px;
+    width: 150%;
+    align-self: center;
+}
+
+.signInButton:hover {
+    background-color: white;
+    color: black;
 }
 
 #signUp * {

@@ -16,11 +16,11 @@ class CreateProjectModal extends Component {
             newSkills : [],
             newProjectTypes : [],
             // Inputs
-            projectName: '',
+            name: '',
             elevatorPitch : '',
             projectImageFile: '',
             projectImageUrl : '',
-            projectDescription: '',
+            description: '',
             projectMembersDescription : '',
 
             selectedSkill : "",
@@ -79,9 +79,9 @@ class CreateProjectModal extends Component {
             this.postUserProjectRef.set(projectId);
 
             this.postProjectRef.child(projectId).set({
-                "projectName" : this.state.projectName,
+                "name" : this.state.name,
                 "elevatorPitch" : this.state.elevatorPitch,
-                "projectDescription" : this.state.projectDescription,
+                "description" : this.state.description,
                 "projectMembersDescription" : this.state.projectMembersDescription,
                 "timeDescription" : this.state.timeDescription,
                 "myRoleDescription" : this.state.myRoleDescription,
@@ -124,7 +124,7 @@ class CreateProjectModal extends Component {
         this.postUserProjectsRef.off();
     }
 
-    handleChangeProjectName(e) {this.setState({projectName: e.target.value});}
+    handleChangename(e) {this.setState({name: e.target.value});}
 
     handleChangeElevatorPitch(e) {this.setState({elevatorPitch: e.target.value});}
 
@@ -139,7 +139,7 @@ class CreateProjectModal extends Component {
         }
     }
 
-    handleChangeProjectDescription(e) { this.setState({projectDescription: e.target.value});}
+    handleChangedescription(e) { this.setState({description: e.target.value});}
 
     handleChangeProjectMembersDescription(e) { this.setState({projectMembersDescription: e.target.value});}
 
@@ -225,8 +225,8 @@ class CreateProjectModal extends Component {
                     <FormGroup>
                         <Label className="text-gray-dark">What's the name of your project?</Label>
                         <Input type="text"
-                               value={this.state.projectName}
-                               onChange={(e) => this.handleChangeProjectName(e)}
+                               value={this.state.name}
+                               onChange={(e) => this.handleChangename(e)}
                                placeholder="Project Name"
                         />
                     </FormGroup>
@@ -250,8 +250,8 @@ class CreateProjectModal extends Component {
                     <FormGroup>
                         <Label className="text-gray-dark">Tell us anything else about your project here. (Milestones you have, a software development methodology you want to follow, etc.) </Label>
                         <Input type="textarea"
-                               onChange={(e) => this.handleChangeProjectDescription(e)}
-                               value={this.state.projectDescription}
+                               onChange={(e) => this.handleChangedescription(e)}
+                               value={this.state.description}
                                placeholder="Description"
                         />
 

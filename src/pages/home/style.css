@@ -14,9 +14,3 @@
 #link {
     color:white;
 }
-
-.card {
-    white-space: nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}

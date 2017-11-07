@@ -1,19 +1,22 @@
 .info {
-    color: #808080;
+    color: #505050;
     font-size: 15px;
 }
 
 .introCard {
-    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);*/
+    background-color: #EEF1EF;
     margin: auto;
     text-align: center;
     border-radius: 5px;
     padding-bottom: 10px;
 }
 
-.mission {
+.elevatorPitch {
     font-size: 16px;
     color: grey;
+    text-align: center;
+    padding: 2% 8% 2% 8%;
 }
 
 .name {
@@ -22,18 +25,28 @@
 
 /* Each project, group or people card */
 .card {
-    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);*/
     margin: 10px;
     text-align: center;
-    border-radius: 5px;
-    width: 300px;
+    width: 350px;
     max-height: 200px;
     padding: 15px;
-    word-wrap: break-word;
+    /*word-wrap: break-word;*/
+
+}
+
+.cardDescription {
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.card:hover {
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.2);
 }
 
 .description {
-    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    background-color: #EEF1EF;
     margin: 5% auto auto auto;
     text-align: left;
     border-radius: 5px;
@@ -42,7 +55,8 @@
 }
 
 .information {
-    box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0px 4px 8px 4px rgba(0, 0, 0, 0.2);*/
+    background-color: #EEF1EF;
     margin: auto;
     display: block;
     margin: 5% auto auto auto;
@@ -74,7 +88,7 @@ a {
 
 .button:hover, .cardImInterestButton:hover, a:hover {
     /*opacity: 1;*/
-    background-color: #FB5012;
+    background: linear-gradient(to left, #F09819, #FF512F);
 }
 
 .cardImInterestButton {
