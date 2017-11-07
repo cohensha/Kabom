@@ -88,7 +88,8 @@ class CreateProjectModal extends Component {
                 "compensationDescription" : this.state.compensationDescription,
                 "skillsNeeded" : this.state.skillsNeeded,
                 "projectTypes" : this.state.projectTypes,
-                "projectOwner" : this.props.uid
+                "projectOwner" : this.props.uid,
+                "dateAdded" : new Date().toString()
             });
 
             if (this.state.projectImageFile) {
