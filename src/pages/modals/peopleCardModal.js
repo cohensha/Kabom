@@ -31,7 +31,7 @@ class PeopleCardModal extends Component {
     //team owner to request a user
     request() {
         //to make a request
-        //TODO: CHECK if the user has created a team as a team leader
+        //CHECK if the user has created a team as a team leader
         let teamId = this.props.currUser.team;
         let uidForUserToRequest = this.props.obj.id;
         if (!teamId) {
@@ -40,7 +40,6 @@ class PeopleCardModal extends Component {
         }
 
         if (uidForUserToRequest === auth().currentUser.uid) {
-            console.log("hi");
             this.setState({
                 errorMsg: "Oops! Users cannot request themselves.",
                 showRedAlert: true,

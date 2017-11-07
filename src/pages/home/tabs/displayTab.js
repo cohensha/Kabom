@@ -26,7 +26,7 @@ class DisplayTab extends Component {
     }
 
     componentDidMount() {
-        this.ref.limitToFirst(10).once("value").then((snapshot) => {
+        this.ref.limitToFirst(25).once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 // Create a data structure to store your data
                 let array = [];
@@ -53,6 +53,7 @@ class DisplayTab extends Component {
     }
 
     handleClick(data) {
+        console.log(data);
         this.setState({
              selectedObj: data
         });

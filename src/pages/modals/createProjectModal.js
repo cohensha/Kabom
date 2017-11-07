@@ -74,11 +74,7 @@ class CreateProjectModal extends Component {
     writeProjectToDb() {
         if (this.fieldsAreValid()) {
 
-            const projectId = this.postProjectRef.push().key;
-
-            this.postUserProjectRef.set(projectId);
-
-            this.postProjectRef.child(projectId).set({
+            const project = {
                 "projectName" : this.state.projectName,
                 "elevatorPitch" : this.state.elevatorPitch,
                 "projectDescription" : this.state.projectDescription,
@@ -87,9 +83,29 @@ class CreateProjectModal extends Component {
                 "myRoleDescription" : this.state.myRoleDescription,
                 "compensationDescription" : this.state.compensationDescription,
                 "skillsNeeded" : this.state.skillsNeeded,
-                "projectTypes" : this.state.projectTypes,
+                //for some reason, types input is crashing bc its null
+                //"projectTypes" : this.state.projectTypes,
                 "projectOwner" : this.props.uid
-            });
+            };
+
+            const projectId = this.postProjectRef.push(project);
+
+            this.postUserProjectRef.set(projectId.key);
+
+
+
+            // this.postProjectRef.child(projectId).set({
+            //     "projectName" : this.state.projectName,
+            //     "elevatorPitch" : this.state.elevatorPitch,
+            //     "projectDescription" : this.state.projectDescription,
+            //     "projectMembersDescription" : this.state.projectMembersDescription,
+            //     "timeDescription" : this.state.timeDescription,
+            //     "myRoleDescription" : this.state.myRoleDescription,
+            //     "compensationDescription" : this.state.compensationDescription,
+            //     "skillsNeeded" : this.state.skillsNeeded,
+            //     "projectTypes" : this.state.projectTypes,
+            //     "projectOwner" : this.props.uid
+            // });
 
             if (this.state.projectImageFile) {
                 // Upload project image

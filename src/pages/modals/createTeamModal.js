@@ -23,8 +23,7 @@ class CreateTeamModal extends Component {
     }
 
     writeTeamToDb() {
-        //console.log(this.state.teamNameInput);
-        const teamId = this.postTeamRef.push({
+        let team = {
             name: this.state.teamNameInput,
             description: this.state.teamDescriptionInput,
             created: new Date(),
@@ -34,8 +33,11 @@ class CreateTeamModal extends Component {
             projects: [],
             teamOwner: this.state.currUid,
             skillsNeeded: this.state.skillsNeededInput,
-        });
+        };
+        //console.log(this.state.teamNameInput);
+        const teamId = this.postTeamRef.push(team);
         this.postUserTeamRef.set(teamId.key);
+        team["id"] = teamId.key;
         this.postUserTeamsRef.push(this.state.teamNameInput);
 
 
@@ -44,6 +46,7 @@ class CreateTeamModal extends Component {
         this.setState({teamDescriptionInput: ''});
         this.setState({skillsNeededInput: []});
         this.toggle();
+        this.props.updateTeamsUI(team);
 
     }
 
