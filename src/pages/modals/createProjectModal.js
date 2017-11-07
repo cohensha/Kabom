@@ -100,14 +100,14 @@ class CreateProjectModal extends Component {
             }
 
             // TODO: delete this once a comprehensive list of skills have been generated
-            this.state.newSkills.map((x, index) => {
-                database.child("skills/" + x).push().set(this.props.uid);
-            });
+            // this.state.newSkills.map((x, index) => {
+            //     database.child("skills/" + x).push().set(this.props.uid);
+            // });
 
             // TODO: same
-            this.state.newProjectTypes.map((x, index) => {
-                database.child("projectTypes").push().set(x);
-            });
+            // this.state.newProjectTypes.map((x, index) => {
+            //     database.child("projectTypes").push().set(x);
+            // });
 
             this.toggle();
         }
@@ -182,7 +182,7 @@ class CreateProjectModal extends Component {
     addProjectType () {
         if (!this.state.selectedProjectType) {
             this.setState({
-                projectTypes: this.state.projectTypes.concat([this.state.projectTypes[0]])
+                projectTypes: this.state.projectTypes.concat([this.state.allProjectTypes[0]])
             });
         } else {
             this.setState({
@@ -256,7 +256,7 @@ class CreateProjectModal extends Component {
                         />
 
                     </FormGroup>
-                    */}
+
 
                     <FormGroup>
                         <Label className="text-gray-dark"> What's your role in this project?</Label>
@@ -342,7 +342,7 @@ class CreateProjectModal extends Component {
                         <FormGroup>
                             <Label>Can't find a relevant project type? Add it!</Label>
                             <InputGroup>
-                                <Input placeholder="Add New ProjectType" id={"newProjectType"}
+                                <Input placeholder="Add New Project Type" id={"newProjectType"}
                                        value={this.state.newProjectType}
                                        onChange={(e) => this.handleNewProjectTypeChange(e)}/>
                                 <InputGroupButton>
