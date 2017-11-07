@@ -155,6 +155,7 @@ class DisplayTab extends Component {
                                          key={id}
                                          name={d.name}
                                          description={d.description}
+                                         lookingForMembers={d.lookingForMembers}
                                          src={d}
                                          onclick={ () => this.handleClick(d) }
                             />
