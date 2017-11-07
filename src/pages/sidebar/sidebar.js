@@ -87,7 +87,16 @@ class Sidebar extends Component {
                         this.setState({myTeam: sp.val()});
                     }
                 });
-
+                database.child("teams/" + teamIdSnapshot.val() + "/project").once("value").then((sp) => {
+                    if (sp.exists()) {
+                        database.child("projects/" + sp.val()).once("value").then((s) => {
+                            if (s.val()) {
+                                console.log(s.val());
+                                this.setState({ myTeamProject: s.val()})
+                            }
+                        });
+                    }
+                });
 
                 database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
                    if(sp.exists()) {
@@ -357,7 +366,7 @@ class Sidebar extends Component {
         this.setState({
            myProjects: myProjs,
            projRequests: newProjReqs,
-           myTeamProject: selectedProject.projectName,
+           myTeamProject: selectedProject,
         });
     }
 
@@ -449,7 +458,7 @@ class Sidebar extends Component {
                 <p>Your Team's Current Project</p>
 
                 <ListGroup className="mr-3 mb-3">
-                    <ListGroupItem> {this.state.myTeamProject || 'None. Find one to the left!'} </ListGroupItem>
+                    <ListGroupItem> {(this.state.myTeamProject && this.state.myTeamProject.projectName) || 'None. Find one to the left!'} </ListGroupItem>
                 </ListGroup>
 
                 <p onClick={() => this.toggle('projectreq')}> Project Requests For Your Team</p>
