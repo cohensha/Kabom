@@ -11,22 +11,24 @@ class TeamCardModal extends Component {
 
         this.state = {
             interestButtonText: "Express interest to team!",
-            interestedUsersArray: [],
+            localInterestedUsersArray: [],
             userInterestOriginal: false,
             userInterestUpdated: false
         };
 
         //read if user is interested in team from db
-        this.teamIdRef = database.child("users/" + this.props.uid + "/team");
+      //  this.teamIdRef = database.child("users/" + this.props.uid + "/team");
         this.handleCloseClick = this.handleCloseClick.bind(this);
 
-        this.interestedUsersRef = database.child("teams/" + this.props.teamId + "/interestedUsers")
+        // this.interestedUsersRef = database.child("teams/" + this.props.teamId + "/interestedUsers");
+
 
 
 
     }
 
-    getButtonText() {
+    setButtonText() {
+
         if(this.state.userInterestUpdated) {
             console.log("unexpressing interest");
             this.setState({
@@ -48,67 +50,89 @@ class TeamCardModal extends Component {
            userInterestUpdated: !this.state.userInterestUpdated
         });
 
-        this.getButtonText();
+        this.setButtonText();
 
+        //if interested, add to db
 
-    }
-
-    componentDidMount() {
-
-        this.setState({
-            userInterestOriginal: false,
-            userInterestUpdated: false
-        });
-        //set userinterestedoriginal and updated
-
-        //look at team's list of users interested
-        this.interestedUsersRef.once("value").then((sp)=>
-
-        {
-            if(sp.exists()) {
-
-                console.log("reading team interested users to add to set original and buid array to publish to db");
-
-                //for each
-
-                //if value is current user id - then set interested values to true
-
-                //add item to state array
-            }
-            else {
-                console.log("not reading interested users");
-            }
-
-        });
-
-
-        //set text for button
-
-
-        this.getButtonText();
-
-        //loop through this.props.obj.interestedUsers
-
+       // if(this.state.userInterestUpdated) {
+       //
+       //     interestedArr = [];
+       //
+       //     if(this.props.obj.)
+       //
+       //
+       // }
 
 
     }
 
     handleCloseClick() {
-        console.log("closing team card modal");
-       // this.props.onclick;
+        //will show express interest every time they open, bc idk when to read from db for that
 
-     if(this.state.userInterestOriginal != this.state.userInterestUpdated) {
+        //if user expresses interest
+            //if they are already in team's list, do nothing
+            //if they are not, add to list
+        //if user clicks not interested
+            //if they are already in team's list, delete
+            //if they are not, do nothing
+
+
+        console.log("closing team card modal");
+        var currUser = auth().currentUser.uid;
+
+            var localInterestedUsers = [];
          if(this.state.userInterestUpdated) {
-             console.log("writing user is interested to db");
+           var inList = false;
+             //if user is already interested, don't write
+             if(this.props.obj.interestedUsers) {
+                 this.props.obj.interestedUsers.map( (userId) => {
+                     localInterestedUsers.push(userId);
+                     if(userId == currUser) {
+                         inList = true;
+                         console.log("1: interested and already in list - nothing");
+                     }
+                 });
+
+             }
+             //if team does not have a list of interested users already, or current user not in this list
+             if(!inList) {
+                 console.log("2: interested and not in list - write to db");
+                // add user to end of local array
+                 localInterestedUsers.push(currUser);
+             }
+
          }
          else {
 
-             console.log("writing user is not interested to db");
+             var inList = false;
+             //if user is already interested, don't write
+             if(this.props.obj.interestedUsers) {
+                 this.props.obj.interestedUsers.map( (userId) => {
+                     localInterestedUsers.push(userId);
+                     if(userId == currUser) {
+                         inList = true;
+                         console.log("3: not interested and in list -- delete from db");
+                         //TODO delete user from local array
+                         var index = localInterestedUsers.indexOf(currUser);
+                         localInterestedUsers.splice(index, 1);
+                     }
+                 });
+
+             }
+             //if team does not have a list of interested users already, or current user not in this list
+             if(!inList) {
+                 console.log("4: not interested and not in db - nothing");
+             }
+
          }
-     }
-     else {
-        console.log("user interested unchanged");
-     }
+        //
+        //  //push local interested array to db
+        console.log("my team id: ",  this.props.obj.itemId);
+        //     database.child('teams' + this.props.teamId)
+
+        database.child('teams/' + this.props.obj.itemId).update({
+           interestedUsers: localInterestedUsers
+        });
         this.toggle();
 
         //TODO FOR EXPRESSING INTEREST:
@@ -117,17 +141,12 @@ class TeamCardModal extends Component {
 
             //add user to team's array of interested users
 
-
-
         //when mounting - check db to see
-
-
 
     }
 
-
-
     render() {
+        // console.log("team id: ", this.props.obj.itemId);
         return (
             <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
                

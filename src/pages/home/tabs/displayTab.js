@@ -13,7 +13,6 @@ class DisplayTab extends Component {
 
         this.state = {
             selectedObj: {name: ''},
-            selectedObjId: 0,
             radioButtonNames: ["Name", "Description", "Number of Members Needed", "Skills"],
             searchResults: [],
             originalData: [],
@@ -31,6 +30,8 @@ class DisplayTab extends Component {
                 let array = [];
                 snapshot.forEach(function (childSnapshot) {
                     const item = childSnapshot.val();
+                    item.itemId = childSnapshot.key;
+                    // console.log(item);
                     array.push(item);
                 });
                 this.setState({originalData: array});
@@ -43,7 +44,6 @@ class DisplayTab extends Component {
     handleClick(data, id) {
         this.setState({
              selectedObj: data,
-            selectedObjId: id
         });
         this.toggleCardModal();
     }
@@ -112,13 +112,14 @@ class DisplayTab extends Component {
                 />
                 <Row>
                     {this.state.searchResults.map((d, id) =>
+
                         <Col key={id} className="m-1 d-inline-block">
                             <DisplayCard className="d-inline-block"
                                          key={id}
                                          name={d.name}
                                          description={d.description}
                                          src={d}
-                                         onclick={ () => this.handleClick(d, id) }
+                                         onclick={ () => this.handleClick(d) }
                             />
                         </Col>
                     )}
@@ -131,7 +132,7 @@ class DisplayTab extends Component {
                 />
 
                 <TeamCardModal
-                    teamId={this.state.selectedObjId}
+
                     show={this.state.showTeamModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
