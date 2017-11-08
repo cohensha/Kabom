@@ -115,10 +115,10 @@ class TeamCardModal extends Component {
          }
         //
         //  //push local interested array to db
-        console.log("my team id: ",  this.props.obj.itemId);
+        console.log("my team id: ",  this.props.obj.id);
         //     database.child('teams' + this.props.teamId)
 
-        database.child('teams/' + this.props.obj.itemId).update({
+        database.child('teams/' + this.props.obj.id).update({
            interestedUsers: localInterestedUsers
         });
         this.toggle();
@@ -126,7 +126,7 @@ class TeamCardModal extends Component {
     }
 
     render() {
-        // console.log("team id: ", this.props.obj.itemId);
+        // console.log("team id: ", this.props.obj.id);
         return (
             <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
                

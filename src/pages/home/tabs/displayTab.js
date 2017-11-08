@@ -18,9 +18,11 @@ class DisplayTab extends Component {
             originalData: [],
             showProjectModal: false,
             showTeamModal: false,
-            showPeopleModal: false
+            showPeopleModal: false,
+            currUser: null,
         };
         this.ref = database.child(this.props.type);
+        this.userRef = database.child("users/" + auth().currentUser.uid);
     }
 
     componentDidMount() {
@@ -29,9 +31,16 @@ class DisplayTab extends Component {
                 // Create a data structure to store your data
                 let array = [];
                 snapshot.forEach(function (childSnapshot) {
+                    //append uid to object stored client side
                     const item = childSnapshot.val();
+
                     item.itemId = childSnapshot.key;
                     // console.log(item);
+
+                    if (item) {
+                        item["id"] = childSnapshot.key;
+                    }
+
                     array.push(item);
                 });
                 this.setState({originalData: array});
@@ -39,9 +48,16 @@ class DisplayTab extends Component {
 
             }
         });
+        this.userRef.once("value").then((sp) => {
+            if (sp.exists()) {
+                this.setState({ currUser: sp.val() });
+            }
+
+        });
+
     }
 
-    handleClick(data, id) {
+    handleClick(data) {
         this.setState({
              selectedObj: data,
         });
@@ -65,7 +81,34 @@ class DisplayTab extends Component {
     }
 
     searchByName(input) {
-        if (input === "") return;
+        // if (input === "") return;
+        // console.log("here");
+        // this.ref.orderByChild("skillsNeeded").equalTo(input).on("value", (snapshot) => {
+        //     console.log("in callback");
+        //     let array = [];
+        //     snapshot.forEach(function (childSnapshot) {
+        //         const item = childSnapshot.val();
+        //         array.push(item);
+        //         console.log(item);
+        //     });
+        // });
+        // console.log("here");
+
+        //
+        this.ref.once("value").then((snapshot) => {
+            if (snapshot.exists()) {
+                // Create a data structure to store your data
+                let array = [];
+                snapshot.forEach(function (childSnapshot) {
+                    const item = childSnapshot.val();
+                    array.push(item);
+                });
+                this.setState({originalData: array});
+                this.setState({searchResults: array});
+
+            }
+        });
+
         let array = [];
         this.state.originalData.map( (obj) => {
             if (obj.name && obj.name.toLowerCase().includes(input.toLowerCase())) {
@@ -114,21 +157,23 @@ class DisplayTab extends Component {
                     {this.state.searchResults.map((d, id) =>
 
                         <Col key={id} className="m-1 d-inline-block">
-                            <DisplayCard className="d-inline-block"
+                            <DisplayCard className="d-inline-block card"
                                          key={id}
                                          name={d.name}
                                          description={d.description}
+                                         lookingForMembers={d.lookingForMembers}
                                          src={d}
                                          onclick={ () => this.handleClick(d) }
                             />
                         </Col>
                     )}
                 </Row>
-                
+
                 <ProjectCardModal
                     show={this.state.showProjectModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
+                    currUser={this.state.currUser}
                 />
 
                 <TeamCardModal
@@ -136,12 +181,14 @@ class DisplayTab extends Component {
                     show={this.state.showTeamModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
+                    currUser={this.state.currUser}
                 />
 
                 <PeopleCardModal
                     show={this.state.showPeopleModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}
+                    currUser={this.state.currUser}
                 />
             </TabPane>
         );
