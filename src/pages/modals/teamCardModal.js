@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalHeader, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, ModalHeader, Row, Col, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
@@ -12,8 +12,113 @@ class TeamCardModal extends Component {
             showGreenAlert: false,
             hasRequested: false,
             errorMsg: "Oops! Only Project leaders can request teams to work on their project.",
+            interestButtonText: "Express interest to team!",
+            localInterestedUsersArray: [],
+            userInterestUpdated: false,
         };
+        this.handleCloseClick = this.handleCloseClick.bind(this);
+
     }
+
+    setButtonText() {
+
+        if(this.state.userInterestUpdated) {
+            console.log("unexpressing interest");
+            this.setState({
+                interestButtonText: "Express interest to team!"
+            });
+        }
+        else {
+            console.log("expressing interest");
+            this.setState({
+                interestButtonText: "Interest sent to team!"
+            });
+        }
+    }
+
+    handleInterestClick() {
+        //team object is this.props.obj
+        this.setState({
+            userInterestUpdated: !this.state.userInterestUpdated
+        });
+
+        this.setButtonText();
+
+    }
+
+    handleCloseClick() {
+
+        //if user expresses interest
+        //if they are already in team's list, do nothing
+        //if they are not, add to list
+        //if user clicks not interested
+        //if they are already in team's list, delete
+        //if they are not, do nothing
+
+        //Currently, when first opening the modal it does not show if user clicked interested
+        //in the past, bc we don't know where we can access the team object from inside the modal
+
+        console.log("closing team card modal");
+        var currUser = auth().currentUser.uid;
+
+        var localInterestedUsers = [];
+        if(this.state.userInterestUpdated) {
+            var inList = false;
+            //if user is already interested, don't write
+            if(this.props.obj.interestedUsers) {
+                this.props.obj.interestedUsers.map( (userId) => {
+                    localInterestedUsers.push(userId);
+                    if(userId == currUser) {
+                        inList = true;
+                        console.log("1: interested and already in list - nothing");
+                    }
+                });
+
+            }
+            //if team does not have a list of interested users already, or current user not in this list
+            if(!inList) {
+                console.log("2: interested and not in list - write to db");
+                // add user to end of local array
+                localInterestedUsers.push(currUser);
+            }
+
+        }
+        else {
+
+            var inList = false;
+            //if user is already interested, don't write
+            if(this.props.obj.interestedUsers) {
+                this.props.obj.interestedUsers.map( (userId) => {
+                    localInterestedUsers.push(userId);
+                    if(userId == currUser) {
+                        inList = true;
+                        console.log("3: not interested and in list -- delete from db");
+                        //TODO delete user from local array
+                        var index = localInterestedUsers.indexOf(currUser);
+                        localInterestedUsers.splice(index, 1);
+                    }
+                });
+
+            }
+            //if team does not have a list of interested users already, or current user not in this list
+            if(!inList) {
+                console.log("4: not interested and not in db - nothing");
+            }
+
+        }
+        //
+        //  //push local interested array to db
+        console.log("my team id: ",  this.props.obj.id);
+        //     database.child('teams' + this.props.teamId)
+
+        database.child('teams/' + this.props.obj.id).update({
+            interestedUsers: localInterestedUsers
+        });
+        this.toggleModal();
+
+    }
+
+
 
     toggleModal() {
         this.setState({ hasRequested: false });
@@ -87,6 +192,8 @@ class TeamCardModal extends Component {
 
     }
 
+
+
     render() {
         return (
             <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
@@ -127,6 +234,10 @@ class TeamCardModal extends Component {
                               <p>{this.props.obj.description}</p>
                             </div> <br/>
                         </div>
+
+                        <div className="container">
+                            <Button className={"interestButton"} onClick={() => this.handleInterestClick()}>{this.state.interestButtonText}</Button>
+                        </div>
                 </ModalBody>
                 <ModalFooter>
                     <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
@@ -142,7 +253,7 @@ class TeamCardModal extends Component {
                     >
                         Request
                     </Button>
-                    <Button color="secondary" onClick={() => this.toggleModal()}>Close</Button>
+                    <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
                 </ModalFooter>
             </Modal>
         );

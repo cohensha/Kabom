@@ -100,16 +100,27 @@ class PeopleCardModal extends Component {
                
                 <ModalBody>
                         <div className="introCard">
-                            <CardImg top width = "100%" src="https://i.imgur.com/GWUyCqu.gif" alt={"Cover Image"}/>
+                            <CardImg top width = "100%" src={this.props.obj.profilePicture}/>
                             <h1 className="name">{this.props.obj.name}</h1>
+                            <h2 className="info">{this.props.obj.bio}</h2>
                             <p><button className="button">I'm interested!</button></p>
                         </div>
 
                         <div className="information">
                             <h2 >About Me</h2> <br/>
 
-                            <h5>Interests</h5>
-                            <p className="info">{this.props.obj.noOfInterests}</p>
+                            <h5>School</h5>
+                            <p className="info">University of Southern California</p>
+                            <p className="info">{this.props.obj.school}</p>
+
+                            <h5>Email</h5>
+                            <p className="info">{this.props.obj.email}</p>
+
+                            <h5>Links</h5>
+                            <p className="info">{this.props.obj.facebook}</p>
+                            <p className="info">{this.props.obj.github}</p>
+                            <p className="info">{this.props.obj.linkedin}</p>
+
                         </div>
 
                         <div className="description">

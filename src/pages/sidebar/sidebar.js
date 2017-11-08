@@ -52,6 +52,8 @@ class Sidebar extends Component {
         this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
         this.myProjectsRef = database.child("users/"+ this.props.uid + "/projects");
         this.teamIdRef = database.child("users/" + this.props.uid + "/team");
+
+
         this.testRef = database.child("teams/members");
         this.userRef = database.child("users/" + auth().currentUser.uid);
     }
@@ -68,7 +70,7 @@ class Sidebar extends Component {
                         console.log(shot.val());
                         this.setState({
                             myProject: shot.val(),
-                            myProjectName: shot.val().projectName,
+                            myProjectName: shot.val().name,
                         });
                     }
                 });
@@ -80,7 +82,7 @@ class Sidebar extends Component {
         this.teamIdRef.once("value").then((teamIdSnapshot) => {
             if (teamIdSnapshot.exists()) {
                 this.setState({myTeamId: teamIdSnapshot.val()});
-                console.log(teamIdSnapshot.val());
+                //console.log(teamIdSnapshot.val());
                 //get the team name from team id
                 database.child("teams/" + teamIdSnapshot.val() + "/name").once("value").then((sp) => {
                     if (sp.exists()) {
@@ -100,13 +102,13 @@ class Sidebar extends Component {
 
                 database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
                    if(sp.exists()) {
-                       console.log("reading users interested");
+                       // console.log("reading users interested");
                        let arrayIds = [];
                        let array= [];
                       sp.forEach(function(childSnapshot) {
                          const item = childSnapshot.val();
                          arrayIds.push(item);
-                         console.log("user interested: " + item);
+                         // console.log("user interested: " + item);
 
                          //for each interested user, pull their data using uid's and add to array
                           database.child("/users/" + item).once("value").then((snapshot) => {
@@ -389,12 +391,13 @@ class Sidebar extends Component {
         });
     }
 
-    toggleCardModal() {
-        this.setState({
-            showCardModal: !this.state.showCardModal,
-            hasRequested: false,
-        });
-    }
+    //unused
+    // toggleCardModal() {
+    //     this.setState({
+    //         showCardModal: !this.state.showCardModal,
+    //         hasRequested: false,
+    //     });
+    // }
 
     getUserNameFromId(userid) {
         var name = null;
@@ -421,7 +424,7 @@ class Sidebar extends Component {
     }
 
     updateTeams(team) {
-        console.log("called");
+        //console.log("called");
         console.log(team);
         let arr = this.state.myTeams;
         arr.push(team);
@@ -459,7 +462,7 @@ class Sidebar extends Component {
                 <p>Your Team's Current Project</p>
 
                 <ListGroup className="mr-3 mb-3">
-                    <ListGroupItem> {(this.state.myTeamProject && this.state.myTeamProject.projectName) || 'None. Find one to the left!'} </ListGroupItem>
+                    <ListGroupItem> {(this.state.myTeamProject && this.state.myTeamProject.name) || 'None. Find one to the left!'} </ListGroupItem>
                 </ListGroup>
 
                 <p onClick={() => this.toggle('projectreq')}> Project Requests For Your Team</p>
@@ -473,7 +476,7 @@ class Sidebar extends Component {
                                 accept={this.acceptProject.bind(this, id)}
                                 reject={this.rejectProject.bind(this,id)}
                             >
-                                {req.projectName}
+                                {req.name}
                             </RequestListGroupItem>
                         )}
                     </ListGroup>
@@ -537,7 +540,7 @@ class Sidebar extends Component {
                                 onclick={() => this.handleProfileClick(req, "projects")}
                                 contact={() => this.contact()}
                             >
-                                {req.projectName}
+                                {req.name}
                             </OwnedListGroupItem>
                         )}
                     </ListGroup>
