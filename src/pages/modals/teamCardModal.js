@@ -12,7 +12,6 @@ class TeamCardModal extends Component {
         this.state = {
             interestButtonText: "Express interest to team!",
             localInterestedUsersArray: [],
-            userInterestOriginal: false,
             userInterestUpdated: false
         };
 
@@ -52,22 +51,9 @@ class TeamCardModal extends Component {
 
         this.setButtonText();
 
-        //if interested, add to db
-
-       // if(this.state.userInterestUpdated) {
-       //
-       //     interestedArr = [];
-       //
-       //     if(this.props.obj.)
-       //
-       //
-       // }
-
-
     }
 
     handleCloseClick() {
-        //will show express interest every time they open, bc idk when to read from db for that
 
         //if user expresses interest
             //if they are already in team's list, do nothing
@@ -76,6 +62,8 @@ class TeamCardModal extends Component {
             //if they are already in team's list, delete
             //if they are not, do nothing
 
+        //Currently, when first opening the modal it does not show if user clicked interested
+        //in the past, bc we don't know where we can access the team object from inside the modal
 
         console.log("closing team card modal");
         var currUser = auth().currentUser.uid;
@@ -134,14 +122,6 @@ class TeamCardModal extends Component {
            interestedUsers: localInterestedUsers
         });
         this.toggle();
-
-        //TODO FOR EXPRESSING INTEREST:
-            // if user interest is true,
-            // add team to user's set of team they're interested in
-
-            //add user to team's array of interested users
-
-        //when mounting - check db to see
 
     }
 
