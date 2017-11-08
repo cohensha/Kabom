@@ -391,7 +391,8 @@ class Sidebar extends Component {
 
     toggleCardModal() {
         this.setState({
-            showCardModal: !this.state.showCardModal
+            showCardModal: !this.state.showCardModal,
+            hasRequested: false,
         });
     }
 

@@ -13,7 +13,11 @@ class TeamCardModal extends Component {
             hasRequested: false,
             errorMsg: "Oops! Only Project leaders can request teams to work on their project.",
         };
-        this.toggle = this.props.onclick;
+    }
+
+    toggleModal() {
+        this.setState({ hasRequested: false });
+        this.props.onclick();
     }
 
     dismiss(color) {
@@ -25,40 +29,59 @@ class TeamCardModal extends Component {
 
     request() {
         const currProjID = this.props.currUser.project;
+        const teamIdToRequest = this.props.obj.id;
+
         //check if user is actually a project owner first
         if (!currProjID) {
             this.setState({showRedAlert: true});
             return;
         }
 
-        //TODO: check if proj owner is requesting a team he's part of
-        console.log(this.props.currUser.teams);
-        // let newArray = this.props.currUser.teams.filter(function(e, obj){
-        //     return obj.name!==this.props.obj.name;
-        // });
-        // let a = this.props.currUser.teams.find((t) => t === this.props.obj.name);
-        // if (a.size() === 0) {
-        //     this.setState({
-        //         errorMsg: "Oops! Project Owners cannot request their own teams.",
-        //         showRedAlert: true,
-        //     });
-        //     return;
-        // }
+        //check if proj owner is requesting a team he's part of
+        let currUsersTeams = this.props.currUser.teams;
+        if (currUsersTeams[teamIdToRequest]) {
+            this.setState({
+                errorMsg: "Oops! You can't request a team you are a part of.",
+                hasRequested: true,
+                showRedAlert: true,
+            });
+            return;
+        }
 
-        const teamIdToRequest = this.props.obj.id;
-        console.log(teamIdToRequest);
-        console.log(currProjID);
         database.child("projects/" + currProjID).once("value").then((sp) => {
            if (sp.exists()) {
-               let projName = sp.val().projectName;
-               console.log("requests/teams/" + teamIdToRequest);
-               let postProjRequest = database.child("requests/teams/" + teamIdToRequest);
-               console.log("id " + currProjID);
-               postProjRequest.child(currProjID).set(projName);
+               let projName = sp.val().name || sp.val().projectName;
+               let projectsCurrTeams = sp.val().teams;
+               //look through projects current teams,
+               //if the team i'm requesting is already working on my project, return
+               if (projectsCurrTeams[teamIdToRequest]) {
                    this.setState({
-                       showGreenAlert: true,
+                       errorMsg: "Oops! You're already working with this team.",
+                       showRedAlert: true,
                        hasRequested: true,
                    });
+                   return;
+               }
+               let postProjRequest = database.child("requests/teams/" + teamIdToRequest);
+               //check if i've already requested this user
+               postProjRequest.child(currProjID).once("value").then((s) => {
+                   if (s.exists()) {
+                       //if i've already requested this team
+                       this.setState({
+                           errorMsg: "Oops! You've already requested this team.",
+                           showRedAlert: true,
+                           hasRequested: true,
+                       });
+                   }
+                   else {
+                       //if not, push my request
+                       postProjRequest.child(currProjID).set(projName);
+                       this.setState({
+                           showGreenAlert: true,
+                           hasRequested: true,
+                       });
+                   }
+               });
            }
         });
 
@@ -119,7 +142,7 @@ class TeamCardModal extends Component {
                     >
                         Request
                     </Button>
-                    <Button color="secondary" onClick={this.props.onclick}>Close</Button>
+                    <Button color="secondary" onClick={() => this.toggleModal()}>Close</Button>
                 </ModalFooter>
             </Modal>
         );
