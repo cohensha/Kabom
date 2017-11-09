@@ -240,26 +240,26 @@ class TeamCardModal extends Component {
                         </div>
 
                         <div className="description">
-                            <Button className={"interestButton"}
-                                    onClick={() => this.handleInterestClick()}
-                                    block
-                            >{this.state.interestButtonText}
+                            <Button
+                                color="secondary"
+                                onClick={() => this.request()}
+                                disabled={this.state.hasRequested}
+                                block
+                            >
+                                Request This Team For Your Project
                             </Button>
+                            <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
+                                {this.state.errorMsg}
+                            </Alert>
+                            <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
+                                Nice! You've successfully requested this team.
+                            </Alert>
                         </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
-                        {this.state.errorMsg}
-                    </Alert>
-                    <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
-                        Nice! You've successfully requested this team.
-                    </Alert>
-                    <Button
-                        color="secondary"
-                        onClick={() => this.request()}
-                        disabled={this.state.hasRequested}
-                    >
-                        Request
+                    <Button className={"interestButton"}
+                            onClick={() => this.handleInterestClick()}
+                    >{this.state.interestButtonText}
                     </Button>
                     <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
                 </ModalFooter>

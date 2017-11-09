@@ -132,15 +132,25 @@ class PeopleCardModal extends Component {
                               <p>{this.props.obj.description}</p>
                             </div> <br/>
                         </div>
+
+                        <div className="description">
+                            <Button
+                                color="secondary"
+                                onClick={() => this.request()}
+                                disabled={this.state.hasRequested}
+                                block
+                            >
+                                Request This User To Join Your Team
+                            </Button>
+                            <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
+                                {this.state.errorMsg}
+                            </Alert>
+                            <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
+                                Nice! You've successfully requested this team.
+                            </Alert>
+                        </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
-                        {this.state.errorMsg}
-                    </Alert>
-                    <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
-                        Nice! You've successfully requested this user.
-                    </Alert>
-                    <Button color="secondary" onClick={() => this.request()} disabled={this.state.hasRequested}> Request </Button>
                     <Button color="secondary" onClick={() => this.toggleModal()}>Close</Button>
                 </ModalFooter>
             </Modal>
