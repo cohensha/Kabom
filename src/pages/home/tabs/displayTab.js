@@ -185,6 +185,6 @@ class DisplayTab extends Component {
             </TabPane>
         );
         }
-    };
+}
 
 export default DisplayTab;
