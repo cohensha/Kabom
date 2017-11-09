@@ -1,7 +1,7 @@
 import React from 'react';
 import {RejectIcon, AcceptIcon} from '../../icons/icon';
 
-import {ListGroupItem, Button, Badge, Row} from 'reactstrap';
+import {ListGroupItem, Button, Row} from 'reactstrap';
 
 export const RequestListGroupItem = ({id, children, accept, reject, onclick}) => (
     <ListGroupItem key={id}>

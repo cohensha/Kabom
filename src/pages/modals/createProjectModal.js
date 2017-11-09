@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Modal, ModalBody, ModalHeader, ModalFooter,
     Button, Label, FormGroup, Badge, InputGroup, InputGroupButton, Input} from 'reactstrap';
-import { database, auth, storage } from '../../firebase/constants';
+import { database, storage } from '../../firebase/constants';
 
 class CreateProjectModal extends Component {
     constructor(props) {
