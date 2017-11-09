@@ -26,16 +26,21 @@ class DisplayTab extends Component {
     }
 
     componentDidMount() {
-        this.ref.limitToFirst(10).once("value").then((snapshot) => {
+        this.ref.limitToFirst(25).once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 // Create a data structure to store your data
                 let array = [];
                 snapshot.forEach(function (childSnapshot) {
                     //append uid to object stored client side
                     const item = childSnapshot.val();
+
+                    item.itemId = childSnapshot.key;
+                    // console.log(item);
+
                     if (item) {
                         item["id"] = childSnapshot.key;
                     }
+
                     array.push(item);
                 });
                 this.setState({originalData: array});
@@ -53,8 +58,9 @@ class DisplayTab extends Component {
     }
 
     handleClick(data) {
+        console.log(data);
         this.setState({
-             selectedObj: data
+             selectedObj: data,
         });
         this.toggleCardModal();
     }
@@ -150,11 +156,13 @@ class DisplayTab extends Component {
                 />
                 <Row>
                     {this.state.searchResults.map((d, id) =>
+
                         <Col key={id} className="m-1 d-inline-block">
                             <DisplayCard className="d-inline-block card"
                                          key={id}
                                          name={d.name}
                                          description={d.description}
+                                         lookingForMembers={d.lookingForMembers}
                                          src={d}
                                          onclick={ () => this.handleClick(d) }
                             />
@@ -170,6 +178,7 @@ class DisplayTab extends Component {
                 />
 
                 <TeamCardModal
+
                     show={this.state.showTeamModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleCardModal()}

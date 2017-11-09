@@ -21,6 +21,15 @@ class PeopleCardModal extends Component {
         this.userRef = database.child("users/" + auth().currentUser.uid);
     }
 
+    toggleModal() {
+        this.setState({
+            hasRequested: false,
+            showRedAlert: false,
+            showGreenAlert: false,
+        });
+        this.props.onclick();
+    }
+
     dismiss(color) {
         if (color === "red")
             this.setState({ showRedAlert: false });
@@ -31,7 +40,7 @@ class PeopleCardModal extends Component {
     //team owner to request a user
     request() {
         //to make a request
-        //TODO: CHECK if the user has created a team as a team leader
+        //CHECK if the user has created a team as a team leader
         let teamId = this.props.currUser.team;
         let uidForUserToRequest = this.props.obj.id;
         if (!teamId) {
@@ -40,7 +49,6 @@ class PeopleCardModal extends Component {
         }
 
         if (uidForUserToRequest === auth().currentUser.uid) {
-            console.log("hi");
             this.setState({
                 errorMsg: "Oops! Users cannot request themselves.",
                 showRedAlert: true,
@@ -53,17 +61,39 @@ class PeopleCardModal extends Component {
         database.child("teams/" + teamId).once("value").then((sp) => {
             if (sp.exists()) {
                 let teamName = sp.val().name;
+
+                //check if person i am requesting to join my team is already a member of my team
+                let teamsCurrMembers = sp.val().members;
+                if (teamsCurrMembers[uidForUserToRequest]) {
+                    this.setState({
+                        errorMsg: "Oops! This person is already in your team",
+                        hasRequested: true,
+                        showRedAlert: true,
+                    });
+                    return;
+                }
+
+                //check if i've already requested this user
                 let postRequestToUser = database.child("requests/users/" + uidForUserToRequest);
-                postRequestToUser.child(teamId).set(teamName);
-                this.setState({
-                    showGreenAlert: true,
-                    hasRequested: true,
+                postRequestToUser.child(teamId).once("value").then((s) => {
+                    if (s.exists()) {
+                        this.setState({
+                            errorMsg: "Oops! You've already requested this user.",
+                            showRedAlert: true,
+                            hasRequested: true,
+                        });
+                        return;
+                    }
+                    else {
+                        postRequestToUser.child(teamId).set(teamName);
+                        this.setState({
+                            showGreenAlert: true,
+                            hasRequested: true,
+                        });
+                    }
                 });
             }
         });
-
-        //console.log(this)
-        //IF YES (shoudl be yes), then write your team id and team name to request
     }
 
     render() {
@@ -102,16 +132,26 @@ class PeopleCardModal extends Component {
                               <p>{this.props.obj.description}</p>
                             </div> <br/>
                         </div>
+
+                        <div className="description">
+                            <Button
+                                color="secondary"
+                                onClick={() => this.request()}
+                                disabled={this.state.hasRequested}
+                                block
+                            >
+                                Request This User To Join Your Team
+                            </Button>
+                            <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
+                                {this.state.errorMsg}
+                            </Alert>
+                            <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
+                                Nice! You've successfully requested this team.
+                            </Alert>
+                        </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
-                        {this.state.errorMsg}
-                    </Alert>
-                    <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
-                        Nice! You've successfully requested this user.
-                    </Alert>
-                    <Button color="secondary" onClick={() => this.request()} disabled={this.state.hasRequested}> Request </Button>
-                    <Button color="secondary" onClick={this.props.onclick}>Close</Button>
+                    <Button color="secondary" onClick={() => this.toggleModal()}>Close</Button>
                 </ModalFooter>
             </Modal>
         );

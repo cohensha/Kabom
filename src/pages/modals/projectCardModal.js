@@ -17,7 +17,7 @@ class ProjectCardModal extends Component {
                 <ModalBody>
                     <div className="introCard">
                         <CardImg top width = "100%" src={this.props.obj.projectPicture} />
-                        <h1 className="name">{this.props.obj.projectName}</h1>
+                        <h1 className="name">{this.props.obj.name}</h1>
                         <p className="elevatorPitch">{this.props.obj.elevatorPitch}</p>
                         <p><button className="button">I'm interested!</button></p>
                     </div>
@@ -42,6 +42,10 @@ class ProjectCardModal extends Component {
 
                         <h5>Compensation</h5>
                         <p className="info">{this.props.obj.compensationDescription}</p>
+
+                        <h5>Tags</h5>
+                        <p className="info">{this.props.obj.projectTypes}</p>   
+                        
                     </div>
 
                     {/*<div className="description">
@@ -56,7 +60,7 @@ class ProjectCardModal extends Component {
                         <h2 >Description</h2> 
                         
                         <div className="container">
-                          <p className="info">{this.props.obj.projectDescription}</p>
+                          <p className="info">{this.props.obj.description}</p>
                         </div> <br/>
                     </div>
                 </ModalBody>

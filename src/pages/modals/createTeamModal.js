@@ -61,7 +61,6 @@ class CreateTeamModal extends Component {
                 });
             }
         });
-
         // Get Project Types
         database.child("projectTypes").once("value").then((snapshot) => {
             if (snapshot.exists()) {

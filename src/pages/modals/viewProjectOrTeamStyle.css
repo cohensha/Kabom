@@ -104,3 +104,10 @@ a {
     width: 50%;
     align-self: center;
 }
+
+
+.projectImage {
+    width: 5%;
+    height: 5%;
+    margin-left: 5px;
+}

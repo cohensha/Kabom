@@ -5,11 +5,14 @@ import PeopleCardModal from '../modals/peopleCardModal';
 import CreateProjectModal from '../modals/createProjectModal';
 import CreateTeamModal from '../modals/createTeamModal';
 
-import RequestListGroupItem from './requestListGroupItem';
+import {RequestListGroupItem, OwnedListGroupItem} from "./requestListGroupItem";
+
 import './style.css';
 
 import CardModal from '../modals/cardModal';
 import TeamCardModal from "../modals/teamCardModal";
+import ProjectCardModal from "../modals/projectCardModal";
+
 
 class Sidebar extends Component {
     constructor(props) {
@@ -22,14 +25,14 @@ class Sidebar extends Component {
             myProjectsCollapse: false,
             myTeamInterestsCollapse: false,
             colorTeam: "#ffffff",
-            teamRequests: [],
-            projRequests: [],
-            myTeams: [],
-            myProjects: [],
+            teamRequests: [], //teams requesting me to join their team
+            projRequests: [], //projects requesting my team
+            myTeams: [], //teams im a part of
+            myProjects: [], //list of projects contributed to
             isMounted: false,
-            myTeam: null,
-            myTeamProject: null,
-            myTeamId: '',
+            myTeam: null, //team i own
+            myTeamProject: null, //my team's project
+            myTeamId: '', //my team's id
             myTeamInterestedUsersUID: [],
             myTeamInterestedUsersData: [],
             showProfileModal: false,
@@ -40,15 +43,19 @@ class Sidebar extends Component {
             uid: auth().currentUser.uid,
             showCreateTeamModal: false,
             showCreateProjectModal: false,
+            myProject: null, //project that i created
+            myProjectName: '',
+            showProjProfileModal: false,
         };
         //console.log(auth().currentUser);
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
         this.myTeamsRef = database.child("users/" + this.props.uid + "/teams");
         this.myProjectsRef = database.child("users/"+ this.props.uid + "/projects");
         this.teamIdRef = database.child("users/" + this.props.uid + "/team");
+
+
         this.testRef = database.child("teams/members");
         this.userRef = database.child("users/" + auth().currentUser.uid);
-
     }
 
 
@@ -56,32 +63,52 @@ class Sidebar extends Component {
         //console.log(auth().currentUser);
         this.userRef.once("value").then((sp) => {
             if (sp.exists()) {
-                this.setState({ currUser: sp.val() });
+                const user = sp.val();
+                this.setState({ currUser: user });
+                database.child("projects/" + user.project).once("value").then((shot) => {
+                    if (shot.exists()) {
+                        console.log(shot.val());
+                        this.setState({
+                            myProject: shot.val(),
+                            myProjectName: shot.val().name,
+                        });
+                    }
+                });
             }
 
         });
 
+
         this.teamIdRef.once("value").then((teamIdSnapshot) => {
             if (teamIdSnapshot.exists()) {
                 this.setState({myTeamId: teamIdSnapshot.val()});
-                console.log(teamIdSnapshot.val());
+                //console.log(teamIdSnapshot.val());
                 //get the team name from team id
                 database.child("teams/" + teamIdSnapshot.val() + "/name").once("value").then((sp) => {
                     if (sp.exists()) {
                         this.setState({myTeam: sp.val()});
                     }
                 });
-
+                database.child("teams/" + teamIdSnapshot.val() + "/project").once("value").then((sp) => {
+                    if (sp.exists()) {
+                        database.child("projects/" + sp.val()).once("value").then((s) => {
+                            if (s.val()) {
+                                console.log(s.val());
+                                this.setState({ myTeamProject: s.val()})
+                            }
+                        });
+                    }
+                });
 
                 database.child("teams/" + teamIdSnapshot.val() + "/interestedUsers").once("value").then((sp) => {
                    if(sp.exists()) {
-                       console.log("reading users interested");
+                       // console.log("reading users interested");
                        let arrayIds = [];
                        let array= [];
                       sp.forEach(function(childSnapshot) {
                          const item = childSnapshot.val();
                          arrayIds.push(item);
-                         console.log("user interested: " + item);
+                         // console.log("user interested: " + item);
 
                          //for each interested user, pull their data using uid's and add to array
                           database.child("/users/" + item).once("value").then((snapshot) => {
@@ -104,13 +131,21 @@ class Sidebar extends Component {
 
                 //get the team requests from team id
                 //get the project requests for a given team, need to make it so that full proj object is returned
-                database.child("requests/teams/" + teamIdSnapshot.val()).once("value").then((teamsSnapshot) => {
-                    if (teamsSnapshot.exists()) {
+                database.child("requests/teams/" + teamIdSnapshot.val()).once("value").then((projectsSnap) => {
+                    if (projectsSnap.exists()) {
                         let array = [];
-                        teamsSnapshot.forEach(function(childSnapshot) {
-                            const item = childSnapshot.val();
-                            array.push(item);
-                            console.log("item: " + item);
+                        //console.log(snapshot.key);
+                        projectsSnap.forEach(function(childSnapshot) {
+                            //console.log(childSnapshot.key);
+                            database.child("projects/" + childSnapshot.key).once("value").then((sp) => {
+                                let item = sp.val();
+                                //save the team id to the team object
+                                if (item) {
+                                    item["projectId"] = childSnapshot.key;
+                                    array.push(item);
+                                }
+                                //console.log(item);
+                            });
                         });
                         this.setState({projRequests: array});
                     }
@@ -153,14 +188,17 @@ class Sidebar extends Component {
         });
 
 
-
         this.myTeamsRef.once("value").then( (snapshot) => {
             if (snapshot.exists()) {
                 let array = [];
                 snapshot.forEach(function(childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
-                    console.log("team", item);
+                    database.child("teams/" + childSnapshot.key).once("value").then((s) => {
+                       const item = s.val();
+                       if (item) {
+                           item["teamId"] = childSnapshot.key;
+                           array.push(item);
+                       }
+                    });
                 });
                 this.setState({myTeams: array});
             }
@@ -170,8 +208,13 @@ class Sidebar extends Component {
             if (snapshot.exists()) {
                 let array = [];
                 snapshot.forEach(function(childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
+                    database.child("projects/" + childSnapshot.key).once("value").then((s) => {
+                        const item = s.val();
+                        if (item) {
+                            item["projectId"] = childSnapshot.key;
+                            array.push(item);
+                        }
+                    });
                 });
                 this.setState({myProjects: array});
             }
@@ -213,10 +256,15 @@ class Sidebar extends Component {
                 showProfileModal: !this.state.showProfileModal
             });
         }
+        if (type === "projects") {
+            this.setState({
+                showProjProfileModal: !this.state.showProjProfileModal
+            });
+        }
     }
 
-    accept(index) {
-        //accept a team's request to you
+    acceptTeam(index) {
+        //acceptTeam a team's request to you
         //to do
         // console.log("clicked " + index);
 
@@ -268,7 +316,7 @@ class Sidebar extends Component {
 
     }
 
-    reject(index) {
+    rejectTeam(index) {
         //remove request from request table - DONE
         let selectedTeam = this.state.teamRequests[index];
         //console.log(selectedTeam.teamId);
@@ -283,11 +331,73 @@ class Sidebar extends Component {
         this.setState({ teamRequests: newArray });
     }
 
-    toggleCardModal() {
+    acceptProject(index) {
+        let arr = this.state.projRequests;
+        let selectedProject = arr[index];
+        console.log(selectedProject);
+        console.log(this.state.myTeam);
+
+        // //delete request from backend request table - DONE
+        let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.projectId);
+        deleteProjectReqRef.remove();
+        //
+        // //push proj id to my projects array in user obj in backend - DONE
+        let postUserProjectsRef = database.child("users/" + this.props.uid + "/projects/");
+        postUserProjectsRef.child(selectedProject.projectId).set(selectedProject.projectName)
+
+        //push proj id to team's obj in backend
+        let postUserProjectRef = database.child("teams/" + this.state.myTeamId + "/project/");
+        postUserProjectRef.set(selectedProject.projectId)
+
+        //push team id to proj object in backend
+        let postProjectTeamsRef = database.child("projects/" + selectedProject.projectId + "/teams");
+        postProjectTeamsRef.child(this.state.myTeamId).set(this.state.myTeam);
+
+        //add project to my projects ive contributed to list
+        //this is under myTeams
+        let myProjs = this.state.myProjects;
+        myProjs.push(selectedProject);
+
+        //remove project from front end array projRequests
+        let newProjReqs = this.state.projRequests.filter(function(e, i){
+            return i!==index;
+        });
+
+        //list project under "your team is currently working on project" label
+        //this is under myTeamProject
         this.setState({
-            showCardModal: !this.state.showCardModal
+           myProjects: myProjs,
+           projRequests: newProjReqs,
+           myTeamProject: selectedProject,
         });
     }
+
+    rejectProject(index) {
+        let arr = this.state.projRequests;
+        let selectedProject = arr[index];
+        //console.log(selectedProject);
+        //console.log(this.state.myTeam);
+
+        // //delete request from backend request table - DONE
+        let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.projectId);
+        deleteProjectReqRef.remove();
+
+        //remove project from front end array projRequests
+        let projReqs = this.state.projRequests.filter(function(e, i){
+            return i!==index;
+        });
+        this.setState({
+            projRequests: projReqs,
+        });
+    }
+
+    //unused
+    // toggleCardModal() {
+    //     this.setState({
+    //         showCardModal: !this.state.showCardModal,
+    //         hasRequested: false,
+    //     });
+    // }
 
     getUserNameFromId(userid) {
         var name = null;
@@ -313,12 +423,26 @@ class Sidebar extends Component {
         });
     }
 
+    updateTeams(team) {
+        //console.log("called");
+        console.log(team);
+        let arr = this.state.myTeams;
+        arr.push(team);
+        this.setState({
+            myTeam: team.name,
+            myTeams: arr,
+        })
+    }
+
+    contact() {
+        console.log("contacted");
+    }
 
     render() {
         return (
             <div  id="sidebar-div" className="ml-auto ml-5 pl-2">
                 <p />
-
+                {/*YOUR TEAM INFO*/}
                 <p>Team Lead For</p>
 
                 <ListGroup className="mr-3 mb-3">
@@ -338,10 +462,32 @@ class Sidebar extends Component {
                 <p>Your Team's Current Project</p>
 
                 <ListGroup className="mr-3 mb-3">
-                    <ListGroupItem> {this.state.myTeamProject || 'None. Find one to the left!'} </ListGroupItem>
+                    <ListGroupItem> {(this.state.myTeamProject && this.state.myTeamProject.name) || 'None. Find one to the left!'} </ListGroupItem>
                 </ListGroup>
 
-                <p onClick={() => this.toggle('teamreq')}> Team Requests </p>
+                <p onClick={() => this.toggle('projectreq')}> Project Requests For Your Team</p>
+
+                <Collapse isOpen={this.state.projectRequestCollapse}>
+                    <ListGroup className="mr-3 mb-3">
+                        {this.state.projRequests.map((req, id) =>
+                            <RequestListGroupItem
+                                key={id}
+                                onclick={() => this.handleProfileClick(req, "projects")}
+                                accept={this.acceptProject.bind(this, id)}
+                                reject={this.rejectProject.bind(this,id)}
+                            >
+                                {req.name}
+                            </RequestListGroupItem>
+                        )}
+                    </ListGroup>
+                </Collapse>
+
+                {/*END OF YOUR OWN TEAM INFO */}
+
+                <p>___________________________________</p>
+
+                {/*JOINING OTHERS' TEAMS*/}
+                <p onClick={() => this.toggle('teamreq')}> Teams Requesting You </p>
 
                 <Collapse isOpen={this.state.teamRequestCollapse}>
                     <ListGroup className="mr-3 mb-3">
@@ -349,8 +495,8 @@ class Sidebar extends Component {
                               <RequestListGroupItem
                                     key={id}
                                     onclick={() => this.handleProfileClick(req, "teams")}
-                                    accept={this.accept.bind(this, id)}
-                                    reject={this.reject.bind(this, id)}
+                                    accept={this.acceptTeam.bind(this, id)}
+                                    reject={this.rejectTeam.bind(this, id)}
                                 >
                                     {req.name}
                                 </RequestListGroupItem>
@@ -358,41 +504,48 @@ class Sidebar extends Component {
                     </ListGroup>
                 </Collapse>
 
-                <p onClick={() => this.toggle('projectreq')}> Project Requests for {this.state.myTeam} </p>
-
-                <Collapse isOpen={this.state.projectRequestCollapse}>
-                    <ListGroup className="mr-3 mb-3">
-                        {this.state.projRequests.map((req, id) =>
-                            <RequestListGroupItem
-                                key={id}
-                                accept={this.accept.bind(this, id)}
-                                reject={this.reject.bind(this,id)}
-                            >
-                                {req}
-                            </RequestListGroupItem>
-                        )}
-                    </ListGroup>
-                </Collapse>
-
-                <p onClick={() => this.toggle('team')}> My Teams </p>
+                <p onClick={() => this.toggle('team')}> Teams I'm A Part Of </p>
 
                 <Collapse isOpen={this.state.myTeamsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeams.map( (req, id) =>
-                            <ListGroupItem key={id}> {req} </ListGroupItem>
+                            <OwnedListGroupItem
+                                key={id}
+                                onclick={() => this.handleProfileClick(req, "teams")}
+                                contact={() => this.contact()}
+                            >
+                                {req.name}
+                            </OwnedListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
+                {/*END OF JOINING OTHERS' TEAMS*/}
 
-                <p onClick={() => this.toggle('project')}> My Projects </p>
+                <p>___________________________________</p>
+
+                {/*YOUR PROJECT (OWNER) INFO*/}
+                <p>Project Owner Of</p>
+
+                <ListGroup className="mr-3 mb-3">
+                    <ListGroupItem> {this.state.myProjectName || 'None. Create One Below!'} </ListGroupItem>
+                </ListGroup>
+
+                <p onClick={() => this.toggle('project')}> Projects I've Contributed To </p>
 
                 <Collapse isOpen={this.state.myProjectsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myProjects.map( (req, id) =>
-                            <ListGroupItem key={id}> {req.name} </ListGroupItem>
+                            <OwnedListGroupItem
+                                key={id}
+                                onclick={() => this.handleProfileClick(req, "projects")}
+                                contact={() => this.contact()}
+                            >
+                                {req.name}
+                            </OwnedListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
+                {/*END OF PROJECT OWNER INFO*/}
 
                 <Button className="mb-2" color="secondary" size="lg"
                         onClick={() => this.toggleCreateTeam()}
@@ -416,10 +569,19 @@ class Sidebar extends Component {
                     show={this.state.showTeamProfileModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleProfileModal("teams")}
+                    currUser={this.state.currUser}
+                />
+                <ProjectCardModal
+                    show={this.state.showProjProfileModal}
+                    obj={this.state.selectedObj}
+                    onclick={ () => this.toggleProfileModal("projects")}
+                    currUser={this.state.currUser}
                 />
                 <CreateTeamModal show={this.state.showCreateTeamModal}
                                  onclick={() => this.toggleCreateTeam()}
-                                 uid={this.state.uid}/>
+                                 uid={this.state.uid}
+                                 updateTeamsUI={() => this.updateTeams()}
+                />
                 <CreateProjectModal show={this.state.showCreateProjectModal}
                                     onclick={() => this.toggleCreateProject()}
                                     uid={this.state.uid}/>
