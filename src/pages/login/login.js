@@ -249,7 +249,7 @@ class Login extends Component {
 				<Row id="body">
 					<Col xs="8">
 						<div>
-							<Jumbotron  style={{ backgroundColor: '#F6F7F8'}}>
+							<Jumbotron style={{ backgroundColor: '#F6F7F8'}}>
 								<h1 className="display-4">Project collaboration made easier.</h1>
 								<p className="lead">
 									Kabom connects USC students of all backgrounds to collaborate on student projects.

@@ -3,7 +3,7 @@ import {Card, CardTitle, CardText} from 'reactstrap';
 
 
 const DisplayCard = ({name, description, lookingForMembers, onclick}) => (
-    <Card body className="text-center" inverse style={{ backgroundColor: '#EEF1EF', borderColor: '#EEF1EF'}} onClick={onclick} block>
+    <Card className="text-center" inverse style={{ backgroundColor: '#EEF1EF', borderColor: '#EEF1EF'}} onClick={onclick} block>
         <CardTitle> {name}
         	{lookingForMembers ? <img className="projectImage" src={'greencheck.svg'} alt=""/> : <img className="projectImage" src={''} alt=""/> }
         </CardTitle>
