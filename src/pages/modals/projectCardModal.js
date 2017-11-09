@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalHeader, ModalFooter, Button, CardImg} from 'reactstrap';
-import { database, auth } from '../../firebase/constants';
+import {Modal, ModalBody, ModalFooter, Button, CardImg} from 'reactstrap';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
 

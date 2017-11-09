@@ -1,6 +1,6 @@
 import React , {Component} from 'react';
 import './notfound-style.css';
-import {Navbar, NavItem, NavLink, Nav, Button} from 'reactstrap';
+import {Navbar, Nav, Button} from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 
 

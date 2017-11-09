@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, Alert, ModalHeader, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
@@ -17,7 +17,7 @@ class PeopleCardModal extends Component {
             //myTeamId: this.props.currUser.team,
         };
         this.toggle = this.props.onclick;
-        this.writeReqRef = database.child("requests/" + "");
+        this.writeReqRef = database.child("requests/");
         this.userRef = database.child("users/" + auth().currentUser.uid);
     }
 
