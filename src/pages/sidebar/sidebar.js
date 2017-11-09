@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
+import {Button, Collapse, ListGroup, ListGroupItem, Label} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import PeopleCardModal from '../modals/peopleCardModal';
 import CreateProjectModal from '../modals/createProjectModal';
@@ -46,6 +46,12 @@ class Sidebar extends Component {
             myProject: null, //project that i created
             myProjectName: '',
             showProjProfileModal: false,
+
+            //Create Team and Project Checks
+            hasProject : false,
+            hasTeam : false,
+            hideCreateTeamLabel : true,
+            hideCreateProjectLabel : true,
         };
         //console.log(auth().currentUser);
         this.teamReqRef = database.child("requests/users/" + this.props.uid);
@@ -65,23 +71,29 @@ class Sidebar extends Component {
             if (sp.exists()) {
                 const user = sp.val();
                 this.setState({ currUser: user });
-                database.child("projects/" + user.project).once("value").then((shot) => {
-                    if (shot.exists()) {
-                        console.log(shot.val());
-                        this.setState({
-                            myProject: shot.val(),
-                            myProjectName: shot.val().name,
-                        });
-                    }
-                });
+                if(user.project) {
+                    this.setState({hasProject : true}); // For create project button
+                    database.child("projects/" + user.project).once("value").then((shot) => {
+                        if (shot.exists()) {
+                            console.log(shot.val());
+                            this.setState({
+                                myProject: shot.val(),
+                                myProjectName: shot.val().name,
+                            });
+                        }
+                    });
+                }
             }
-
         });
 
 
         this.teamIdRef.once("value").then((teamIdSnapshot) => {
             if (teamIdSnapshot.exists()) {
-                this.setState({myTeamId: teamIdSnapshot.val()});
+
+                this.setState({
+                    myTeamId: teamIdSnapshot.val(),
+                    hasTeam : true
+                });
                 //console.log(teamIdSnapshot.val());
                 //get the team name from team id
                 database.child("teams/" + teamIdSnapshot.val() + "/name").once("value").then((sp) => {
@@ -411,16 +423,23 @@ class Sidebar extends Component {
     }
 
     toggleCreateTeam() {
-        console.log("hey");
-        this.setState({
-            showCreateTeamModal: !this.state.showCreateTeamModal
-        });
+        if (this.state.hasTeam) {
+            this.setState({hideCreateTeamLabel : !this.state.hideCreateTeamLabel});
+        } else {
+            this.setState({
+                showCreateTeamModal: !this.state.showCreateTeamModal
+            });
+        }
     }
 
     toggleCreateProject() {
-        this.setState({
-            showCreateProjectModal: !this.state.showCreateProjectModal
-        });
+        if (this.state.hasProject) {
+            this.setState({hideCreateProjectLabel : !this.state.hideCreateProjectLabel});
+        } else {
+            this.setState({
+                showCreateProjectModal: !this.state.showCreateProjectModal
+            });
+        }
     }
 
     updateTeams(team) {
@@ -549,14 +568,21 @@ class Sidebar extends Component {
 
                 <Button className="mb-2" color="secondary" size="lg"
                         onClick={() => this.toggleCreateTeam()}
-                        block
-                >Create Team
+                        block>
+                    Create Team
                 </Button>
+                <Label hidden={this.state.hideCreateTeamLabel} style={{color : "red"}}>
+                    Unable to Create Team: you can only own one team!
+                </Label>
 
                 <Button className="mb-2" color="secondary" size="lg"
                         onClick={() => this.toggleCreateProject()}
-                        block
-                >Create Project</Button>
+                        block>
+                    Create Project
+                </Button>
+                <Label hidden={this.state.hideCreateProjectLabel} style={{color : "red"}}>
+                    Unable to Create Project: you can only own one project!
+                </Label>
 
 
                 <PeopleCardModal
