@@ -24,6 +24,8 @@ class PeopleCardModal extends Component {
     toggleModal() {
         this.setState({
             hasRequested: false,
+            showRedAlert: false,
+            showGreenAlert: false,
         });
         this.props.onclick();
     }
