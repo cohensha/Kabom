@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TabPane, Row, Col, Input, Button, FormGroup, Label, InputGroup, InputGroupButton} from 'reactstrap';
+import {TabPane, Row, Col} from 'reactstrap';
 import DisplayCard from '../cards/displayCard';
 import ProjectCardModal from '../../modals/projectCardModal';
 import TeamCardModal from '../../modals/teamCardModal';
@@ -66,11 +66,11 @@ class DisplayTab extends Component {
     }
 
     toggleCardModal() {
-        if (this.props.type == "projects") {
+        if (this.props.type === "projects") {
             this.setState({
                 showProjectModal: !this.state.showProjectModal
             });
-        } else if (this.props.type == "teams") {
+        } else if (this.props.type === "teams") {
             this.setState({
                 showTeamModal: !this.state.showTeamModal
             });
@@ -194,6 +194,6 @@ class DisplayTab extends Component {
             </TabPane>
         );
         }
-    };
+}
 
 export default DisplayTab;

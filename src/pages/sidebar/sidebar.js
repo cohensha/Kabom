@@ -9,7 +9,7 @@ import {RequestListGroupItem, OwnedListGroupItem} from "./requestListGroupItem";
 
 import './style.css';
 
-import CardModal from '../modals/cardModal';
+//import CardModal from '../modals/cardModal';
 import TeamCardModal from "../modals/teamCardModal";
 import ProjectCardModal from "../modals/projectCardModal";
 
@@ -235,7 +235,7 @@ class Sidebar extends Component {
             this.setState({ myTeamsCollapse: !this.state.myTeamsCollapse });
         else if (collapse === 'project')
             this.setState({ myProjectsCollapse: !this.state.myProjectsCollapse });
-        else if (collapse == 'teamInterest')
+        else if (collapse === 'teamInterest')
             this.setState({myTeamInterestsCollapse: !this.state.myTeamInterestsCollapse});
     }
 

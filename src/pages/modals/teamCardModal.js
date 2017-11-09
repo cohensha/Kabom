@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalHeader, Row, Col, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
@@ -62,13 +62,14 @@ class TeamCardModal extends Component {
         var currUser = auth().currentUser.uid;
 
         var localInterestedUsers = [];
+        var inList = false;
         if(this.state.userInterestUpdated) {
-            var inList = false;
+
             //if user is already interested, don't write
             if(this.props.obj.interestedUsers) {
                 this.props.obj.interestedUsers.map( (userId) => {
                     localInterestedUsers.push(userId);
-                    if(userId == currUser) {
+                    if(userId === currUser) {
                         inList = true;
                         console.log("1: interested and already in list - nothing");
                     }
@@ -84,13 +85,11 @@ class TeamCardModal extends Component {
 
         }
         else {
-
-            var inList = false;
             //if user is already interested, don't write
             if(this.props.obj.interestedUsers) {
                 this.props.obj.interestedUsers.map( (userId) => {
                     localInterestedUsers.push(userId);
-                    if(userId == currUser) {
+                    if(userId === currUser) {
                         inList = true;
                         console.log("3: not interested and in list -- delete from db");
                         //TODO delete user from local array

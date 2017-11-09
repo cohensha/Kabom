@@ -88,11 +88,11 @@ class Login extends Component {
 	}
 
 	signIn() {
-		var email = document.getElementById('loginEmail').value
+		var email = document.getElementById('loginEmail').value;
 		if (!email.endsWith("@usc.edu")) {
 			email+="@usc.edu"
 		}
-		var password = document.getElementById('loginPassword').value
+		var password = document.getElementById('loginPassword').value;
 		// Firebase Auth Sign In
 		auth().signInWithEmailAndPassword(email, password).then(() =>  {
 			var user = auth().currentUser;
@@ -249,7 +249,7 @@ class Login extends Component {
 				<Row id="body">
 					<Col xs="8">
 						<div>
-							<Jumbotron body inverse style={{ backgroundColor: '#F6F7F8'}}>
+							<Jumbotron  style={{ backgroundColor: '#F6F7F8'}}>
 								<h1 className="display-4">Project collaboration made easier.</h1>
 								<p className="lead">
 									Kabom connects USC students of all backgrounds to collaborate on student projects.

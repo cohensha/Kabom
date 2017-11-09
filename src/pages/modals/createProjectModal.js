@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import {Modal, ModalBody, ModalHeader, ModalFooter,
     Button, Label, FormGroup, Badge, InputGroup, InputGroupButton, Input} from 'reactstrap';
-import { database, auth, storage } from '../../firebase/constants';
+import { database, storage } from '../../firebase/constants';
 
 class CreateProjectModal extends Component {
     constructor(props) {
@@ -137,7 +137,7 @@ class CreateProjectModal extends Component {
         var reader = new FileReader();
         reader.onload = (e) => {
             this.setState({projectImageUrl: reader.result});
-        }
+        };
         if (e.target.files[0]) {
             reader.readAsDataURL(e.target.files[0]);
         }
@@ -252,11 +252,11 @@ class CreateProjectModal extends Component {
                     </FormGroup>
 
                     <FormGroup>
-                        <Label className="text-gray-dark">Tell us anything else about your project here. (Milestones you have, a software development methodology you want to follow, etc.) </Label>
+                        <Label className="text-gray-dark">Tell us anything else about your project here </Label>
                         <Input type="textarea"
                                onChange={(e) => this.handleChangeDescription(e)}
                                value={this.state.description}
-                               placeholder="Description" />
+                               placeholder="Ex. Milestones you have, a software development methodology you want to follow, etc." />
                     </FormGroup>
 
                     <FormGroup>
@@ -353,7 +353,7 @@ class CreateProjectModal extends Component {
                         {this.state.projectTypes.map( (projectType, idx) =>
                             <Badge href="#"
                                    key={idx}
-                                   id={"projectTypeBadge"}
+                                   id={"skillBadge"}
                                    color="primary"
                                    onClick={this.deleteProjectTypeBadge.bind(this, idx)}>
                                 {projectType}

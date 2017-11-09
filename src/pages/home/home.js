@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
 import Header from '../header/header';
-import ProjectTab from './tabs/projectTab';
-import PeopleTab from "./tabs/peopleTab";
-import TeamTab from "./tabs/teamTab";
-import { database, auth } from '../../firebase/constants';
+// import ProjectTab from './tabs/projectTab';
+// import PeopleTab from "./tabs/peopleTab";
+// import TeamTab from "./tabs/teamTab";
+import { auth } from '../../firebase/constants';
 import DisplayTab from "./tabs/displayTab";
 import CreateTeamModal from '../modals/createTeamModal';
 import CreateProjectModal from '../modals/createProjectModal';
