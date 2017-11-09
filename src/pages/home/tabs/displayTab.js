@@ -82,56 +82,40 @@ class DisplayTab extends Component {
     }
 
     searchByName(input) {
-        // if (input === "") return;
-        // console.log("here");
-        // this.ref.orderByChild("skillsNeeded").equalTo(input).on("value", (snapshot) => {
-        //     console.log("in callback");
-        //     let array = [];
-        //     snapshot.forEach(function (childSnapshot) {
-        //         const item = childSnapshot.val();
-        //         array.push(item);
-        //         console.log(item);
-        //     });
-        // });
-        // console.log("here");
-
-        //
-        this.ref.once("value").then((snapshot) => {
-            if (snapshot.exists()) {
-                // Create a data structure to store your data
-                let array = [];
-                snapshot.forEach(function (childSnapshot) {
-                    const item = childSnapshot.val();
-                    array.push(item);
-                });
-                this.setState({originalData: array});
-                this.setState({searchResults: array});
-
-            }
+        if (input === "") return;
+        console.log("here");
+        this.ref.orderByChild("name").equalTo(input).on("value", (snapshot) => {
+            console.log("in callback");
+            let array = [];
+            snapshot.forEach(function (childSnapshot) {
+                const item = childSnapshot.val();
+                array.push(item);
+                console.log(item);
+            });
+            this.setState({searchResults: array});
         });
 
-        let array = [];
-        this.state.originalData.map( (obj) => {
-            if (obj.name && obj.name.toLowerCase().includes(input.toLowerCase())) {
-                array.push(obj);
-            }
-        });
-        this.setState({searchResults: array});
     }
 
     searchByDesc(input) {
         if (input === "") return;
-        let array = [];
-        this.state.originalData.map( (obj) => {
-            if (obj.description && obj.description.toLowerCase().includes(input.toLowerCase())) {
-                array.push(obj);
-            }
+        console.log("here");
+        this.ref.orderByChild("description").equalTo(input).on("value", (snapshot) => {
+            console.log("in callback");
+            let array = [];
+            snapshot.forEach(function (childSnapshot) {
+                const item = childSnapshot.val();
+                array.push(item);
+                console.log(item);
+            });
+            this.setState({searchResults: array});
         });
-        this.setState({searchResults: array});
     }
 
     searchBySkills(input) {
+        //TODO: search for skills array
         if (input === "") return;
+        this.ref.orderByChild("skills").equalTo(input).on("value");
         let array = [];
         this.state.originalData.map( (obj) => {
             if (obj.skillsNeeded && obj.skillsNeeded.includes(input)) {
