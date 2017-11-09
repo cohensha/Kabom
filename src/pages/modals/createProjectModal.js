@@ -4,6 +4,9 @@ import {Modal, ModalBody, ModalHeader, ModalFooter,
     Button, Label, FormGroup, Badge, InputGroup, InputGroupButton, Input} from 'reactstrap';
 import { database, storage } from '../../firebase/constants';
 
+import './createProjectOrTeamStyle.css';
+
+
 class CreateProjectModal extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +37,16 @@ class CreateProjectModal extends Component {
             compensationDescription : '',
             lookingForMembers : false,
             workingOnProject : false,
+
+            // Error checking
+            validName : true,
+            validElevatorPitch : true,
+            validDescription : true,
+            validRole : true,
+            validProjectMembersDescription : true,
+            validSkills : true,
+            validProjectTypes : true,
+            validTimeCommitment : true,
         };
 
         this.addSkill = this.addSkill.bind(this);
@@ -119,8 +132,65 @@ class CreateProjectModal extends Component {
     }
 
     fieldsAreValid() {
-        // TODO: check fields and add form feedback
-        return true;
+        var allValid = true;
+
+        if (this.state.name.length === 0) {
+            this.setState({validName:false});
+            allValid = false;
+        } else {
+            this.setState({validName:true});
+        }
+
+        if (this.state.elevatorPitch.length === 0){
+            this.setState({validElevatorPitch:false});
+            allValid = false;
+        } else {
+            this.setState({validElevatorPitch:true});
+        }
+
+        if (this.state.description.length === 0){
+            this.setState({validDescription:false});
+            allValid = false;
+        } else {
+            this.setState({validDescription:true});
+        }
+
+        if (this.state.myRoleDescription.length === 0){
+            this.setState({validRole:false});
+            allValid = false;
+        } else {
+            this.setState({validRole:true});
+        }
+
+        if (this.state.projectMembersDescription.length === 0){
+            this.setState({validProjectMembersDescription:false});
+            allValid = false;
+        } else {
+            this.setState({validProjectMembersDescription:true});
+        }
+
+        if (this.state.skillsNeeded.length === 0){
+            this.setState({validSkills:false});
+            allValid = false;
+        } else {
+            this.setState({validSkills:true});
+        }
+
+        if (this.state.projectTypes.length === 0){
+            this.setState({validProjectTypes:false});
+            allValid = false;
+        } else {
+            this.setState({validProjectTypes:true});
+        }
+
+        if (this.state.timeDescription.length === 0){
+            this.setState({validTimeCommitment:false});
+            allValid = false;
+        } else {
+            this.setState({validTimeCommitment:true});
+        }
+
+        return allValid;
     }
 
     componentWillUnmount() {
@@ -234,6 +304,9 @@ class CreateProjectModal extends Component {
                                value={this.state.name}
                                onChange={(e) => this.handleChangeName(e)}
                                placeholder="Project Name"/>
+                        <Label hidden={this.state.validName} id={"error"}>
+                            Please enter a team name.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -242,6 +315,9 @@ class CreateProjectModal extends Component {
                                onChange={(e) => this.handleChangeElevatorPitch(e)}
                                value={this.state.elevatorPitch}
                                placeholder="Elevator Pitch" />
+                        <Label hidden={this.state.validElevatorPitch} id={"error"}>
+                            Please enter an elevator pitch.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -257,6 +333,9 @@ class CreateProjectModal extends Component {
                                onChange={(e) => this.handleChangeDescription(e)}
                                value={this.state.description}
                                placeholder="Ex. Milestones you have, a software development methodology you want to follow, etc." />
+                        <Label hidden={this.state.validDescription} id={"error"}>
+                            Please write a description for your project.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -265,6 +344,9 @@ class CreateProjectModal extends Component {
                                onChange={(e) => this.handleChangeRoleDescription(e)}
                                value={this.state.myRoleDescription}
                                placeholder="Ex. Developer, Designer, Project Manager, General Stakeholder, etc." />
+                        <Label hidden={this.state.validRole} id={"error"}>
+                            Please describe your role in the project.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -273,6 +355,10 @@ class CreateProjectModal extends Component {
                                onChange={(e) => this.handleChangeProjectMembersDescription(e)}
                                value={this.state.projectMembersDescription}
                                placeholder="Ex. 2-3 Developers, 1 Designer, 1 Project Manager" />
+
+                        <Label hidden={this.state.validProjectMembersDescription} id={"error"}>
+                            Please describe the project members you are looking for or currently have.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -316,6 +402,10 @@ class CreateProjectModal extends Component {
                                 {skill}
                             </Badge>
                         )}
+
+                        <Label hidden={this.state.validSkills} id={"error"}>
+                            Please enter at least 1 skill your project requires.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -359,6 +449,10 @@ class CreateProjectModal extends Component {
                                 {projectType}
                             </Badge>
                         )}
+
+                        <Label hidden={this.state.validProjectTypes} id={"error"}>
+                            Please enter at least 1 project type to better classify your project.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
@@ -367,6 +461,9 @@ class CreateProjectModal extends Component {
                                onChange={(e) => this.handleChangeTimeDescription(e)}
                                value={this.state.timeDescription}
                                placeholder="Ex. 2-3 hours per week, checking in once a week in person on campus. Aiming for completion before winter break."/>
+                        <Label hidden={this.state.validTimeCommitment} id={"error"}>
+                            Please describe the time commitment for your project.
+                        </Label>
                     </FormGroup>
 
                     <FormGroup>
