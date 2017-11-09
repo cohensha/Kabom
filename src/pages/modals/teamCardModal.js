@@ -140,6 +140,7 @@ class TeamCardModal extends Component {
         const currProjID = this.props.currUser.project;
         const teamIdToRequest = this.props.obj.id;
 
+        console.log(currProjID);
         //check if user is actually a project owner first
         if (!currProjID) {
             this.setState({showRedAlert: true});
@@ -148,7 +149,7 @@ class TeamCardModal extends Component {
 
         //check if proj owner is requesting a team he's part of
         let currUsersTeams = this.props.currUser.teams;
-        if (currUsersTeams[teamIdToRequest]) {
+        if (currUsersTeams && currUsersTeams[teamIdToRequest]) {
             this.setState({
                 errorMsg: "Oops! You can't request a team you are a part of.",
                 hasRequested: true,
@@ -163,7 +164,7 @@ class TeamCardModal extends Component {
                let projectsCurrTeams = sp.val().teams;
                //look through projects current teams,
                //if the team i'm requesting is already working on my project, return
-               if (projectsCurrTeams[teamIdToRequest]) {
+               if (projectsCurrTeams && projectsCurrTeams[teamIdToRequest]) {
                    this.setState({
                        errorMsg: "Oops! You're already working with this team.",
                        showRedAlert: true,

@@ -64,7 +64,7 @@ class PeopleCardModal extends Component {
 
                 //check if person i am requesting to join my team is already a member of my team
                 let teamsCurrMembers = sp.val().members;
-                if (teamsCurrMembers[uidForUserToRequest]) {
+                if (teamsCurrMembers && teamsCurrMembers[uidForUserToRequest]) {
                     this.setState({
                         errorMsg: "Oops! This person is already in your team",
                         hasRequested: true,
