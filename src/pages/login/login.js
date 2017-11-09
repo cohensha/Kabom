@@ -88,11 +88,11 @@ class Login extends Component {
 	}
 
 	signIn() {
-		var email = document.getElementById('loginEmail').value
+		var email = document.getElementById('loginEmail').value;
 		if (!email.endsWith("@usc.edu")) {
 			email+="@usc.edu"
 		}
-		var password = document.getElementById('loginPassword').value
+		var password = document.getElementById('loginPassword').value;
 		// Firebase Auth Sign In
 		auth().signInWithEmailAndPassword(email, password).then(() =>  {
 			var user = auth().currentUser;

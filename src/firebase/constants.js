@@ -11,6 +11,6 @@ if (!firebase.length) {
 	firebase.initializeApp(config)
 }
 
-export const database = firebase.database().ref()
-export const auth = firebase.auth
-export const storage = firebase.storage().ref()
+export const database = firebase.database().ref();
+export const auth = firebase.auth;
+export const storage = firebase.storage().ref();

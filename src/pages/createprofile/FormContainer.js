@@ -62,7 +62,7 @@ class FormContainer extends Component {
 		var reader = new FileReader();
 		reader.onload = (e) => {
 			this.setState({profilePictureUrl: reader.result});
-		}
+		};
 		if (e.target.files[0]) {
             reader.readAsDataURL(e.target.files[0]);
 		}
