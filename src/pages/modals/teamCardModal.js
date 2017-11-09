@@ -235,8 +235,12 @@ class TeamCardModal extends Component {
                             </div> <br/>
                         </div>
 
-                        <div className="container">
-                            <Button className={"interestButton"} onClick={() => this.handleInterestClick()}>{this.state.interestButtonText}</Button>
+                        <div className="description">
+                            <Button className={"interestButton"}
+                                    onClick={() => this.handleInterestClick()}
+                                    block
+                            >{this.state.interestButtonText}
+                            </Button>
                         </div>
                 </ModalBody>
                 <ModalFooter>
