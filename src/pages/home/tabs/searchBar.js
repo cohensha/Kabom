@@ -35,7 +35,6 @@ class SearchBar extends Component {
 
     onSearchChange(event) {
         this.setState({searchInput: event.target.value});
-        //console.log(this.state.searchInput);
     }
 
 
@@ -56,11 +55,11 @@ class SearchBar extends Component {
                             </DropdownMenu>
                         </ButtonDropdown>
                     </InputGroupButton> {' '}
-                    <Button className="mr-2" onClick={() => this.props.setSeeAll()}>See All</Button>
+                    <Button className="mr-2" onClick={() => this.props.reset()}>Reset</Button>
                 </InputGroup>
             </div>
         );
     }
-};
+}
 
 export default SearchBar;

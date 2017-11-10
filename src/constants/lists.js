@@ -14,7 +14,7 @@ export const uscSchools = [
     'Ostrow School of Dentistry',
     'Thornton School of Music',
     'Mrs. T.H. Chan Division of Occupational Science and Occupational Therapy',
-    'Price School of Public Policy']
+    'Price School of Public Policy'];
 
 export const schoolYears = [
     "Freshmen",
@@ -22,4 +22,4 @@ export const schoolYears = [
     "Junior",
     "Senior",
     "Graduate Student"
-]
+];

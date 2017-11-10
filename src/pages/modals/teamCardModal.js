@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalHeader, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
@@ -7,8 +7,196 @@ import './viewProjectOrTeamStyle.css';
 class TeamCardModal extends Component {
     constructor(props) {
         super(props);
-        this.toggle = this.props.onclick;
+        this.state = {
+            showRedAlert: false,
+            showGreenAlert: false,
+            hasRequested: false,
+            errorMsg: "Oops! Only Project leaders can request teams to work on their project.",
+            interestButtonText: "Express interest to team!",
+            localInterestedUsersArray: [],
+            userInterestUpdated: false,
+        };
+        this.handleCloseClick = this.handleCloseClick.bind(this);
+
     }
+
+    setButtonText() {
+
+        if(this.state.userInterestUpdated) {
+            console.log("unexpressing interest");
+            this.setState({
+                interestButtonText: "Express interest to team!"
+            });
+        }
+        else {
+            console.log("expressing interest");
+            this.setState({
+                interestButtonText: "Interest sent to team!"
+            });
+        }
+    }
+
+    handleInterestClick() {
+        //team object is this.props.obj
+        this.setState({
+            userInterestUpdated: !this.state.userInterestUpdated
+        });
+
+        this.setButtonText();
+
+    }
+
+    handleCloseClick() {
+
+        //if user expresses interest
+        //if they are already in team's list, do nothing
+        //if they are not, add to list
+        //if user clicks not interested
+        //if they are already in team's list, delete
+        //if they are not, do nothing
+
+        //Currently, when first opening the modal it does not show if user clicked interested
+        //in the past, bc we don't know where we can access the team object from inside the modal
+
+        console.log("closing team card modal");
+        var currUser = auth().currentUser.uid;
+
+        var localInterestedUsers = [];
+        var inList = false;
+        if(this.state.userInterestUpdated) {
+
+            //if user is already interested, don't write
+            if(this.props.obj.interestedUsers) {
+                this.props.obj.interestedUsers.map( (userId) => {
+                    localInterestedUsers.push(userId);
+                    if(userId === currUser) {
+                        inList = true;
+                        console.log("1: interested and already in list - nothing");
+                    }
+                });
+
+            }
+            //if team does not have a list of interested users already, or current user not in this list
+            if(!inList) {
+                console.log("2: interested and not in list - write to db");
+                // add user to end of local array
+                localInterestedUsers.push(currUser);
+            }
+
+        }
+        else {
+            //if user is already interested, don't write
+            if(this.props.obj.interestedUsers) {
+                this.props.obj.interestedUsers.map( (userId) => {
+                    localInterestedUsers.push(userId);
+                    if(userId === currUser) {
+                        inList = true;
+                        console.log("3: not interested and in list -- delete from db");
+                        //TODO delete user from local array
+                        var index = localInterestedUsers.indexOf(currUser);
+                        localInterestedUsers.splice(index, 1);
+                    }
+                });
+
+            }
+            //if team does not have a list of interested users already, or current user not in this list
+            if(!inList) {
+                console.log("4: not interested and not in db - nothing");
+            }
+
+        }
+        //
+        //  //push local interested array to db
+        console.log("my team id: ",  this.props.obj.id);
+        //     database.child('teams' + this.props.teamId)
+
+        database.child('teams/' + this.props.obj.id).update({
+            interestedUsers: localInterestedUsers
+        });
+        this.toggleModal();
+
+    }
+
+
+
+    toggleModal() {
+        this.setState({
+            hasRequested: false,
+            showRedAlert: false,
+            showGreenAlert: false,
+        });
+        this.props.onclick();
+    }
+
+    dismiss(color) {
+        if (color === "red")
+            this.setState({ showRedAlert: false });
+        if (color === "green")
+            this.setState({ showGreenAlert: false });
+    }
+
+    request() {
+        const currProjID = this.props.currUser.project;
+        const teamIdToRequest = this.props.obj.id;
+
+        console.log(currProjID);
+        //check if user is actually a project owner first
+        if (!currProjID) {
+            this.setState({showRedAlert: true});
+            return;
+        }
+
+        //check if proj owner is requesting a team he's part of
+        let currUsersTeams = this.props.currUser.teams;
+        if (currUsersTeams && currUsersTeams[teamIdToRequest]) {
+            this.setState({
+                errorMsg: "Oops! You can't request a team you are a part of.",
+                hasRequested: true,
+                showRedAlert: true,
+            });
+            return;
+        }
+
+        database.child("projects/" + currProjID).once("value").then((sp) => {
+           if (sp.exists()) {
+               let projName = sp.val().name || sp.val().projectName;
+               let projectsCurrTeams = sp.val().teams;
+               //look through projects current teams,
+               //if the team i'm requesting is already working on my project, return
+               if (projectsCurrTeams && projectsCurrTeams[teamIdToRequest]) {
+                   this.setState({
+                       errorMsg: "Oops! You're already working with this team.",
+                       showRedAlert: true,
+                       hasRequested: true,
+                   });
+                   return;
+               }
+               let postProjRequest = database.child("requests/teams/" + teamIdToRequest);
+               //check if i've already requested this user
+               postProjRequest.child(currProjID).once("value").then((s) => {
+                   if (s.exists()) {
+                       //if i've already requested this team
+                       this.setState({
+                           errorMsg: "Oops! You've already requested this team.",
+                           showRedAlert: true,
+                           hasRequested: true,
+                       });
+                   }
+                   else {
+                       //if not, push my request
+                       postProjRequest.child(currProjID).set(projName);
+                       this.setState({
+                           showGreenAlert: true,
+                           hasRequested: true,
+                       });
+                   }
+               });
+           }
+        });
+
+    }
+
+
 
     render() {
         return (
@@ -28,11 +216,19 @@ class TeamCardModal extends Component {
                         </div>
 
                         <div className="description">
-                            <h2> Members </h2> 
-                            
+                            <h2> Members </h2>
+
+
+                            {this.props.obj.members &&
                             <div className="container">
-                                <p>{this.props.obj.members}</p>
-                            </div> <br/>
+                                {Object.keys(this.props.obj.members).map((k, i) =>
+                                    <p key={i}>{this.props.obj.members[k]}</p>
+
+
+                                )}
+                            </div>}
+
+                            <br/>
                         </div>
 
                         <div className="description">
@@ -42,9 +238,30 @@ class TeamCardModal extends Component {
                               <p>{this.props.obj.description}</p>
                             </div> <br/>
                         </div>
+
+                        <div className="description">
+                            <Button
+                                color="secondary"
+                                onClick={() => this.request()}
+                                disabled={this.state.hasRequested}
+                                block
+                            >
+                                Request This Team For Your Project
+                            </Button>
+                            <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
+                                {this.state.errorMsg}
+                            </Alert>
+                            <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
+                                Nice! You've successfully requested this team.
+                            </Alert>
+                        </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="secondary" onClick={this.props.onclick}>Close</Button>
+                    <Button className={"interestButton"}
+                            onClick={() => this.handleInterestClick()}
+                    >{this.state.interestButtonText}
+                    </Button>
+                    <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
                 </ModalFooter>
             </Modal>
         );

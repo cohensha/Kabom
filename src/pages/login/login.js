@@ -88,11 +88,11 @@ class Login extends Component {
 	}
 
 	signIn() {
-		var email = document.getElementById('loginEmail').value
+		var email = document.getElementById('loginEmail').value;
 		if (!email.endsWith("@usc.edu")) {
 			email+="@usc.edu"
 		}
-		var password = document.getElementById('loginPassword').value
+		var password = document.getElementById('loginPassword').value;
 		// Firebase Auth Sign In
 		auth().signInWithEmailAndPassword(email, password).then(() =>  {
 			var user = auth().currentUser;
@@ -210,7 +210,7 @@ class Login extends Component {
 								</InputGroup>
 							</Col>
 							<Col xs="auto">
-								<Button outline color="info" onClick={this.signIn}>Sign In</Button>{' '}
+								<button className="signInButton" onClick={this.signIn}>Sign In</button>
 							</Col>
 							<Col xs="auto">
 								<Button color="link" id="forgotPassword" onClick={this.toggle}> Forgot Password?
@@ -249,7 +249,7 @@ class Login extends Component {
 				<Row id="body">
 					<Col xs="8">
 						<div>
-							<Jumbotron>
+							<Jumbotron style={{ backgroundColor: '#F6F7F8'}}>
 								<h1 className="display-4">Project collaboration made easier.</h1>
 								<p className="lead">
 									Kabom connects USC students of all backgrounds to collaborate on student projects.
@@ -257,9 +257,9 @@ class Login extends Component {
 									find the team of developers, designers, project managers, and whoever else you need
 									to make an amazing project.
 								</p>
-								<p className="lead">
+								{/*<p className="lead">
 									<Button color="primary">Learn More</Button>
-								</p>
+								</p>*/}
 								<hr className="my-2" />
 								<p><strong>Fun fact:</strong> kabom /kəˈbo͞om/ means <i>unity</i> in Twi, one of the many languages spoken in Ghana.</p>
 							</Jumbotron>

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {TabContent, Nav, NavItem, NavLink, Row, Col} from 'reactstrap';
 import Header from '../header/header';
-import ProjectTab from './tabs/projectTab';
-import PeopleTab from "./tabs/peopleTab";
-import TeamTab from "./tabs/teamTab";
-import { database, auth } from '../../firebase/constants';
+// import ProjectTab from './tabs/projectTab';
+// import PeopleTab from "./tabs/peopleTab";
+// import TeamTab from "./tabs/teamTab";
+import { auth } from '../../firebase/constants';
 import DisplayTab from "./tabs/displayTab";
 import CreateTeamModal from '../modals/createTeamModal';
 import CreateProjectModal from '../modals/createProjectModal';
@@ -14,7 +14,6 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
-        this.toggleCreateTeam = this.toggleCreateTeam.bind(this);
         this.state = {
             activeTab: '1',
             projects: [],
@@ -34,21 +33,7 @@ class Home extends Component {
         }
     }
 
-    toggleCreateTeam() {
-        this.setState({
-            showCreateTeamModal: !this.state.showCreateTeamModal
-        });
-    }
 
-    toggleCreateProject() {
-        this.setState({
-            showCreateProjectModal: !this.state.showCreateProjectModal
-        });
-    }
-
-    componentDidMount() {
-
-    }
 
     render() {
         return (
@@ -97,8 +82,7 @@ class Home extends Component {
                         </div>
                     </Col>
                     <Col sm={{size: '3', offset: 1}}>
-                        <Sidebar uid={this.state.currUid || 'null rn'} teamclick={() => this.toggleCreateTeam()}
-                                 projectclick={() => this.toggleCreateProject()}/>
+                        <Sidebar uid={this.state.currUid || 'null rn'}/>
                     </Col>
                 </Row>
                 <CreateTeamModal show={this.state.showCreateTeamModal}
