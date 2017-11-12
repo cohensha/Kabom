@@ -18,7 +18,7 @@ class ProjectCardModal extends Component {
                         <CardImg top width = "100%" src={this.props.obj.projectPicture} />
                         <h1 className="name">{this.props.obj.name}</h1>
                         <p className="elevatorPitch">{this.props.obj.elevatorPitch}</p>
-                        <p><button className="button">I'm interested!</button></p>
+                        <button className="button">I'm interested!</button>
                     </div>
 
                     <div className="information">
@@ -26,6 +26,9 @@ class ProjectCardModal extends Component {
 
                         {/*<h5>Number of interests</h5>
                         <p className="info">{this.props.obj.noOfInterests}</p>*/}
+
+                        <h5>Owner</h5>
+                        <p className="info">{this.props.obj.owner}</p>
 
                         <h5>Project creator's role</h5>
                         <p className="info">{this.props.obj.myRoleDescription}</p>
@@ -44,16 +47,21 @@ class ProjectCardModal extends Component {
 
                         <h5>Tags</h5>
                         <p className="info">{this.props.obj.projectTypes}</p>   
+
+                        {/*<h5>Currently working on project?</h5>
+                        <p className="info">{this.props.obj.workingOnProject}</p>
+
+                        <h5>Looking for more team members</h5>
+                        <p className="info">{this.props.obj.lookingForMembers}</p>*/}
                         
                     </div>
 
-                    {/*<div className="description">
+                    <div className="description">
                         <h2> Members </h2> 
-                        
                         <div className="container">
                             <p>{this.props.obj.members}</p>
                         </div> <br/>
-                    </div>*/}
+                    </div>
 
                     <div className="description">
                         <h2 >Description</h2> 
