@@ -29,6 +29,7 @@ class SearchBar extends Component {
     }
 
     toggleDropdown() {
+        console.log("called");
         this.setState({dropdownOpen: !this.state.dropdownOpen});
     }
 
@@ -48,14 +49,15 @@ class SearchBar extends Component {
                             <DropdownToggle caret>
                                 Search
                             </DropdownToggle>
-                            <DropdownMenu>
+
+                            <DropdownMenu className={this.state.dropdownOpen && 'show'}>
                                 <DropdownItem onClick={() => this.searchByName()}>Search By Name</DropdownItem>
                                 <DropdownItem onClick={() => this.searchBySkills()}>Search By Skills</DropdownItem>
                                 <DropdownItem onClick={() => this.searchByDesc()}>Search By Description</DropdownItem>
                             </DropdownMenu>
                         </ButtonDropdown>
                     </InputGroupButton> {' '}
-                    <Button className="mr-2" onClick={() => this.props.reset()}>Reset</Button>
+                    <Button className="mr-2" onClick={() => this.props.setSeeAll()}>Reset</Button>
                 </InputGroup>
             </div>
         );

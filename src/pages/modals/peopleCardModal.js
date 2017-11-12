@@ -41,6 +41,7 @@ class PeopleCardModal extends Component {
     request() {
         //to make a request
         //CHECK if the user has created a team as a team leader
+        console.log(this.props.currUser);
         let teamId = this.props.currUser.team;
         let uidForUserToRequest = this.props.obj.id;
         if (!teamId) {
@@ -90,6 +91,8 @@ class PeopleCardModal extends Component {
                             showGreenAlert: true,
                             hasRequested: true,
                         });
+
+                    //TODO Delete user from your team's list of interested users
                     }
                 });
             }
