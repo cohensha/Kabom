@@ -355,11 +355,11 @@ class Sidebar extends Component {
         //
         // //push proj id to my projects array in user obj in backend - DONE
         let postUserProjectsRef = database.child("users/" + this.props.uid + "/projects/");
-        postUserProjectsRef.child(selectedProject.projectId).set(selectedProject.projectName)
+        postUserProjectsRef.child(selectedProject.projectId).set(selectedProject.name);
 
         //push proj id to team's obj in backend
         let postUserProjectRef = database.child("teams/" + this.state.myTeamId + "/project/");
-        postUserProjectRef.set(selectedProject.projectId)
+        postUserProjectRef.set(selectedProject.projectId);
 
         //push team id to proj object in backend
         let postProjectTeamsRef = database.child("projects/" + selectedProject.projectId + "/teams");
