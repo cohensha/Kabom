@@ -7,6 +7,7 @@ import './viewProjectOrTeamStyle.css';
 class TeamCardModal extends Component {
     constructor(props) {
         super(props);
+        this.toggle = this.props.onclick;
         this.state = {
             showRedAlert: false,
             showGreenAlert: false,
@@ -14,7 +15,7 @@ class TeamCardModal extends Component {
             errorMsg: "Oops! Only Project leaders can request teams to work on their project.",
             showInterestRedAlert: false,
             interestErrorMsg: "Oops! You cannot express interest in the team you lead!",
-            interestButtonText: "Express interest to team!",
+            interestButtonText: "Express interest to team",
             localInterestedUsersArray: [],
             userInterestUpdated: false,
         };
@@ -27,13 +28,13 @@ class TeamCardModal extends Component {
         if(this.state.userInterestUpdated) {
             console.log("unexpressing interest");
             this.setState({
-                interestButtonText: "Express interest to team!"
+                interestButtonText: "Express interest to team"
             });
         }
         else {
             console.log("expressing interest");
             this.setState({
-                interestButtonText: "Interest sent to team!"
+                interestButtonText: "Interest sent to team"
             });
         }
     }
@@ -46,7 +47,6 @@ class TeamCardModal extends Component {
             // console.log(this.state.interestErrorMsg);
                 this.setState({showInterestRedAlert: true});
                 return;
-
         }
         else {
             this.setState({
@@ -55,8 +55,6 @@ class TeamCardModal extends Component {
 
             this.setButtonText();
         }
-
-
     }
 
     handleCloseClick() {
@@ -70,6 +68,7 @@ class TeamCardModal extends Component {
 
         //Currently, when first opening the modal it does not show if user clicked interested
         //in the past, bc we don't know where we can access the team object from inside the modal
+
 
         console.log("closing team card modal");
         var currUser = auth().currentUser.uid;
@@ -215,20 +214,44 @@ class TeamCardModal extends Component {
 
     }
 
-
-
     render() {
         return (
-            <Modal isOpen={this.props.show} toggle={this.toggle} className={this.props.className}>
+            <Modal isOpen={this.props.show} className={this.props.className}>
                
                 <ModalBody>
                         <div className="introCard">
                             <CardImg top width = "100%" src="https://i.imgur.com/GWUyCqu.gif" alt={"Cover Image"}/>
                             <h1 className="name">{this.props.obj.name}</h1>
+
+                            <Alert color="danger" isOpen={this.state.showInterestRedAlert} toggle={() => this.dismissInterest("red")}>
+                                {this.state.interestErrorMsg}
+                            </Alert>
+
+                            <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
+                                {this.state.errorMsg}
+                            </Alert>
+                            
+                            <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
+                                Nice! You've successfully requested this team.
+                            </Alert>
+
+                            <button className="button" onClick={() => this.handleInterestClick()}>{this.state.interestButtonText}</button>
+                            <br/>
+
+                            <button className="requestTeamButton" 
+                                color="secondary"
+                                onClick={() => this.request()}
+                                disabled={this.state.hasRequested}
+                                block>
+                                Request Team For Your Project
+                            </button>
                         </div>
 
                         <div className="information">
                             <h2 >Information</h2> <br/>
+
+                            <h5>Owner</h5>
+                            <p className="info">{this.props.obj.owner}</p>
 
                             <h5>Number of interests</h5>
                             <p className="info">{this.props.obj.noOfInterests}</p>
@@ -242,11 +265,8 @@ class TeamCardModal extends Component {
                             <div className="container">
                                 {Object.keys(this.props.obj.members).map((k, i) =>
                                     <p key={i}>{this.props.obj.members[k]}</p>
-
-
                                 )}
                             </div>}
-
                             <br/>
                         </div>
 
@@ -255,45 +275,14 @@ class TeamCardModal extends Component {
                             
                             <div className="container">
                               <p>{this.props.obj.description}</p>
-                            </div> <br/>
+                            </div> 
+                            <br/>
                         </div>
-
-                        <div className="description">
-                            <Button
-                                color="secondary"
-                                onClick={() => this.request()}
-                                disabled={this.state.hasRequested}
-                                block
-                            >
-                                Request This Team For Your Project
-                            </Button>
-                            <Alert color="danger" isOpen={this.state.showRedAlert} toggle={() => this.dismiss("red")}>
-                                {this.state.errorMsg}
-                            </Alert>
-                            <Alert color="success" isOpen={this.state.showGreenAlert} toggle={() => this.dismiss("green")}>
-                                Nice! You've successfully requested this team.
-                            </Alert>
-                        </div>
-
-                {/*<ModalFooter>*/}
-                    <div className="alert">
-                        <Alert color="danger" isOpen={this.state.showInterestRedAlert} toggle={() => this.dismissInterest("red")}>
-                            {this.state.interestErrorMsg}
-                        </Alert>
-                    </div>
-                    
-                    <div className="buttons">
-                   <Button className={"interestButton"}
-                            onClick={() => this.handleInterestClick()}
-                    >{this.state.interestButtonText}
-                    </Button>
-                    <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
-
-                    </div>
-
-
-                {/*</ModalFooter>*/}
                 </ModalBody>
+
+                <ModalFooter>
+                    <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
+                </ModalFooter>
             </Modal>
         );
     }

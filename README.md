@@ -17,6 +17,7 @@
 - [ ] be able to convert a group to a project w/ certain members
 - [ ] ability to remove from a group/project
 - [ ] Ability to write posts on a group/project
+- [ ] Add gender, date of birth for customization
 
 # Resources Used
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).

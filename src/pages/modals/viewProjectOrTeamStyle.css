@@ -9,15 +9,15 @@
     margin: auto;
     text-align: center;
     border-radius: 5px;
-    padding-bottom: 10px;
+    padding-bottom: 3%;
 }
 
-.elevatorPitch {
+/*.elevatorPitch {
     font-size: 16px;
     color: grey;
     text-align: center;
     padding: 2% 8% 2% 8%;
-}
+}*/
 
 .name {
     padding-top: 10px;
@@ -76,9 +76,26 @@
     background-color: #000;
     text-align: center;
     cursor: pointer;
-    width: 40%;
-    font-size: 18px;
+    max-width: 100%;
+    white-space: nowrap;
+    font-size: 16px;
     border-radius: 20px;
+}
+
+.requestTeamButton {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    max-width: 100%;
+    white-space: nowrap;
+    font-size: 16px;
+    border-radius: 20px;
+    margin-top: 3%;
 }
 
 a {
@@ -87,7 +104,7 @@ a {
     color: black;
 }
 
-.button:hover, .cardImInterestButton:hover, a:hover {
+.button:hover, .cardImInterestButton:hover, a:hover, .requestTeamButton:hover {
     /*opacity: 1;*/
     background: linear-gradient(to left, #F09819, #FF512F);
     outline:0;
@@ -104,10 +121,10 @@ a {
     font-size: 14px;
     border-radius: 20px;
     width: 50%;
+    height: 50%;
     align-self: center;
     outline:0;
 }
-
 
 .projectCheckmark {
     width: 5%;
