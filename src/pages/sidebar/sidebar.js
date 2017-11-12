@@ -30,7 +30,8 @@ class Sidebar extends Component {
             myTeams: [], //teams im a part of
             myProjects: [], //list of projects contributed to
             isMounted: false,
-            myTeam: null, //team i own
+            myTeamName: '', //team i own
+            myTeam: null,
             myTeamProject: null, //my team's project
             myTeamId: '', //my team's id
             myTeamInterestedUsersUID: [],
@@ -96,9 +97,12 @@ class Sidebar extends Component {
                 });
                 //console.log(teamIdSnapshot.val());
                 //get the team name from team id
-                database.child("teams/" + teamIdSnapshot.val() + "/name").once("value").then((sp) => {
+                database.child("teams/" + teamIdSnapshot.val()).once("value").then((sp) => {
                     if (sp.exists()) {
-                        this.setState({myTeam: sp.val()});
+                        this.setState({
+                            myTeamName: sp.val().name,
+                            myTeam: sp.val(),
+                        });
                     }
                 });
                 database.child("teams/" + teamIdSnapshot.val() + "/project").once("value").then((sp) => {
@@ -347,7 +351,7 @@ class Sidebar extends Component {
         let arr = this.state.projRequests;
         let selectedProject = arr[index];
         console.log(selectedProject);
-        console.log(this.state.myTeam);
+        console.log(this.state.myTeamName);
 
         // //delete request from backend request table - DONE
         let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.projectId);
@@ -363,7 +367,7 @@ class Sidebar extends Component {
 
         //push team id to proj object in backend
         let postProjectTeamsRef = database.child("projects/" + selectedProject.projectId + "/teams");
-        postProjectTeamsRef.child(this.state.myTeamId).set(this.state.myTeam);
+        postProjectTeamsRef.child(this.state.myTeamId).set(this.state.myTeamName);
 
         //add project to my projects ive contributed to list
         //this is under myTeams
@@ -465,10 +469,14 @@ class Sidebar extends Component {
                 <p>Team Lead For</p>
 
                 <ListGroup className="mr-3 mb-3">
-                    <ListGroupItem> {this.state.myTeam || 'None. Create One Below!'} </ListGroupItem>
+                    <ListGroupItem
+                        onClick={() => this.handleProfileClick(this.state.myTeam, "teams")}
+                    >
+                        {this.state.myTeamName || 'None. Create One Below!'}
+                        </ListGroupItem>
                 </ListGroup>
 
-                <p onClick={() => this.toggle('teamInterest')}> Users interested in {this.state.myTeam}: {this.state.myTeamInterestedUsersUID.length}</p>
+                <p onClick={() => this.toggle('teamInterest')}> Users interested in {this.state.myTeamName}: {this.state.myTeamInterestedUsersUID.length}</p>
                 <Collapse isOpen={this.state.myTeamInterestsCollapse}>
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeamInterestedUsersData.map( (req, id) =>
@@ -546,7 +554,11 @@ class Sidebar extends Component {
                 <p>Project Owner Of</p>
 
                 <ListGroup className="mr-3 mb-3">
-                    <ListGroupItem> {this.state.myProjectName || 'None. Create One Below!'} </ListGroupItem>
+                    <ListGroupItem
+                        onClick={() => this.handleProfileClick(this.state.myProject, "projects")}
+                    >
+                        {this.state.myProjectName || 'None. Create One Below!'}
+                    </ListGroupItem>
                 </ListGroup>
 
                 <p onClick={() => this.toggle('project')}> Projects I've Contributed To </p>

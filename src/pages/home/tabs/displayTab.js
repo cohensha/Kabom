@@ -113,6 +113,8 @@ class DisplayTab extends Component {
     }
 
     searchBySkills(input) {
+
+        
         //TODO: search for skills array
         if (input === "") return;
         this.ref.orderByChild("skills").equalTo(input).on("value");
