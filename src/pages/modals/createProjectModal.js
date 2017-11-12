@@ -62,7 +62,7 @@ class CreateProjectModal extends Component {
 
     componentDidMount () {
         // Get Skills
-        database.child("skills/projects/").once("value").then((snapshot) => {
+        database.child("skills/users/").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;

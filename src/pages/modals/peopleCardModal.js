@@ -142,7 +142,6 @@ class PeopleCardModal extends Component {
                             <p className="info">{this.props.obj.facebook}</p>
                             <p className="info">{this.props.obj.github}</p>
                             <p className="info">{this.props.obj.linkedin}</p>
-
                         </div>
 
                         <div className="description">

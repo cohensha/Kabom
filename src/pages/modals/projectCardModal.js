@@ -47,6 +47,12 @@ class ProjectCardModal extends Component {
 
                         <h5>Tags</h5>
                         <p className="info">{this.props.obj.projectTypes}</p>   
+
+                        {/*<h5>Currently working on project?</h5>
+                        <p className="info">{this.props.obj.workingOnProject}</p>
+
+                        <h5>Looking for more team members</h5>
+                        <p className="info">{this.props.obj.lookingForMembers}</p>*/}
                         
                     </div>
 

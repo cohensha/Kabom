@@ -129,8 +129,6 @@ class TeamCardModal extends Component {
 
     }
 
-
-
     toggleModal() {
         this.setState({
             hasRequested: false,
@@ -220,7 +218,7 @@ class TeamCardModal extends Component {
                
                 <ModalBody>
                         <div className="introCard">
-                            <CardImg top width = "100%" src="https://i.imgur.com/GWUyCqu.gif" alt={"Cover Image"}/>
+                            <CardImg top width = "100%" src={this.props.obj.teamPicture} />
                             <h1 className="name">{this.props.obj.name}</h1>
 
                             <Alert color="danger" isOpen={this.state.showInterestRedAlert} toggle={() => this.dismissInterest("red")}>
@@ -255,11 +253,19 @@ class TeamCardModal extends Component {
 
                             <h5>Number of interests</h5>
                             <p className="info">{this.props.obj.noOfInterests}</p>
+
+                            <h5>Date created</h5>
+                            <p className="info">{this.props.obj.dateCreated}</p>
+
+                            {/*<h5>Available to work on project?</h5>
+                            <p className="info">{this.props.obj.currentlyAvailable}</p>
+
+                            <h5>Looking for more team members</h5>
+                            <p className="info">{this.props.obj.lookingForMembers}</p>*/}
                         </div>
 
                         <div className="description">
                             <h2> Members </h2>
-
 
                             {this.props.obj.members &&
                             <div className="container">
@@ -281,7 +287,7 @@ class TeamCardModal extends Component {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
+                    <Button color="secondary" onClick={this.handleCloseClick}>Save and Close</Button>
                 </ModalFooter>
             </Modal>
         );
