@@ -31,6 +31,7 @@
     width: 350px;
     max-height: 200px;
     padding: 15px;
+    color: black;
     /*word-wrap: break-word;*/
 
 }
@@ -47,7 +48,7 @@
 
 .description {
     background-color: #EEF1EF;
-    margin: 5% auto auto auto;
+    margin: 3% auto auto auto;
     text-align: left;
     border-radius: 5px;
     padding: 15px;
@@ -59,7 +60,7 @@
     background-color: #EEF1EF;
     margin: auto;
     display: block;
-    margin: 5% auto auto auto;
+    margin: 3% auto auto auto;
     text-align: left;
     border-radius: 5px;
     padding: 15px;
@@ -89,6 +90,7 @@ a {
 .button:hover, .cardImInterestButton:hover, a:hover {
     /*opacity: 1;*/
     background: linear-gradient(to left, #F09819, #FF512F);
+    outline:0;
 }
 
 .cardImInterestButton {
@@ -103,10 +105,11 @@ a {
     border-radius: 20px;
     width: 50%;
     align-self: center;
+    outline:0;
 }
 
 
-.projectImage {
+.projectCheckmark {
     width: 5%;
     height: 5%;
     margin-left: 5px;
