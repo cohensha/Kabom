@@ -62,7 +62,7 @@ class CreateProjectModal extends Component {
 
     componentDidMount () {
         // Get Skills
-        database.child("skills").once("value").then((snapshot) => {
+        database.child("skills/projects/").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;
@@ -74,10 +74,10 @@ class CreateProjectModal extends Component {
         });
 
         // Get Project Types
-        database.child("projectTypes").once("value").then((snapshot) => {
+        database.child("projectTypes/projects/").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
-                    let item = childSnapshot.val();
+                    let item = childSnapshot.key;
                     this.setState({
                         allProjectTypes: this.state.allProjectTypes.concat([item])
                     });
@@ -118,14 +118,14 @@ class CreateProjectModal extends Component {
             }
 
             // TODO: delete this once a comprehensive list of skills have been generated
-            // this.state.newSkills.map((x, index) => {
-            //     database.child("skills/" + x).push().set(this.props.uid);
-            // });
+            this.state.skillsNeeded.map((x, index) => {
+                database.child("skills/projects/" + x).push().set(this.props.uid);
+            });
 
             // TODO: same
-            // this.state.newProjectTypes.map((x, index) => {
-            //     database.child("projectTypes").push().set(x);
-            // });
+            this.state.projectTypes.map((x, index) => {
+                database.child("projectTypes/projects/" + x).push().set(this.props.uid);
+            });
 
             this.toggle();
         }
