@@ -603,7 +603,7 @@ class Sidebar extends Component {
                     Create Project
                 </Button>
                 <Label hidden={this.state.hideCreateProjectLabel} style={{color : "red"}}>
-                    Unable to Create Project: you can only own one project!
+                    Unable to create project: you are already working on a project! Please complete or leave the project before creating a new project.
                 </Label>
 
 
