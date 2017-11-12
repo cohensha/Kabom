@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg, Row} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
@@ -12,6 +12,8 @@ class TeamCardModal extends Component {
             showGreenAlert: false,
             hasRequested: false,
             errorMsg: "Oops! Only Project leaders can request teams to work on their project.",
+            showInterestRedAlert: false,
+            interestErrorMsg: "Oops! You cannot express interest in the team you lead!",
             interestButtonText: "Express interest to team!",
             localInterestedUsersArray: [],
             userInterestUpdated: false,
@@ -38,11 +40,22 @@ class TeamCardModal extends Component {
 
     handleInterestClick() {
         //team object is this.props.obj
-        this.setState({
-            userInterestUpdated: !this.state.userInterestUpdated
-        });
 
-        this.setButtonText();
+        //if they are the team leader, display erroe message
+        if(this.props.obj.teamOwner == auth().currentUser.uid) {
+            // console.log(this.state.interestErrorMsg);
+                this.setState({showInterestRedAlert: true});
+                return;
+
+        }
+        else {
+            this.setState({
+                userInterestUpdated: !this.state.userInterestUpdated
+            });
+
+            this.setButtonText();
+        }
+
 
     }
 
@@ -124,6 +137,7 @@ class TeamCardModal extends Component {
             hasRequested: false,
             showRedAlert: false,
             showGreenAlert: false,
+            showInterestRedAlert: false,
         });
         this.props.onclick();
     }
@@ -131,8 +145,13 @@ class TeamCardModal extends Component {
     dismiss(color) {
         if (color === "red")
             this.setState({ showRedAlert: false });
+
         if (color === "green")
             this.setState({ showGreenAlert: false });
+    }
+
+    dismissInterest(color) {
+        this.setState({showInterestRedAlert: false});
     }
 
     request() {
@@ -255,14 +274,26 @@ class TeamCardModal extends Component {
                                 Nice! You've successfully requested this team.
                             </Alert>
                         </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button className={"interestButton"}
+
+                {/*<ModalFooter>*/}
+                    <div className="alert">
+                        <Alert color="danger" isOpen={this.state.showInterestRedAlert} toggle={() => this.dismissInterest("red")}>
+                            {this.state.interestErrorMsg}
+                        </Alert>
+                    </div>
+                    
+                    <div className="buttons">
+                   <Button className={"interestButton"}
                             onClick={() => this.handleInterestClick()}
                     >{this.state.interestButtonText}
                     </Button>
                     <Button color="secondary" onClick={this.handleCloseClick}>Close</Button>
-                </ModalFooter>
+
+                    </div>
+
+
+                {/*</ModalFooter>*/}
+                </ModalBody>
             </Modal>
         );
     }
