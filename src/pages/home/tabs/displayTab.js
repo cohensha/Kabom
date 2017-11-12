@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TabPane, Row, Col} from 'reactstrap';
+import {TabPane, Row, Col, FormGroup, Label, Input, InputGroup, InputGroupButton, Button} from 'reactstrap';
 import DisplayCard from '../cards/displayCard';
 import ProjectCardModal from '../../modals/projectCardModal';
 import TeamCardModal from '../../modals/teamCardModal';
@@ -20,6 +20,7 @@ class DisplayTab extends Component {
             showTeamModal: false,
             showPeopleModal: false,
             currUser: null,
+            allSkills: [],
         };
         this.ref = database.child(this.props.type);
         this.userRef = database.child("users/" + auth().currentUser.uid);
@@ -55,6 +56,14 @@ class DisplayTab extends Component {
 
         });
 
+        database.child("skills/users").once("value").then((s) => {
+           if (s.exists()) {
+               let array = [];
+               s.forEach((childSnap) => array.push(childSnap.key));
+               this.setState({ allSkills: array });
+           }
+        });
+
     }
 
     handleClick(data) {
@@ -83,48 +92,130 @@ class DisplayTab extends Component {
 
     searchByName(input) {
         if (input === "") return;
-        console.log("here");
-        this.ref.orderByChild("name").equalTo(input).on("value", (snapshot) => {
+        this.ref.orderByChild("name").equalTo(input).once("value").then( (snapshot) => {
             console.log("in callback");
             let array = [];
             snapshot.forEach(function (childSnapshot) {
-                const item = childSnapshot.val();
+                let item = childSnapshot.val();
+                if (item) {
+                    item["id"] = childSnapshot.key;
+                }
                 array.push(item);
-                console.log(item);
             });
             this.setState({searchResults: array});
         });
 
     }
 
-    searchByDesc(input) {
-        if (input === "") return;
-        console.log("here");
-        this.ref.orderByChild("description").equalTo(input).on("value", (snapshot) => {
-            console.log("in callback");
-            let array = [];
-            snapshot.forEach(function (childSnapshot) {
-                const item = childSnapshot.val();
-                array.push(item);
-                console.log(item);
+    /*******
+     * Search by project types/categories of interest
+     * @param input
+     ********/
+    searchByCategories(input) {
+        this.setState({ searchResults: [] });
+        let uniqueMap = new Map();
+        input.map((cat) => {
+            database.child("projectTypes/" + this.props.type + "/" + cat).once("value").then((snaps) => {
+                if (snaps.exists()) {
+                    snaps.forEach((s) => {
+                        database.child(this.props.type + "/" + s.val()).once("value").then((obj) => {
+                            let item = obj.val();
+                            if (item) {
+                                item["id"] = obj.key;
+                            }
+                            //result.add(item);
+                            //if (result.has)
+                            if (!uniqueMap.has(obj.key)) {
+                                uniqueMap.set(obj.key, item);
+                                this.setState({
+                                    searchResults: this.state.searchResults.concat([item]),
+                                });
+                            }
+                        });
+                    });
+                }
             });
-            this.setState({searchResults: array});
         });
     }
 
+    /********
+     * For each skill the user is filtering by, get the uids associated with that skill
+     * for each uid, get the user/team/proj object and concat search results array
+     * but only if it hasn't been inserted already!
+     * @type {Map}
+     *********/
     searchBySkills(input) {
+        //OLD WAY... NOT sure if needed
+        // let set = new Set();
+        // input.map((skill) => {
+        //     this.ref.orderByChild("skills/"+skill).equalTo(true).on("value", (snapshot) => {
+        //         console.log("in callback");
+        //         let array = [];
+        //         snapshot.forEach(function (childSnapshot) {
+        //             let item = childSnapshot.val();
+        //             if (item) {
+        //                 item["id"] = childSnapshot.key;
+        //             }
+        //             array.push(item);
+        //             console.log(item);
+        //         });
+        //         this.setState({searchResults: array});
+        //     });
+        // });
 
-        
-        //TODO: search for skills array
-        if (input === "") return;
-        this.ref.orderByChild("skills").equalTo(input).on("value");
-        let array = [];
-        this.state.originalData.map( (obj) => {
-            if (obj.skillsNeeded && obj.skillsNeeded.includes(input)) {
-                array.push(obj);
-            }
+        this.setState({ searchResults: [] });
+        let uniqueMap = new Map();
+        input.map((skill) => {
+           database.child("skills/" + this.props.type + "/" + skill).once("value").then((snaps) => {
+              if (snaps.exists()) {
+                  snaps.forEach((s) => {
+                      database.child(this.props.type + "/" + s.val()).once("value").then((obj) => {
+                          let item = obj.val();
+                          if (item) {
+                              item["id"] = obj.key;
+                          }
+                          //result.add(item);
+                          //if (result.has)
+                          if (item && !uniqueMap.has(obj.key)) {
+                              uniqueMap.set(obj.key, item);
+                              this.setState({
+                                  searchResults: this.state.searchResults.concat([item]),
+                              });
+                          }
+                      });
+                  });
+              }
+           });
         });
-        this.setState({searchResults: array});
+    }
+
+    /***
+     * Queries firebase for matching school field
+     * @param input
+     */
+    searchBySchool(input) {
+        this.setState({ searchResults: [] });
+
+        let uniqueMap = new Map();
+        input.map((school) => {
+            let arr = [];
+            this.ref.orderByChild("school").equalTo(school).once("value").then( (snapshot) => {
+                snapshot.forEach(function (childSnapshot) {
+                    let item = childSnapshot.val();
+                    if (item) {
+                        item["id"] = childSnapshot.key;
+                    }
+                    if (item && !uniqueMap.has(childSnapshot.key)) {
+                        console.log("dup");
+                        console.log(childSnapshot.key);
+                        uniqueMap.set(childSnapshot.key, item);
+                        arr.push(item);
+                    }
+                });
+                this.setState({searchResults: this.state.searchResults.concat(arr)});
+            });
+
+        });
     }
 
     setSeeAll() {
@@ -136,10 +227,14 @@ class DisplayTab extends Component {
             <TabPane tabId={this.props.id} className="mt-3">
                 <SearchBar
                     searchByName={(input) => this.searchByName(input)}
-                    searchByDesc={(input) => this.searchByDesc(input)}
+                    searchByCategories={(input) => this.searchByCategories(input)}
                     searchBySkills={(input) => this.searchBySkills(input)}
+                    searchBySchool={(input) => this.searchBySchool(input)}
+                    type={this.props.type}
                     setSeeAll={() => this.setSeeAll()}
                 />
+
+                {(this.state.searchResults.length === 0) && <p>Oops! No Results Found.</p>}
                 <Row>
                     {this.state.searchResults.map((d, id) =>
 

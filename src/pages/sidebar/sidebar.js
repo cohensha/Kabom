@@ -289,6 +289,18 @@ class Sidebar extends Component {
         }
     }
 
+    /*******
+     * accept a team's request for you to join them
+     * Does:
+     *  remove request from request table in firebase
+     *  remove the request from the front end list displaying requests
+     *  push that team to your list of teams in your user obj in firebase
+     *  push to front end list of your teams
+     *  push your id to team object's members list in firebase where key,value -> uid: name
+     *  increments number of members in team objec in firebase
+     *  decrement number of mmember seeking in team object in firebase
+     *  adds users skills to teams list of skills, both in team object and in skills/teams/teamid
+    ********/
     acceptTeam(index) {
         //acceptTeam a team's request to you
         //to do
@@ -316,7 +328,7 @@ class Sidebar extends Component {
         this.setState({ myTeams: newArr });
 
         //push your id to members list of a team - DONE
-        let postTeamMemberRef = database.child("teams/" + selectedTeam.teamId + "/members");
+        let postTeamMemberRef = database.child("teams/" + selectedTeam.teamId + "/members/");
         postTeamMemberRef.child(this.props.uid).set(this.state.currUser.name);
         //this.ref.child("Victor").setValue("setting custom key when pushing new data to firebase database");
 
@@ -335,10 +347,15 @@ class Sidebar extends Component {
             return (num || 0) + 1;
         });
         //
-        //add curr users skills to skills list of team - DONE
-        let skillsRef = database.child("teams/" + selectedTeam.teamId + "/skills/");
-        this.state.currUser.skills.map((skill) => skillsRef.push(skill));
-        //skillsRef.push()
+        //add curr users skills to skills list of team object - DONE
+        // and add to skills/teams/skill/team id table - DONE
+        if (this.state.currUser.skills) {
+            this.state.currUser.skills.map((skill) => {
+                database.child("teams/" + selectedTeam.teamId + "/skills/").push(skill);
+                database.child("skills/teams/" + skill + "/" + selectedTeam.teamId).set(selectedTeam.teamId);
+
+            });
+        }
 
     }
 
@@ -360,8 +377,7 @@ class Sidebar extends Component {
     acceptProject(index) {
         let arr = this.state.projRequests;
         let selectedProject = arr[index];
-        console.log(selectedProject);
-        console.log(this.state.myTeamName);
+        //console.log(this.state.myTeamName);
 
         // //delete request from backend request table - DONE
         let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.projectId);
@@ -629,11 +645,13 @@ class Sidebar extends Component {
                 <CreateTeamModal show={this.state.showCreateTeamModal}
                                  onclick={() => this.toggleCreateTeam()}
                                  uid={this.state.uid}
+                                 currUser={this.state.currUser}
                                  updateTeamsUI={() => this.updateTeams()}
                 />
                 <CreateProjectModal show={this.state.showCreateProjectModal}
                                     onclick={() => this.toggleCreateProject()}
-                                    uid={this.state.uid}/>
+                                    uid={this.state.uid}
+                />
             </div>
         );
     }

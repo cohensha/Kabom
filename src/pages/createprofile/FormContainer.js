@@ -251,12 +251,12 @@ class FormContainer extends Component {
 
             // TODO: delete this once a comprehensive list of skills have been generated
 			this.state.skills.map((x, index) => {
-                database.child("skills/users/" + x).push().set(uid);
+                database.child("skills/users/" + x + "/" + uid).set(uid);
 			});
 
 			// TODO: same
             this.state.projectTypes.map((x, index) => {
-                database.child("projectTypes/users/" + x).push().set(uid);
+                database.child("projectTypes/users/" + x + "/" + uid).set(uid);
             });
 
             this.setState({submitted: true});

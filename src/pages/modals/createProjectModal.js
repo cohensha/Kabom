@@ -62,7 +62,7 @@ class CreateProjectModal extends Component {
 
     componentDidMount () {
         // Get Skills
-        database.child("skills/projects/").once("value").then((snapshot) => {
+        database.child("skills/users/").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;
@@ -74,7 +74,7 @@ class CreateProjectModal extends Component {
         });
 
         // Get Project Types
-        database.child("projectTypes/projects/").once("value").then((snapshot) => {
+        database.child("projectTypes/users/").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     let item = childSnapshot.key;
@@ -118,13 +118,15 @@ class CreateProjectModal extends Component {
             }
 
             // TODO: delete this once a comprehensive list of skills have been generated
+
+            //edited by sabrina, pushes to skills/projects/skill/projid: proj id for search
             this.state.skillsNeeded.map((x, index) => {
-                database.child("skills/projects/" + x).push().set(this.props.uid);
+                database.child("skills/projects/" + x + "/" + projectId).set(projectId);
             });
 
-            // TODO: same
+            // same
             this.state.projectTypes.map((x, index) => {
-                database.child("projectTypes/projects/" + x).push().set(this.props.uid);
+                database.child("projectTypes/projects/" + x + "/" + projectId).set(projectId);
             });
 
             this.toggle();

@@ -63,7 +63,7 @@ class CreateTeamModal extends Component {
 
     componentDidMount() {
         // Get Skills
-        database.child("skills/teams").once("value").then((snapshot) => {
+        database.child("skills/users").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;
@@ -74,7 +74,7 @@ class CreateTeamModal extends Component {
             }
         });
         // Get Project Types
-        database.child("projectTypes/teams").once("value").then((snapshot) => {
+        database.child("projectTypes/users").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     let item = childSnapshot.key;
@@ -152,13 +152,16 @@ class CreateTeamModal extends Component {
             }
 
             // TODO: delete this once a comprehensive list of skills have been generated
+
+            //not sure what the above to do is referencing, but this writes to
+            // skills/teams/skill/teamid: teamid db for search - sabrina
             this.state.skills.map((x, index) => {
-                database.child("skills/teams/" + x).push().set(this.state.currUid);
+                database.child("skills/teams/" + x + "/" + teamId).set(teamId);
             });
 
-            // TODO: same
+            //same
             this.state.projectTypes.map((x, index) => {
-                database.child("projectTypes/teams/" + x).push().set(this.state.currUid);
+                database.child("projectTypes/teams/" + x + "/" + teamId).set(teamId);
             });
 
             this.toggle();
