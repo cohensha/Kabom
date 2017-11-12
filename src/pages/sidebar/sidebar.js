@@ -118,17 +118,26 @@ class Sidebar extends Component {
                        let arrayIds = [];
                        let array= [];
                       sp.forEach(function(childSnapshot) {
-                         const item = childSnapshot.val();
-                         arrayIds.push(item);
-                         // console.log("user interested: " + item);
+                         if(childSnapshot.exists()) {
+                             // const key = childSnapshot.key;
+                             const item = childSnapshot.val();
+                             // item["id"] = key;
+                             arrayIds.push(item);
 
-                         //for each interested user, pull their data using uid's and add to array
-                          database.child("/users/" + item).once("value").then((snapshot) => {
-                              if(snapshot.exists()) {
-                                  array.push(snapshot.val());
-                              }
+                             // console.log("user interested: " + item);
 
-                          });
+                             //for each interested user, pull their data using uid's and add to array
+                             database.child("/users/" + item).once("value").then((snapshot) => {
+                                 if(snapshot.exists()) {
+                                     const userkey = snapshot.key;
+                                   const useritem = snapshot.val();
+                                    useritem["id"] = userkey;
+                                     array.push(useritem);
+
+                                 }
+
+                             });
+                         }
 
                       });
                       this.setState({myTeamInterestedUsersUID: arrayIds});
@@ -252,6 +261,7 @@ class Sidebar extends Component {
     }
 
     handleProfileClick(data, type) {
+        console.log("hitting handle profile click in sidebar.js");
         this.setState({
            selectedObj: data
         });
@@ -473,7 +483,7 @@ class Sidebar extends Component {
                     <ListGroup className="mr-3 mb-3">
                         {this.state.myTeamInterestedUsersData.map( (req, id) =>
 
-                            <ListGroupItem key={id} onClick={ () => this.handleProfileClick(req) }> {req.firstName}</ListGroupItem>
+                            <ListGroupItem key={id} onClick={ () => this.handleProfileClick(req, "people") }> {req.firstName}</ListGroupItem>
                         )}
                     </ListGroup>
                 </Collapse>
@@ -589,6 +599,7 @@ class Sidebar extends Component {
                     show={this.state.showProfileModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleProfileModal("people")}
+                    currUser={this.state.currUser}
                 />
 
                 <TeamCardModal
