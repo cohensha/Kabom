@@ -33,23 +33,29 @@ Here are the ~~completed~~, **in-progress**, and *future* requirements.
 |3. All active job projects a user posted should be viewable by the user on their profile page. | This is currently the sidebar. |
 
 ## In-Progress
+### General
+|Functionality | Notes |
+|--------------|-------|
+|Dashboard for a better view project, team, and other information| This would replace or simplify the sidebar|
+
 ### Search
 |Functionality | Notes |
 |--------------|-------|
-|1. Filters for Teams: Most popular (based on number of interests), Recently added | |
-|2. Filters for Projects: Most popular, Recently added, Category| |
-|3. Filters for Users: Skills/Roles, University| |
+|Filters for Teams: Most popular (based on number of interests), Recently added | |
+|Filters for Projects: Most popular, Recently added, Category| |
+|Filters for Users: Skills/Roles, University| |
 
 ### Team Formation
 |Functionality | Notes |
 |--------------|-------|
-|1. Request Modal for when team owners request users for their team. The modal should define the user's role and other aspects of the user's commitment in the team | | 
-|2. Increment numOfInterests after a user clicks on "I'm interested!" button  | Used to rank projects by popularity. Could be renamed to likes rather than interests |
+|Edit Team| |
+|Increment numOfInterests after a user clicks on "I'm interested!" button  | Used to rank projects by popularity. Could be renamed to likes rather than interests |
+
 ### Project Formation
 |Functionality | Notes |
 |--------------|-------|
-|1. Request Modal: Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing| | 
-|2. Increment numOfInterests after a user clicks on "I'm interested!" button | Used to rank projects by popularity. Could be renamed to likes rather than interests | 
+|Edit Project| | 
+|Increment numOfInterests after a user clicks on "I'm interested!" button | Used to rank projects by popularity. Could be renamed to likes rather than interests | 
 
 ## Future Tasks
 ### Group Formation
@@ -64,32 +70,34 @@ With this distinction, both experienced and inexperienced users can join the pla
 
 |Functionality | Notes |
 |--------------|-------|
-|1. Creating, joining, requesting, liking groups and any other group tasks. | Specifics TBD | 
-|2. Group forum  | |
-|3. Be able to convert a group to a team | | 
+|Creating, joining, requesting, liking groups and any other group tasks. | Specifics TBD | 
+|Group forum for discussion | |
+|Be able to convert a group to a team | | 
  
 ### General
 |Functionality | Notes |
 |--------------|-------|
-|1. Authentication Persistence| Currently the platform will log the user out after refreshing |
-|2. Show a project/group after a project/group is created instead of having to refresh/log back in| |
-|3. Better/consistent UI colors and buttons. Add Logos. | |
+|Authentication Persistence| Currently the platform will log the user out after refreshing |
+|Show a project/group after a project/group is created instead of having to refresh/log back in| |
+|Better/consistent UI colors and buttons. Add Logos. | |
 
 ### Team Formation
 |Functionality | Notes |
 |--------------|-------|
-|1. Notifications (Email or in-platform) for whenever a team is requested or when a user accepts a team invitation. | |
-|2. Remove team members| |
-|3. Delete team | |
+|Request Modal for when team owners request users for their team. The modal should define the user's role and other aspects of the user's commitment in the team | | 
+|Notifications (Email or in-platform) for whenever a team is requested or when a user accepts a team invitation. | |
+|Remove team members| |
+|Delete team | |
 
 ### Project Formation
 |Functionality | Notes |
 |--------------|-------|
-|1. Notifications (Email or in-platform) for whenever a team is accepts a project invitation. | |
-|2. Deadline on a project based on created date| This keeps projects fresh and prevents a graveyard of unimplemented projects. |
-|3. Autosuggest a member when searching or adding members to a project/team based on project types| |
-|4. Remove teams/project members| |
-|5. Delete project | |
+|Request Modal: Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing| | 
+|Notifications (Email or in-platform) for whenever a team is accepts a project invitation. | |
+|Deadline on a project based on created date| This keeps projects fresh and prevents a graveyard of unimplemented projects. |
+|Autosuggest a member when searching or adding members to a project/team based on project types| |
+|Remove teams/project members| |
+|Delete project | |
 
 ---
 
