@@ -1,4 +1,4 @@
-![alt text](https://i.imgur.com/l1pJ7m5.png)
+![alt text](https://i.imgur.com/l1pJ7m5.png?1)
 **Kabom - Project collaboration made easier.**
 >Kabom connects USC students of all backgrounds to collaborate on student projects. Whether you have a project in mind or you just want to join in on a side project, find the team of developers, designers, project managers, and whoever else you need to make an amazing project.
 
