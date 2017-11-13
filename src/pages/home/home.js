@@ -4,10 +4,11 @@ import Header from '../header/header';
 // import ProjectTab from './tabs/projectTab';
 // import PeopleTab from "./tabs/peopleTab";
 // import TeamTab from "./tabs/teamTab";
-import { auth } from '../../firebase/constants';
+import { auth, database } from '../../firebase/constants';
 import DisplayTab from "./tabs/displayTab";
 import CreateTeamModal from '../modals/createTeamModal';
 import CreateProjectModal from '../modals/createProjectModal';
+import PeopleCardModal from '../modals/peopleCardModal';
 import Sidebar from '../sidebar/sidebar';
 
 class Home extends Component {
@@ -19,10 +20,20 @@ class Home extends Component {
             projects: [],
             teams: [],
             people: [],
+            showProfileModal: false,
             showCreateTeamModal: false,
             showCreateProjectModal: false,
             currUid: auth().currentUser.uid,
+            currUser: null,
         };
+    }
+
+    componentDidMount() {
+        database.child("users/" + auth().currentUser.uid).once("value").then((user) => {
+            if (user.exists()) {
+                this.setState({ currUser: user.val() });
+            }
+        });
     }
 
     toggle(tab) {
@@ -33,12 +44,17 @@ class Home extends Component {
         }
     }
 
+    toggleProfileModal() {
+        this.setState({ showProfileModal: !this.state.showProfileModal });
+    }
 
 
     render() {
         return (
             <div className="home">
-                <Header/>
+                <Header
+                    toggleProfile={() => this.toggleProfileModal()}
+                />
                 <Row>
                     <Col sm="12" md={{size: 8}}>
                         <div className="ml-3 d-inline-block">
@@ -85,6 +101,12 @@ class Home extends Component {
                         <Sidebar uid={this.state.currUid || 'null rn'}/>
                     </Col>
                 </Row>
+                {this.state.currUser &&
+                <PeopleCardModal show={this.state.showProfileModal}
+                                 onclick={() => this.toggleProfileModal()}
+                                 obj={this.state.currUser}
+                />
+                }
                 <CreateTeamModal show={this.state.showCreateTeamModal}
                                  onclick={() => this.toggleCreateTeam()}
                                  uid={this.state.currUid}/>

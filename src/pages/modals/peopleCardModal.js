@@ -152,13 +152,32 @@ class PeopleCardModal extends Component {
                                 )}
                             </div>}
 
+                            <h5>Interests</h5>
+                            {this.props.obj.interests &&
+                            <div className="container">
+                                {Object.keys(this.props.obj.interests).map((k, i) =>
+                                    <h5 key={i} className="d-inline-block">
+                                        <Badge
+                                            key={i}
+                                            id={"skillBadge"}
+                                            color="primary"
+                                        >
+                                            {this.props.obj.interests[k]}
+                                        </Badge>
+                                    </h5>
+                                )}
+                            </div>}
+
                             <h5>Email</h5>
                             <p className="info">{this.props.obj.email}</p>
 
                             <h5>Links</h5>
+                            <p>Facebook</p>
                             <p className="info">{this.props.obj.facebook}</p>
+                            <p>GitHub</p>
                             <p className="info">{this.props.obj.github}</p>
-                            <p className="info">{this.props.obj.linkedin}</p>
+                            <p>linkedIn</p>
+                            <p className="info">{this.props.obj.linkedIn}</p>
                         </div>
 
                         <div className="description">

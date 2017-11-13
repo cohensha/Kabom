@@ -92,7 +92,7 @@ class FormContainer extends Component {
         });
 
         // Get Skills
-        database.child("skills/users/").once("value").then((snapshot) => {
+        database.child("generalSkills").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;
@@ -104,7 +104,7 @@ class FormContainer extends Component {
         });
 
         // Get Project Types
-        database.child("projectTypes/users/").once("value").then((snapshot) => {
+        database.child("generalProjectTypes").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     let item = childSnapshot.key;
@@ -255,9 +255,18 @@ class FormContainer extends Component {
 			});
 
 			// TODO: same
-            this.state.projectTypes.map((x, index) => {
+            this.state.projectInterests.map((x, index) => {
                 database.child("projectTypes/users/" + x + "/" + uid).set(uid);
             });
+
+            this.state.newSkills.map((x) => {
+                database.child("generalSkills/" + x).set(x);
+            });
+
+            this.state.newProjectTypes.map((x) => {
+                database.child("generalProjectTypes/" + x).set(x);
+            });
+
 
             this.setState({submitted: true});
 		}

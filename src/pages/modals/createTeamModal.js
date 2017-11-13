@@ -63,7 +63,7 @@ class CreateTeamModal extends Component {
 
     componentDidMount() {
         // Get Skills
-        database.child("skills/users").once("value").then((snapshot) => {
+        database.child("generalSkills").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;
@@ -74,7 +74,7 @@ class CreateTeamModal extends Component {
             }
         });
         // Get Project Types
-        database.child("projectTypes/users").once("value").then((snapshot) => {
+        database.child("generalProjectTypes").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     let item = childSnapshot.key;
@@ -162,6 +162,14 @@ class CreateTeamModal extends Component {
             //same
             this.state.projectTypes.map((x, index) => {
                 database.child("projectTypes/teams/" + x + "/" + teamId).set(teamId);
+            });
+
+            this.state.newSkills.map((x) => {
+                database.child("generalSkills/" + x).set(x);
+            });
+
+            this.state.newProjectTypes.map((x) => {
+                database.child("generalProjectTypes/" + x).set(x);
             });
 
             this.toggle();

@@ -62,7 +62,7 @@ class CreateProjectModal extends Component {
 
     componentDidMount () {
         // Get Skills
-        database.child("skills/users/").once("value").then((snapshot) => {
+        database.child("generalSkills").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     var item = childSnapshot.key;
@@ -74,7 +74,7 @@ class CreateProjectModal extends Component {
         });
 
         // Get Project Types
-        database.child("projectTypes/users/").once("value").then((snapshot) => {
+        database.child("generalProjectTypes").once("value").then((snapshot) => {
             if (snapshot.exists()) {
                 snapshot.forEach((childSnapshot) => {
                     let item = childSnapshot.key;

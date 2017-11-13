@@ -4,13 +4,13 @@ import './header-style.css';
 import {Navbar, NavItem, NavLink, Nav} from 'reactstrap';
 
 
-const Header = () => (
+const Header = ({toggleProfile}) => (
     <div id="header">
         <Navbar>
             <Nav>
             <h1 href="/" className="d-inline-block">Kabom</h1>
                 <NavItem className="ml-auto">
-                    <NavLink className="txt" href="/login">Profile</NavLink>
+                    <NavLink className="txt" onClick={toggleProfile}>Profile</NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink className="txt" href="/">Home</NavLink>
