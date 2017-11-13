@@ -43,6 +43,7 @@ Here are the ~~completed~~, **in-progress**, and *future* requirements.
 ## In-Progress/To-Be-Completed
 ### Dashboard
 A major change we discussed to the current UI was adding a dashboard to better display and manage a user's team and project information. This may be moved to a future task.
+
 |Functionality | Notes |
 |--------------|-------|
 |Dashboard for a better view project, team, and other information| This would replace or simplify the sidebar|
