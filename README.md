@@ -1,25 +1,125 @@
-# Functionality to be implemented
-## Urgent, Must-Have Functionality
-- [X] Create Project Improvements - **Jonathan**
-- [ ] Create Team Improvements: Team Pictures, Project links, Skills, Whether or not you are accepting members, Availability, Desired Team Size (soft requirement) - **Jonathan**
-- [ ] Request Modal: Team/Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing - **Jonathan**
-- [ ] Increment numOfInterests after a user clicks on "I'm interested!" button 
-- [ ] Notify users when I'm interested" button is clicked
+![alt text](https://i.imgur.com/l1pJ7m5.png?1)
+**Unify to Solve**
 
-## Not Urgent, UX-Friendly Functionality
-- [ ] Show a project/group after a project/group is created instead of refreshing 
+*Kabom is a web platform to make project collaboration. Kabom connects USC students of all backgrounds to collaborate on student projects. Whether you have a project in mind or you just want to join in on a side project, find the team of developers, designers, project managers, and whoever else you need to make an amazing project.*
 
-## Future
-- [ ] better/consistent UI colors and buttons
-- [ ] deadline on a project based on created date
-- [ ] have a member size displayed in members' box
-- [ ] autosuggest a member when searching or adding members to a project/team
-- [ ] be able to convert a group to a project w/ certain members
-- [ ] ability to remove from a group/project
-- [ ] Ability to write posts on a group/project
-- [ ] Add gender, date of birth for customization
+***Fun fact**: kabom /kəˈbo͞om/ means **unity** in Twi, one of the many languages spoken in Ghana.*
 
-# Resources Used
+# High Level Requirements
+Here are the ~~completed~~, **in-progress**, and *future* requirements.
+## Completed
+### Login and Sign Up
+|Functionality | Notes |
+|--------------|-------|
+| 1. Users can log in and be authenticated. | |
+| 2. Users should be able to sign up with a university email address, username, and password, retype password. | No username, just first and last name. |
+|3. Each user should have a profile, which should state where they are from, their name, group memberships, what work they like to do (front-end, back-end, etc.) | |
+
+### Team Formation
+|Functionality | Notes |
+|--------------|-------|
+|1. Users can create/join a team. | This was changed from having a stakeholder/copreneur mode. Now users can be either with no distinct |mode.|
+|2. Teams can consist of 1 or more people. | |
+|3. Each team created will have a name. | |
+|4. Users can be part of multiple teams (might be a limit), but all the teams that the user is a part of should be viewable from his or her profile page. | The profile page is currently the sidebar. |
+|5. Teams will display the team owner’s name somewhere noticeable | |
+|6. Team owners can only make requests out to users to join their team, but a user cannot request to join a group (can express interest instead) | |
+|7. Teams can see all the projects that they have done, and currently working on | On the sidebar|
+
+### Project Formation
+|Functionality | Notes |
+|--------------|-------|
+|1. Users can create a project. | |
+|2. Project owners can make a request to a team that they think will fit the needs of the project. | |
+|3. All active job projects a user posted should be viewable by the user on their profile page. | This is currently the sidebar. |
+
+### Search
+|Functionality | Notes |
+|--------------|-------|
+|Search bar should have options to search by team name, individual name, and project name. Individual will be the default option| |
+|Project owners should be able to search for teams by school (both at other universities and schools within the university), and this should populate a list of all teams that fit that criteria.| Currently only for USC |
+|Users should be able to search for other users in any university/school, and view their profile, where all the information is visible| Currently only for USC |
+
+## In-Progress/To-Be-Completed
+### Dashboard
+A major change we discussed to the current UI was adding a dashboard to better display and manage a user's team and project information. This may be moved to a future task.
+
+|Functionality | Notes |
+|--------------|-------|
+|Dashboard for a better view project, team, and other information| This would replace or simplify the sidebar|
+
+### General
+|Functionality | Notes |
+|--------------|-------|
+|Authentication Persistence| Currently the platform will log the user out after refreshing |
+|Show a project/group after a project/group is created instead of having to refresh/log back in| |
+|Better/consistent UI colors and buttons. Add Logos. | |
+
+### Search
+|Functionality | Notes |
+|--------------|-------|
+|Filters for Teams: Most popular (based on number of interests), Recently added | |
+|Filters for Projects: Most popular, Recently added, Category| |
+|Filters for Users: Skills/Roles, University| |
+
+### Team Formation
+|Functionality | Notes |
+|--------------|-------|
+|Edit Team| Comes with dashboard.|
+|Team owner can delete team members| | 
+|Each team should have a named role for each user (e.g. project manager, full-stack developer, front-end engineer, etc.)| tech start up roles only. This would require a request modal that a team owner must fill out upon requesting a user. Also, if roles are to be strictly defined, a preset list of roles need to be added, changing the database structure.|
+|Request Modal for when team owners request users for their team|The modal should define the user's role and other aspects of the user's commitment in the team.|
+|A team can be deleted by the team owner or hand off ownership| | 
+
+### Project Formation
+|Functionality | Notes |
+|--------------|-------|
+|Request Modal: Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing| | 
+|Edit Project| Comes with dashboard.| 
+
+## Future Tasks
+### Group Formation
+Currently, our platform only supports teams. Here we define the difference between groups and teams:
+We got more specific about the distinction between of teams and groups. 
+* **Team**: a group of organized students with experience working together. Types of teams could range from a 2-person front-end/back-end team to an incubator team that is capable of raising an idea from the ground-up (much like Lavalab at USC). An team would showcase their ability with the projects under their belt and describe their team members and their roles within that team. 
+
+* **Group**: A group is an unorganized collection of students who want to get more experience by working on projects and to organize themselves into teams. Groups could be slightly more organized, labeling themselves like: Cool Hackathon Team, iOS Developers in Training, Newbie Web Devs Trying to Learn ReactJS (us)
+
+We do not envision Kabom being another social platform, but we could provide links to the user’s Facebook profile and other social media outlets for group members to connect. The goal is that groups will eventually turn into teams.
+With this distinction, both experienced and inexperienced users can join the platform, making it more appealable to students of all technical levels.
+
+|Functionality | Notes |
+|--------------|-------|
+|Creating, joining, requesting, liking groups and any other group tasks. | Specifics TBD | 
+|Group forum for discussion | |
+|Be able to convert a group to a team | | 
+ 
+### General
+|Functionality | Notes |
+|--------------|-------|
+|Some measurement to track each individual's contribution to the team (this could be sensitive information) | |
+|Display revenue group has brought in from their completed projects| |
+|Rating/Ranking system| This is currently set up as the "I'm interested" function and keeping track of how many interests a team, user, or project gets. Should be improved. |
+|Project owners can rate/review the group the project was assigned to through the platform, once project is completed| |
+|Find a way to give teams better exposure on the platform| |
+|Increment numOfInterests after a user clicks on "I'm interested!" button | Used to rank teams/projects by popularity. Could be renamed to likes rather than interests |
+
+### Team Formation
+|Functionality | Notes |
+|--------------|-------|
+|Notifications (Email or in-platform) for whenever a team is requested or when a user accepts a team invitation. | |
+
+### Project Formation
+|Functionality | Notes |
+|--------------|-------|
+|Notifications (Email or in-platform) for whenever a team is accepts a project invitation. | |
+|Deadline on a project based on created date| This keeps projects fresh and prevents a graveyard of unimplemented projects. |
+|Autosuggest a member when searching or adding members to a project/team based on project types| |
+|Delete project | |
+
+---
+
+# REACT JS GUIDE
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
