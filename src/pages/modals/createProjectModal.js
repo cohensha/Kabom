@@ -103,7 +103,7 @@ class CreateProjectModal extends Component {
                 "compensationDescription" : this.state.compensationDescription,
                 "skillsNeeded" : this.state.skillsNeeded,
                 "projectTypes" : this.state.projectTypes,
-                "projectOwner" : this.props.uid,
+                "owner" : this.props.uid,
                 "dateAdded" : new Date().toString(),
                 "lookingForMembers" : this.state.lookingForMembers,
                 "workingOnProject" : this.state.workingOnProject,

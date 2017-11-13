@@ -39,6 +39,13 @@ class DisplayTab extends Component {
                     // console.log(item);
 
                     if (item) {
+                        if (item.owner) {
+                            database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                               if (snap.exists()) {
+                                   item["ownerName"] = snap.val();
+                               }
+                            });
+                        }
                         item["id"] = childSnapshot.key;
                     }
 
@@ -98,6 +105,13 @@ class DisplayTab extends Component {
             snapshot.forEach(function (childSnapshot) {
                 let item = childSnapshot.val();
                 if (item) {
+                    if (item.owner) {
+                        database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                            if (snap.exists()) {
+                                item["ownerName"] = snap.val();
+                            }
+                        });
+                    }
                     item["id"] = childSnapshot.key;
                 }
                 array.push(item);
@@ -121,6 +135,13 @@ class DisplayTab extends Component {
                         database.child(this.props.type + "/" + s.val()).once("value").then((obj) => {
                             let item = obj.val();
                             if (item) {
+                                if (item.owner) {
+                                    database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                        if (snap.exists()) {
+                                            item["ownerName"] = snap.val();
+                                        }
+                                    });
+                                }
                                 item["id"] = obj.key;
                             }
                             //result.add(item);
@@ -172,6 +193,13 @@ class DisplayTab extends Component {
                       database.child(this.props.type + "/" + s.val()).once("value").then((obj) => {
                           let item = obj.val();
                           if (item) {
+                              if (item.owner) {
+                                  database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                      if (snap.exists()) {
+                                          item["ownerName"] = snap.val();
+                                      }
+                                  });
+                              }
                               item["id"] = obj.key;
                           }
                           //result.add(item);
@@ -203,6 +231,13 @@ class DisplayTab extends Component {
                 snapshot.forEach(function (childSnapshot) {
                     let item = childSnapshot.val();
                     if (item) {
+                        if (item.owner) {
+                            database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                if (snap.exists()) {
+                                    item["ownerName"] = snap.val();
+                                }
+                            });
+                        }
                         item["id"] = childSnapshot.key;
                     }
                     if (item && !uniqueMap.has(childSnapshot.key)) {

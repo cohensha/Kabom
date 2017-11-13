@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg, Row} from 'reactstrap';
+import {Modal, ModalBody, Alert, Badge, ModalFooter, Button, CardImg, Row} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
+import Mailto from 'react-mailto';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
 
@@ -249,7 +250,7 @@ class TeamCardModal extends Component {
                             <h2 >Information</h2> <br/>
 
                             <h5>Owner</h5>
-                            <p className="info">{this.props.obj.owner}</p>
+                            <p className="info">{this.props.obj.ownerName}</p>
 
                             <h5>Number of interests</h5>
                             <p className="info">{this.props.obj.noOfInterests}</p>
@@ -257,15 +258,39 @@ class TeamCardModal extends Component {
                             <h5>Date created</h5>
                             <p className="info">{this.props.obj.dateCreated}</p>
 
+                            <h5>Skills</h5>
+                            {this.props.obj.skills &&
+                            <div className="container">
+                                {Object.keys(this.props.obj.skills).map((k, i) =>
+                                    <h5 key={i} className="d-inline-block">
+                                        <Badge
+                                            key={i}
+                                            id={"skillBadge"}
+                                            color="primary"
+                                        >
+                                        {this.props.obj.skills[k]}
+                                        </Badge>
+                                    </h5>
+                                )}
+                            </div>}
+
+                            {/*<p className="info">{this.props.obj.skills}</p>*/}
                             {/*<h5>Available to work on project?</h5>
                             <p className="info">{this.props.obj.currentlyAvailable}</p>
 
-                            <h5>Looking for more team members</h5>
+                            <h5>Looking for more tpeeam members</h5>
                             <p className="info">{this.props.obj.lookingForMembers}</p>*/}
                         </div>
 
                         <div className="description">
                             <h2> Members </h2>
+                            {this.props.isMyTeam &&
+                                <p>
+                                    <Mailto email={this.props.obj.contactEmails} obfuscate={true}>
+                                        Contact Members!
+                                    </Mailto>
+                                </p>
+                            }
 
                             {this.props.obj.members &&
                             <div className="container">

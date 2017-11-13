@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, Badge, Alert, ModalFooter, Button, CardImg} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
@@ -121,8 +121,9 @@ class PeopleCardModal extends Component {
                                 color="secondary"
                                 onClick={() => this.request()}
                                 disabled={this.state.hasRequested}
-                                block>
-                                Request to join team
+                                block
+                            >
+                                Request This User To Join Your Team
                             </button>
 
 
@@ -134,6 +135,22 @@ class PeopleCardModal extends Component {
                             <h5>School</h5>
                             <p className="info">University of Southern California</p>
                             <p className="info">{this.props.obj.school}</p>
+
+                            <h5>Skills</h5>
+                            {this.props.obj.skills &&
+                            <div className="container">
+                                {Object.keys(this.props.obj.skills).map((k, i) =>
+                                    <h5 key={i} className="d-inline-block">
+                                        <Badge
+                                            key={i}
+                                            id={"skillBadge"}
+                                            color="primary"
+                                        >
+                                            {this.props.obj.skills[k]}
+                                        </Badge>
+                                    </h5>
+                                )}
+                            </div>}
 
                             <h5>Email</h5>
                             <p className="info">{this.props.obj.email}</p>

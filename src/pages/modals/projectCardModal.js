@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalFooter, Button, CardImg} from 'reactstrap';
+import {Modal, ModalBody, ModalFooter, Badge, Button, CardImg} from 'reactstrap';
+import Mailto from 'react-mailto';
+
 import '../home/style.css';
 import './viewProjectOrTeamStyle.css';
 
@@ -28,13 +30,23 @@ class ProjectCardModal extends Component {
                         <p className="info">{this.props.obj.noOfInterests}</p>*/}
 
                         <h5>Owner</h5>
-                        <p className="info">{this.props.obj.owner}</p>
+                        <p className="info">{this.props.obj.ownerName}</p>
 
                         <h5>Project creator's role</h5>
                         <p className="info">{this.props.obj.myRoleDescription}</p>
 
                         <h5>Technology used</h5>
-                        <p className="info">{this.props.obj.skillsNeeded}</p>
+                        {this.props.obj.skillsNeeded && this.props.obj.skillsNeeded.map((skill, idx) =>
+                            <h5 key={idx} className="d-inline-block">
+                                <Badge
+                                key={idx}
+                                id={"skillBadge"}
+                                color="primary"
+                                >
+                                {skill}
+                                </Badge>
+                            </h5>
+                        )}
 
                         <h5>Looking for</h5>
                         <p className="info">{this.props.obj.projectMembersDescription}</p>
@@ -46,7 +58,17 @@ class ProjectCardModal extends Component {
                         <p className="info">{this.props.obj.compensationDescription}</p>
 
                         <h5>Tags</h5>
-                        <p className="info">{this.props.obj.projectTypes}</p>   
+                        {this.props.obj.projectTypes && this.props.obj.projectTypes.map((skill, idx) =>
+                            <h5 key={idx} className="d-inline-block">
+                                <Badge
+                                    key={idx}
+                                    id={"skillBadge"}
+                                    color="primary"
+                                >
+                                    {skill}
+                                </Badge>
+                            </h5>
+                        )}
 
                         {/*<h5>Currently working on project?</h5>
                         <p className="info">{this.props.obj.workingOnProject}</p>
@@ -57,10 +79,21 @@ class ProjectCardModal extends Component {
                     </div>
 
                     <div className="description">
-                        <h2> Members </h2> 
+                        <h2> Teams Working on This Project </h2>
+                        {this.props.isMyTeam &&
+                        <p>
+                            <Mailto email={this.props.obj.contactEmails} obfuscate={true}>
+                                Contact Members!
+                            </Mailto>
+                        </p>
+                        }
+                        {this.props.obj.teams &&
                         <div className="container">
-                            <p>{this.props.obj.members}</p>
-                        </div> <br/>
+                            {Object.keys(this.props.obj.teams).map((k, i) =>
+                                <p key={i}>{this.props.obj.teams[k]}</p>
+                            )}
+                        </div>}
+                        <br/>
                     </div>
 
                     <div className="description">

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Mailto from 'react-mailto';
 import {Button, Collapse, ListGroup, ListGroupItem, Label} from 'reactstrap';
 import { database, auth } from '../../firebase/constants';
 import PeopleCardModal from '../modals/peopleCardModal';
@@ -24,6 +25,7 @@ class Sidebar extends Component {
             myTeamsCollapse: false,
             myProjectsCollapse: false,
             myTeamInterestsCollapse: false,
+            teamMemberEmails: '',
             colorTeam: "#ffffff",
             teamRequests: [], //teams requesting me to join their team
             projRequests: [], //projects requesting my team
@@ -76,9 +78,11 @@ class Sidebar extends Component {
                     this.setState({hasProject : true}); // For create project button
                     database.child("projects/" + user.project).once("value").then((shot) => {
                         if (shot.exists()) {
-                            console.log(shot.val());
+                            let project = shot.val();
+                            project["ownerName"] = user.name;
+                            project["id"] = user.project;
                             this.setState({
-                                myProject: shot.val(),
+                                myProject: project,
                                 myProjectName: shot.val().name,
                             });
                         }
@@ -99,9 +103,12 @@ class Sidebar extends Component {
                 //get the team name from team id
                 database.child("teams/" + teamIdSnapshot.val()).once("value").then((sp) => {
                     if (sp.exists()) {
+                        let team = sp.val();
+                        team["ownerName"] = this.state.currUser.name;
+                        team["id"] = teamIdSnapshot.val();
                         this.setState({
-                            myTeamName: sp.val().name,
-                            myTeam: sp.val(),
+                            myTeamName: team.name,
+                            myTeam: team,
                         });
                     }
                 });
@@ -109,8 +116,22 @@ class Sidebar extends Component {
                     if (sp.exists()) {
                         database.child("projects/" + sp.val()).once("value").then((s) => {
                             if (s.val()) {
-                                console.log(s.val());
-                                this.setState({ myTeamProject: s.val()})
+                                //console.log(s.val());
+                                let item = s.val();
+                                if (item.owner) {
+                                    database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                        if (snap.exists()) {
+                                            item["ownerName"] = snap.val();
+                                        }
+                                    });
+                                    database.child("users/" + item.owner + "/email/").once("value").then((snap) => {
+                                        if (snap.exists()) {
+                                            item["ownerEmail"] = snap.val();
+                                        }
+                                    });
+                                }
+                                item["id"] = sp.val();
+                                this.setState({ myTeamProject: item})
                             }
                         });
                     }
@@ -166,7 +187,19 @@ class Sidebar extends Component {
                                 let item = sp.val();
                                 //save the team id to the team object
                                 if (item) {
-                                    item["projectId"] = childSnapshot.key;
+                                    if (item.owner) {
+                                        database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                            if (snap.exists()) {
+                                                item["ownerName"] = snap.val();
+                                            }
+                                        });
+                                        database.child("users/" + item.owner + "/email/").once("value").then((snap) => {
+                                            if (snap.exists()) {
+                                                item["ownerEmail"] = snap.val();
+                                            }
+                                        });
+                                    }
+                                    item["id"] = childSnapshot.key;
                                     array.push(item);
                                 }
                                 //console.log(item);
@@ -177,18 +210,18 @@ class Sidebar extends Component {
                  });
             }
         });
-
-        this.testRef.orderByChild("members").equalTo(this.props.uid).on("value", (snapshot) => {
-                console.log("in callback " + this.props.uid);
-                let array = [];
-                snapshot.forEach(function (childSnapshot) {
-                    const item = childSnapshot.val();
-                    if(item) {
-                        array.push(item);
-                        console.log(item);
-                    }
-                });
-            });
+        //
+        // this.testRef.orderByChild("members").equalTo(this.props.uid).on("value", (snapshot) => {
+        //         console.log("in callback " + this.props.uid);
+        //         let array = [];
+        //         snapshot.forEach(function (childSnapshot) {
+        //             const item = childSnapshot.val();
+        //             if(item) {
+        //                 array.push(item);
+        //                 console.log(item);
+        //             }
+        //         });
+        //     });
 
             //hHEREEEE@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //loads full team objects into team request array
@@ -202,7 +235,19 @@ class Sidebar extends Component {
                         let item = sp.val();
                         //save the team id to the team object
                         if (item) {
-                            item["teamId"] = childSnapshot.key;
+                            if (item.owner) {
+                                database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                    if (snap.exists()) {
+                                        item["ownerName"] = snap.val();
+                                    }
+                                });
+                                database.child("users/" + item.owner + "/email/").once("value").then((snap) => {
+                                    if (snap.exists()) {
+                                        item["ownerEmail"] = snap.val();
+                                    }
+                                });
+                            }
+                            item["id"] = childSnapshot.key;
                             array.push(item);
                         }
                         //console.log(item);
@@ -212,7 +257,7 @@ class Sidebar extends Component {
             }
         });
 
-
+        //teams i'm a part of
         this.myTeamsRef.once("value").then( (snapshot) => {
             if (snapshot.exists()) {
                 let array = [];
@@ -220,7 +265,19 @@ class Sidebar extends Component {
                     database.child("teams/" + childSnapshot.key).once("value").then((s) => {
                        const item = s.val();
                        if (item) {
-                           item["teamId"] = childSnapshot.key;
+                           if (item.owner) {
+                               database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                   if (snap.exists()) {
+                                       item["ownerName"] = snap.val();
+                                   }
+                               });
+                               database.child("users/" + item.owner + "/email/").once("value").then((snap) => {
+                                   if (snap.exists()) {
+                                       item["ownerEmail"] = snap.val();
+                                   }
+                               });
+                           }
+                           item["id"] = childSnapshot.key;
                            array.push(item);
                        }
                     });
@@ -236,7 +293,19 @@ class Sidebar extends Component {
                     database.child("projects/" + childSnapshot.key).once("value").then((s) => {
                         const item = s.val();
                         if (item) {
-                            item["projectId"] = childSnapshot.key;
+                            if (item.owner) {
+                                database.child("users/" + item.owner + "/name/").once("value").then((snap) => {
+                                    if (snap.exists()) {
+                                        item["ownerName"] = snap.val();
+                                    }
+                                });
+                                database.child("users/" + item.owner + "/email/").once("value").then((snap) => {
+                                    if (snap.exists()) {
+                                        item["ownerEmail"] = snap.val();
+                                    }
+                                });
+                            }
+                            item["id"] = childSnapshot.key;
                             array.push(item);
                         }
                     });
@@ -265,7 +334,6 @@ class Sidebar extends Component {
     }
 
     handleProfileClick(data, type) {
-        console.log("hitting handle profile click in sidebar.js");
         this.setState({
            selectedObj: data
         });
@@ -309,7 +377,7 @@ class Sidebar extends Component {
         //remove request from request table - DONE
         let selectedTeam = this.state.teamRequests[index];
         //console.log(selectedTeam.teamId);
-        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/" + selectedTeam.teamId);
+        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/" + selectedTeam.id);
         deleteTeamReqRef.remove();
 
         //remove request from front end teamrequest array - DONE
@@ -320,7 +388,7 @@ class Sidebar extends Component {
 
         //push team to your teams list in user table - DONE
         let postUserTeamsRef = database.child("users/" + this.props.uid + "/teams/");
-        postUserTeamsRef.child(selectedTeam.teamId).set(selectedTeam.name);
+        postUserTeamsRef.child(selectedTeam.id).set(selectedTeam.name);
 
         //push to front end list of myteams - DONE
         let newArr = this.state.myTeams;
@@ -328,31 +396,35 @@ class Sidebar extends Component {
         this.setState({ myTeams: newArr });
 
         //push your id to members list of a team - DONE
-        let postTeamMemberRef = database.child("teams/" + selectedTeam.teamId + "/members/");
+        let postTeamMemberRef = database.child("teams/" + selectedTeam.id + "/members/");
         postTeamMemberRef.child(this.props.uid).set(this.state.currUser.name);
-        //this.ref.child("Victor").setValue("setting custom key when pushing new data to firebase database");
 
 
         //increment num members
-        let incrNumPeopleRef = database.child("teams/" + selectedTeam.teamId + "/numPeople");
+        let incrNumPeopleRef = database.child("teams/" + selectedTeam.id + "/numPeople");
         incrNumPeopleRef.transaction((num) => {
             // If node/clicks has never been set, currentRank will be `null`.
             return (num || 0) + 1;
         });
 
         //decrement num people seeking
-        let decrNumPeopleRef = database.child("teams/" + selectedTeam.teamId + "/seekingNumPeople");
+        let decrNumPeopleRef = database.child("teams/" + selectedTeam.id + "/seekingNumPeople");
         decrNumPeopleRef.transaction((num) => {
             // If node/clicks has never been set, currentRank will be `null`.
             return (num || 0) + 1;
+        });
+
+        //add user to string of user emails
+        database.child("teams/" + selectedTeam.id + "/contactEmails").transaction((str) => {
+           return (str || '') + this.state.currUser.email + ',';
         });
         //
         //add curr users skills to skills list of team object - DONE
         // and add to skills/teams/skill/team id table - DONE
         if (this.state.currUser.skills) {
             this.state.currUser.skills.map((skill) => {
-                database.child("teams/" + selectedTeam.teamId + "/skills/").push(skill);
-                database.child("skills/teams/" + skill + "/" + selectedTeam.teamId).set(selectedTeam.teamId);
+                database.child("teams/" + selectedTeam.id + "/skills/").push(skill);
+                database.child("skills/teams/" + skill + "/" + selectedTeam.id).set(selectedTeam.id);
 
             });
         }
@@ -362,9 +434,9 @@ class Sidebar extends Component {
     rejectTeam(index) {
         //remove request from request table - DONE
         let selectedTeam = this.state.teamRequests[index];
-        //console.log(selectedTeam.teamId);
+        //console.log(selectedTeam.id);
         //console.log("requests/users/" + this.props.uid + "/" + selectedTeam.id + "/");
-        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/" + selectedTeam.teamId + "/");
+        let deleteTeamReqRef = database.child("requests/users/" + this.props.uid + "/" + selectedTeam.id + "/");
         deleteTeamReqRef.remove();
 
         //remove request from front end teamrequest array - DONE
@@ -380,19 +452,19 @@ class Sidebar extends Component {
         //console.log(this.state.myTeamName);
 
         // //delete request from backend request table - DONE
-        let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.projectId);
+        let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.id);
         deleteProjectReqRef.remove();
         //
         // //push proj id to my projects array in user obj in backend - DONE
         let postUserProjectsRef = database.child("users/" + this.props.uid + "/projects/");
-        postUserProjectsRef.child(selectedProject.projectId).set(selectedProject.name);
+        postUserProjectsRef.child(selectedProject.id).set(selectedProject.name);
 
         //push proj id to team's obj in backend
         let postUserProjectRef = database.child("teams/" + this.state.myTeamId + "/project/");
-        postUserProjectRef.set(selectedProject.projectId);
+        postUserProjectRef.set(selectedProject.id);
 
         //push team id to proj object in backend
-        let postProjectTeamsRef = database.child("projects/" + selectedProject.projectId + "/teams");
+        let postProjectTeamsRef = database.child("projects/" + selectedProject.id + "/teams");
         postProjectTeamsRef.child(this.state.myTeamId).set(this.state.myTeamName);
 
         //add project to my projects ive contributed to list
@@ -403,6 +475,11 @@ class Sidebar extends Component {
         //remove project from front end array projRequests
         let newProjReqs = this.state.projRequests.filter(function(e, i){
             return i!==index;
+        });
+
+        //add team to string of team emails for project
+        database.child("projects/" + selectedProject.id + "/contactEmails").transaction((str) => {
+            return (str || '') + this.state.currUser.email + ',';
         });
 
         //list project under "your team is currently working on project" label
@@ -421,7 +498,7 @@ class Sidebar extends Component {
         //console.log(this.state.myTeam);
 
         // //delete request from backend request table - DONE
-        let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.projectId);
+        let deleteProjectReqRef = database.child("requests/teams/" + this.state.myTeamId + "/" + selectedProject.id);
         deleteProjectReqRef.remove();
 
         //remove project from front end array projRequests
@@ -515,7 +592,17 @@ class Sidebar extends Component {
                 <p>Your Team's Current Project</p>
 
                 <ListGroup className="mr-3 mb-3">
-                    <ListGroupItem> {(this.state.myTeamProject && this.state.myTeamProject.name) || 'None. Find one to the left!'} </ListGroupItem>
+                    {this.state.myTeamProject &&
+                        <OwnedListGroupItem
+                            onclick={() => this.handleProfileClick(this.state.myTeamProject, "projects")}
+                            contact={this.state.myTeamProject.ownerEmail}
+                        >
+                            {this.state.myTeamProject.name}
+                        </OwnedListGroupItem>
+                    }
+                    {!this.state.myTeamProject &&
+                        <ListGroupItem> None. Find one to the left! </ListGroupItem>
+                    }
                 </ListGroup>
 
                 <p onClick={() => this.toggle('projectreq')}> Project Requests For Your Team</p>
@@ -565,7 +652,7 @@ class Sidebar extends Component {
                             <OwnedListGroupItem
                                 key={id}
                                 onclick={() => this.handleProfileClick(req, "teams")}
-                                contact={() => this.contact()}
+                                contact={req.ownerEmail}
                             >
                                 {req.name}
                             </OwnedListGroupItem>
@@ -595,7 +682,7 @@ class Sidebar extends Component {
                             <OwnedListGroupItem
                                 key={id}
                                 onclick={() => this.handleProfileClick(req, "projects")}
-                                contact={() => this.contact()}
+                                contact={req.ownerEmail}
                             >
                                 {req.name}
                             </OwnedListGroupItem>
@@ -635,12 +722,15 @@ class Sidebar extends Component {
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleProfileModal("teams")}
                     currUser={this.state.currUser}
+                    isMyTeam={this.state.selectedObj.owner === this.state.uid}
                 />
+
                 <ProjectCardModal
                     show={this.state.showProjProfileModal}
                     obj={this.state.selectedObj}
                     onclick={ () => this.toggleProfileModal("projects")}
                     currUser={this.state.currUser}
+                    isMyTeam={this.state.selectedObj.owner === this.state.uid}
                 />
                 <CreateTeamModal show={this.state.showCreateTeamModal}
                                  onclick={() => this.toggleCreateTeam()}

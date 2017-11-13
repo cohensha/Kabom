@@ -1,5 +1,6 @@
 import React from 'react';
 import {RejectIcon, AcceptIcon} from '../../icons/icon';
+import Mailto from 'react-mailto';
 
 import {ListGroupItem, Button, Row} from 'reactstrap';
 
@@ -20,7 +21,11 @@ export const OwnedListGroupItem = ({id, children, contact, onclick}) => (
     <ListGroupItem key={id}>
         <Row>
             <p onClick={onclick} className="mr-4"> {children} </p>
-            <Button color="primary" onClick={contact}>Contact!</Button>
+            {contact &&
+                <Mailto email={contact} obfuscate={true}>
+                    {' '} (Contact!)
+                </Mailto>
+            }
         </Row>
     </ListGroupItem>
 

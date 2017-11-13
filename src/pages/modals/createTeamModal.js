@@ -137,7 +137,7 @@ class CreateTeamModal extends Component {
                 "portfolio": this.state.portfolio,
                 "skills": this.state.skills,
                 "projectTypes": this.state.projectTypes,
-                "teamOwner": this.props.uid,
+                "owner": this.props.uid,
                 "dateCreated": new Date().toString(),
                 "lookingForMembers": this.state.lookingForMembers,
                 "currentlyAvailable": this.state.currentlyAvailable,
