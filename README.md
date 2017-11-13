@@ -6,6 +6,7 @@
 
 
 # High Level Requirements
+Here are the completed, in-progress, and future requirements.
 ## Completed
 ### Login and Sign Up
 |Functionality | Notes |
@@ -51,7 +52,7 @@
 |2. Increment numOfInterests after a user clicks on "I'm interested!" button | Used to rank projects by popularity. Could be renamed to likes rather than interests | 
 
 ## Future Tasks
-## Group Formation
+### Group Formation
 Currently, our platform only supports teams. Here we define the difference between groups and teams:
 We got more specific about the distinction between of teams and groups. 
 * **Team**: a group of organized students with experience working together. Types of teams could range from a 2-person front-end/back-end team to an incubator team that is capable of raising an idea from the ground-up (much like Lavalab at USC). An team would showcase their ability with the projects under their belt and describe their team members and their roles within that team. 
@@ -67,21 +68,21 @@ With this distinction, both experienced and inexperienced users can join the pla
 |2. Group forum  | |
 |3. Be able to convert a group to a team | | 
  
-## General
+### General
 |Functionality | Notes |
 |--------------|-------|
 |1. Authentication Persistence| Currently the platform will log the user out after refreshing |
 |2. Show a project/group after a project/group is created instead of having to refresh/log back in| |
 |3. Better/consistent UI colors and buttons. Add Logos. | |
 
-## Team Formation
+### Team Formation
 |Functionality | Notes |
 |--------------|-------|
 |1. Notifications (Email or in-platform) for whenever a team is requested or when a user accepts a team invitation. | |
 |2. Remove team members| |
 |3. Delete team | |
 
-## Project Formation
+### Project Formation
 |Functionality | Notes |
 |--------------|-------|
 |1. Notifications (Email or in-platform) for whenever a team is accepts a project invitation. | |
