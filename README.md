@@ -1,10 +1,9 @@
 ![alt text](https://i.imgur.com/l1pJ7m5.png?1)
-**Kabom - Project collaboration made easier.**
+**Unify to Solve**
 
-*Kabom connects USC students of all backgrounds to collaborate on student projects. Whether you have a project in mind or you just want to join in on a side project, find the team of developers, designers, project managers, and whoever else you need to make an amazing project.*
+*Kabom is a web platform to make project collaboration. Kabom connects USC students of all backgrounds to collaborate on student projects. Whether you have a project in mind or you just want to join in on a side project, find the team of developers, designers, project managers, and whoever else you need to make an amazing project.*
 
 ***Fun fact**: kabom /kəˈbo͞om/ means **unity** in Twi, one of the many languages spoken in Ghana.*
-
 
 # High Level Requirements
 Here are the ~~completed~~, **in-progress**, and *future* requirements.
