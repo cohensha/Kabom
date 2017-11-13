@@ -6,7 +6,7 @@
 
 
 # High Level Requirements
-Here are the completed, in-progress, and future requirements.
+Here are the ~~completed~~, **in-progress**, and *future* requirements.
 ## Completed
 ### Login and Sign Up
 |Functionality | Notes |
