@@ -24,6 +24,7 @@ Here are the ~~completed~~, **in-progress**, and *future* requirements.
 |4. Users can be part of multiple teams (might be a limit), but all the teams that the user is a part of should be viewable from his or her profile page. | The profile page is currently the sidebar. |
 |5. Teams will display the team owner’s name somewhere noticeable | |
 |6. Team owners can only make requests out to users to join their team, but a user cannot request to join a group (can express interest instead) | |
+|7. Teams can see all the projects that they have done, and currently working on | On the sidebar|
 
 ### Project Formation
 |Functionality | Notes |
@@ -32,11 +33,26 @@ Here are the ~~completed~~, **in-progress**, and *future* requirements.
 |2. Project owners can make a request to a team that they think will fit the needs of the project. | |
 |3. All active job projects a user posted should be viewable by the user on their profile page. | This is currently the sidebar. |
 
-## In-Progress
-### General
+### Search
+|Functionality | Notes |
+|--------------|-------|
+|Search bar should have options to search by team name, individual name, and project name. Individual will be the default option| |
+|Project owners should be able to search for teams by school (both at other universities and schools within the university), and this should populate a list of all teams that fit that criteria.| Currently only for USC |
+|Users should be able to search for other users in any university/school, and view their profile, where all the information is visible| Currently only for USC |
+
+## In-Progress/To-Be-Completed
+### Dashboard
+A major change we discussed to the current UI was adding a dashboard to better display and manage a user's team and project information. This may be moved to a future task.
 |Functionality | Notes |
 |--------------|-------|
 |Dashboard for a better view project, team, and other information| This would replace or simplify the sidebar|
+
+### General
+|Functionality | Notes |
+|--------------|-------|
+|Authentication Persistence| Currently the platform will log the user out after refreshing |
+|Show a project/group after a project/group is created instead of having to refresh/log back in| |
+|Better/consistent UI colors and buttons. Add Logos. | |
 
 ### Search
 |Functionality | Notes |
@@ -48,14 +64,17 @@ Here are the ~~completed~~, **in-progress**, and *future* requirements.
 ### Team Formation
 |Functionality | Notes |
 |--------------|-------|
-|Edit Team| |
-|Increment numOfInterests after a user clicks on "I'm interested!" button  | Used to rank projects by popularity. Could be renamed to likes rather than interests |
+|Edit Team| Comes with dashboard.|
+|Team owner can delete team members| | 
+|Each team should have a named role for each user (e.g. project manager, full-stack developer, front-end engineer, etc.)| tech start up roles only. This would require a request modal that a team owner must fill out upon requesting a user. Also, if roles are to be strictly defined, a preset list of roles need to be added, changing the database structure.|
+|Request Modal for when team owners request users for their team|The modal should define the user's role and other aspects of the user's commitment in the team.|
+|A team can be deleted by the team owner or hand off ownership| | 
 
 ### Project Formation
 |Functionality | Notes |
 |--------------|-------|
-|Edit Project| | 
-|Increment numOfInterests after a user clicks on "I'm interested!" button | Used to rank projects by popularity. Could be renamed to likes rather than interests | 
+|Request Modal: Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing| | 
+|Edit Project| Comes with dashboard.| 
 
 ## Future Tasks
 ### Group Formation
@@ -77,26 +96,24 @@ With this distinction, both experienced and inexperienced users can join the pla
 ### General
 |Functionality | Notes |
 |--------------|-------|
-|Authentication Persistence| Currently the platform will log the user out after refreshing |
-|Show a project/group after a project/group is created instead of having to refresh/log back in| |
-|Better/consistent UI colors and buttons. Add Logos. | |
+|Some measurement to track each individual's contribution to the team (this could be sensitive information) | |
+|Display revenue group has brought in from their completed projects| |
+|Rating/Ranking system| This is currently set up as the "I'm interested" function and keeping track of how many interests a team, user, or project gets. Should be improved. |
+|Project owners can rate/review the group the project was assigned to through the platform, once project is completed| |
+|Find a way to give teams better exposure on the platform| |
+|Increment numOfInterests after a user clicks on "I'm interested!" button | Used to rank teams/projects by popularity. Could be renamed to likes rather than interests |
 
 ### Team Formation
 |Functionality | Notes |
 |--------------|-------|
-|Request Modal for when team owners request users for their team. The modal should define the user's role and other aspects of the user's commitment in the team | | 
 |Notifications (Email or in-platform) for whenever a team is requested or when a user accepts a team invitation. | |
-|Remove team members| |
-|Delete team | |
 
 ### Project Formation
 |Functionality | Notes |
 |--------------|-------|
-|Request Modal: Project owners requesting for the user/team must define that user's/team's role, Compensation, Time commitment, and description of what they would be doing| | 
 |Notifications (Email or in-platform) for whenever a team is accepts a project invitation. | |
 |Deadline on a project based on created date| This keeps projects fresh and prevents a graveyard of unimplemented projects. |
 |Autosuggest a member when searching or adding members to a project/team based on project types| |
-|Remove teams/project members| |
 |Delete project | |
 
 ---
