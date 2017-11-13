@@ -92,6 +92,8 @@ With this distinction, both experienced and inexperienced users can join the pla
 |4. Remove teams/project members| |
 |5. Delete project | |
 
+---
+
 # REACT JS GUIDE
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
