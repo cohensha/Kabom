@@ -135,7 +135,7 @@ class CreateTeamModal extends Component {
                 "name": this.state.name,
                 "description": this.state.description,
                 "portfolio": this.state.portfolio,
-                "skills": this.state.skills,
+                //"skills": this.state.skills,
                 "projectTypes": this.state.projectTypes,
                 "owner": this.props.uid,
                 "dateCreated": new Date().toString(),
@@ -156,6 +156,7 @@ class CreateTeamModal extends Component {
             //not sure what the above to do is referencing, but this writes to
             // skills/teams/skill/teamid: teamid db for search - sabrina
             this.state.skills.map((x, index) => {
+                database.child("teams/" + teamId + "/skills/" + x).set(x);
                 database.child("skills/teams/" + x + "/" + teamId).set(teamId);
             });
 

@@ -29,7 +29,7 @@ class SearchBar extends Component {
     }
 
     componentDidMount() {
-        database.child("skills/users").once("value").then((s) => {
+        database.child("generalSkills").once("value").then((s) => {
             if (s.exists()) {
                 let array = [];
                 s.forEach((childSnap) => {
@@ -39,7 +39,7 @@ class SearchBar extends Component {
             }
         });
 
-        database.child("projectTypes/users").once("value").then((s) => {
+        database.child("generalProjectTypes").once("value").then((s) => {
             if (s.exists()) {
                 let array = [];
                 s.forEach((childSnap) => {

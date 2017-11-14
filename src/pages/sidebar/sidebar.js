@@ -423,7 +423,7 @@ class Sidebar extends Component {
         // and add to skills/teams/skill/team id table - DONE
         if (this.state.currUser.skills) {
             this.state.currUser.skills.map((skill) => {
-                database.child("teams/" + selectedTeam.id + "/skills/").push(skill);
+                database.child("teams/" + selectedTeam.id + "/skills/" + skill).set(skill);
                 database.child("skills/teams/" + skill + "/" + selectedTeam.id).set(selectedTeam.id);
 
             });
