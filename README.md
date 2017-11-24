@@ -117,6 +117,18 @@ With this distinction, both experienced and inexperienced users can join the pla
 |Autosuggest a member when searching or adding members to a project/team based on project types| |
 |Delete project | |
 
+
+# Deployment
+[The site is deployed](https://kabom-3627c.firebaseapp.com) through Firebase hosting. Previous deploymed versions can be viewed on Firebase's console, and new versions can be easily deployed from the terminal. To deploy:
+
+- clone the repo
+- checkout the deploy branch
+- make sure you have the latest changes in master, then merge master into dpeloy
+- run `npm run build`. This will create a production build in the build folder
+- run `firebase deploy` this will deploy the site.
+
+
+
 ---
 
 # REACT JS GUIDE
